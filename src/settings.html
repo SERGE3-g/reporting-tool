@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Impostazioni - Tool di Reporting Commissioni</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- File CSS principale -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Includi la navbar -->
+    <div id="navbar-container"></div>
+
+    <div class="app-container">
+        <header>
+            <h1><i class="fas fa-cog"></i> Impostazioni</h1>
+            <p>Configura le preferenze dell'applicazione</p>
+        </header>
+
+        <!-- Tabs per le diverse sezioni di impostazioni -->
+        <div class="section">
+            <div class="tabs settings-tabs">
+                <button class="tab-btn active" data-tab="general-settings">Generali</button>
+                <button class="tab-btn" data-tab="email-settings">Email</button>
+                <button class="tab-btn" data-tab="appearance-settings">Aspetto</button>
+                <button class="tab-btn" data-tab="data-settings">Gestione Dati</button>
+            </div>
+
+            <!-- Impostazioni generali -->
+            <div class="tab-content active" id="general-settings">
+                <h3 class="settings-header">Impostazioni Generali</h3>
+
+                <div class="form-group">
+                    <label for="defaultExportFormat">Formato di esportazione predefinito</label>
+                    <select id="defaultExportFormat" class="form-control">
+                        <option value="csv">CSV</option>
+                        <option value="xlsx">Excel (XLSX)</option>
+                        <option value="pdf">PDF</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="maxRecentFiles">Numero massimo di file recenti</label>
+                    <input type="number" id="maxRecentFiles" class="form-control" value="10" min="1" max="50">
+                </div>
+
+                <div class="form-group">
+                    <label for="defaultDateFormat">Formato data predefinito</label>
+                    <select id="defaultDateFormat" class="form-control">
+                        <option value="dd/mm/yyyy">DD/MM/YYYY</option>
+                        <option value="mm/dd/yyyy">MM/DD/YYYY</option>
+                        <option value="yyyy-mm-dd">YYYY-MM-DD</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="defaultLanguage">Lingua</label>
+                    <select id="defaultLanguage" class="form-control">
+                        <option value="it">Italiano</option>
+                        <option value="en">English</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                    </select>
+                </div>
+
+                <div class="checkbox-container mb-20">
+                    <input type="checkbox" id="autoSaveEnabled" checked>
+                    <label for="autoSaveEnabled">Abilita salvataggio automatico</label>
+                </div>
+
+                <div class="checkbox-container mb-20">
+                    <input type="checkbox" id="notificationsEnabled" checked>
+                    <label for="notificationsEnabled">Abilita notifiche</label>
+                </div>
+
+                <button id="saveGeneralSettings" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Salva impostazioni
+                </button>
+            </div>
+
+            <!-- Impostazioni email -->
+            <div class="tab-content" id="email-settings">
+                <h3 class="settings-header">Configurazione Email</h3>
+
+                <div class="form-group">
+                    <label for="emailService">Servizio email</label>
+                    <select id="emailService" class="form-control">
+                        <option value="">Seleziona servizio...</option>
+                        <option value="gmail">Gmail</option>
+                        <option value="outlook">Outlook</option>
+                        <option value="yahoo">Yahoo Mail</option>
+                        <option value="other">Altro (SMTP personalizzato)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="emailUser">Indirizzo email</label>
+                    <input type="email" id="emailUser" class="form-control" placeholder="esempio@dominio.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="emailPassword">Password</label>
+                    <input type="password" id="emailPassword" class="form-control" placeholder="Password email">
+                    <small>Per alcuni servizi potrebbe essere necessaria una "password per app"</small>
+                </div>
+
+                <div id="smtpSettings" style="display: none;">
+                    <div class="form-group">
+                        <label for="smtpServer">Server SMTP</label>
+                        <input type="text" id="smtpServer" class="form-control" placeholder="smtp.esempio.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="smtpPort">Porta SMTP</label>
+                        <input type="number" id="smtpPort" class="form-control" placeholder="587" value="587">
+                    </div>
+
+                    <div class="checkbox-container mb-20">
+                        <input type="checkbox" id="smtpSecure" checked>
+                        <label for="smtpSecure">Usa connessione sicura (SSL/TLS)</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="defaultSubject">Oggetto email predefinito</label>
+                    <input type="text" id="defaultSubject" class="form-control" value="Report Commissioni">
+                </div>
+
+                <div class="form-group">
+                    <label for="defaultMessage">Messaggio predefinito</label>
+                    <textarea id="defaultMessage" class="form-control" rows="4">In allegato il report delle commissioni generato.</textarea>
+                </div>
+
+                <div id="emailStatus" class="status-message" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button id="testEmailConnection" class="btn btn-warning">
+                        <i class="fas fa-vial"></i> Testa connessione
+                    </button>
+
+                    <button id="saveEmailSettings" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salva configurazione
+                    </button>
+                </div>
+            </div>
+
+            <!-- Impostazioni aspetto -->
+            <div class="tab-content" id="appearance-settings">
+                <h3 class="settings-header">Impostazioni Aspetto</h3>
+
+                <div class="form-group">
+                    <label for="themeSelect">Tema</label>
+                    <select id="themeSelect" class="form-control">
+                        <option value="light">Chiaro</option>
+                        <option value="dark">Scuro</option>
+                        <option value="system">Usa impostazioni di sistema</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="primaryColor">Colore primario</label>
+                    <div class="color-picker-container">
+                        <input type="color" id="primaryColor" value="#4361ee" class="color-picker">
+                        <span id="primaryColorLabel">#4361ee</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="secondaryColor">Colore secondario</label>
+                    <div class="color-picker-container">
+                        <input type="color" id="secondaryColor" value="#3f37c9" class="color-picker">
+                        <span id="secondaryColorLabel">#3f37c9</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fontSize">Dimensione testo</label>
+                    <select id="fontSize" class="form-control">
+                        <option value="small">Piccolo</option>
+                        <option value="medium" selected>Medio</option>
+                        <option value="large">Grande</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fontFamily">Famiglia di caratteri</label>
+                    <select id="fontFamily" class="form-control">
+                        <option value="roboto" selected>Roboto</option>
+                        <option value="open-sans">Open Sans</option>
+                        <option value="montserrat">Montserrat</option>
+                        <option value="lato">Lato</option>
+                    </select>
+                </div>
+
+                <div class="checkbox-container mb-20">
+                    <input type="checkbox" id="enableAnimations" checked>
+                    <label for="enableAnimations">Abilita animazioni</label>
+                </div>
+
+                <div id="themePreview" class="theme-preview">
+                    <div class="preview-header">Anteprima tema</div>
+                    <div class="preview-content">
+                        <button class="preview-button">Pulsante</button>
+                        <div class="preview-card">Elemento Card</div>
+                    </div>
+                </div>
+
+                <button id="saveAppearanceSettings" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Salva impostazioni
+                </button>
+
+                <button id="resetAppearanceSettings" class="btn btn-secondary">
+                    <i class="fas fa-undo"></i> Ripristina predefiniti
+                </button>
+            </div>
+
+            <!-- Impostazioni dati -->
+            <div class="tab-content" id="data-settings">
+                <h3 class="settings-header">Gestione Dati</h3>
+
+                <div class="settings-section">
+                    <h4>Dati e cache</h4>
+                    <p>Gestisci i dati salvati localmente dall'applicazione</p>
+
+                    <div class="data-info-item">
+                        <span>Dati di elaborazione salvati:</span>
+                        <span id="processedDataSize">2.3 MB</span>
+                    </div>
+
+                    <div class="data-info-item">
+                        <span>File temporanei:</span>
+                        <span id="tempFilesSize">0.8 MB</span>
+                    </div>
+
+                    <div class="data-info-item">
+                        <span>Cache:</span>
+                        <span id="cacheSize">1.5 MB</span>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="clearProcessedData" class="btn btn-warning">
+                            <i class="fas fa-trash"></i> Cancella dati elaborazione
+                        </button>
+
+                        <button id="clearAllData" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Cancella tutti i dati
+                        </button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h4>Esportazione/Importazione</h4>
+                    <p>Esporta o importa le impostazioni dell'applicazione</p>
+
+                    <div class="button-group">
+                        <button id="exportSettings" class="btn btn-info">
+                            <i class="fas fa-file-export"></i> Esporta impostazioni
+                        </button>
+
+                        <button id="importSettings" class="btn btn-info">
+                            <i class="fas fa-file-import"></i> Importa impostazioni
+                        </button>
+                    </div>
+
+                    <div class="file-import-container" style="display: none;">
+                        <input type="file" id="settingsFileInput" accept=".json">
+                    </div>
+                </div>
+
+                <div class="settings-section danger-zone">
+                    <h4>Area pericolosa</h4>
+                    <p>Queste azioni non possono essere annullate</p>
+
+                    <button id="resetAllSettings" class="btn btn-danger">
+                        <i class="fas fa-exclamation-triangle"></i> Ripristina tutte le impostazioni predefinite
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Includi il footer -->
+    <div id="footer-container"></div>
+
+    <!-- Script per caricare componenti condivisi -->
+    <script>
+        // Funzione per caricare componenti HTML
+        function loadComponent(url, containerId) {
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById(containerId).innerHTML = html;
+                })
+                .catch(error => {
+                    console.error(`Errore nel caricamento del componente ${url}:`, error);
+                });
+        }
+
+        // Carica navbar e footer
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponent('components/navbar.html', 'navbar-container');
+            loadComponent('components/footer.html', 'footer-container');
+        });
+    </script>
+
+    <!-- Script per le impostazioni -->
+    <script src="settings.js"></script>
+</body>
+</html>

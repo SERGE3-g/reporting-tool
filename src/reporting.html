@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Reporting - Tool di Reporting Commissioni</title>
+
+    <!-- Libreria XLSX per esportazione Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Libreria Chart.js per i grafici -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Libreria jsPDF per esportazione PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- File CSS principale -->
+    <link rel="stylesheet" href="stylesReport.css">
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-content">
+        <a href="index.html" class="navbar-brand">
+            <i class="fas fa-exchange-alt"></i> Tool di Reporting Commissioni
+        </a>
+        <button class="navbar-toggler" id="navbarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="navbar-nav" id="navbarNav">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="reporting.html" class="nav-link active">
+                    <i class="fas fa-file-alt"></i> Reporting
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="presets.html" class="nav-link">
+                    <i class="fas fa-sliders-h"></i> Preset
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i> Impostazioni
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="help.html" class="nav-link">
+                    <i class="fas fa-question-circle"></i> Guida
+                </a>
+            </li>
+            <!-- Bottoni di autenticazione dinamici (mostrati in base allo stato di login) -->
+            <li class="nav-item auth-buttons" id="loggedOutButtons">
+                <a href="login.html" class="navbar-btn">
+                    Accedi
+                </a>
+            </li>
+            <li class="nav-item auth-buttons dropdown" id="loggedInButtons" style="display: none;">
+                <a href="#" class="nav-link dropdown-toggle" id="userDropdown">
+                    <i class="fas fa-user-circle"></i> <span id="userName">Utente</span>
+                </a>
+                <div class="dropdown-menu">
+                    <a href="profile.html" class="dropdown-item">
+                        <i class="fas fa-id-card"></i> Profilo
+                    </a>
+                    <a href="#" class="dropdown-item" id="logoutButton">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="app-container">
+    <header>
+        <h1><i class="fas fa-file-alt"></i> Generazione Report</h1>
+        <p>Elabora dati e genera report dettagliati per la tua analisi</p>
+    </header>
+
+    <!-- Tab di navigazione per le diverse opzioni di reporting -->
+    <div class="section">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="new-report">Nuovo Report</button>
+            <button class="tab-btn" data-tab="history">Cronologia Report</button>
+            <button class="tab-btn" data-tab="scheduled">Report Programmati</button>
+            <button class="tab-btn" data-tab="templates">Modelli</button>
+        </div>
+
+        <!-- Nuovo Report -->
+        <div id="new-report" class="tab-content active">
+            <h2><i class="fas fa-plus-circle"></i> Crea un nuovo report</h2>
+
+            <!-- Selezione file -->
+            <div class="subsection">
+                <h3>1. Seleziona Fonte Dati</h3>
+                <div class="data-source-selector">
+                    <div class="data-source-option selected" data-source="file">
+                        <i class="fas fa-file"></i>
+                        <span>File</span>
+                    </div>
+                    <div class="data-source-option" data-source="database">
+                        <i class="fas fa-database"></i>
+                        <span>Database</span>
+                    </div>
+                    <div class="data-source-option" data-source="api">
+                        <i class="fas fa-cloud"></i>
+                        <span>API</span>
+                    </div>
+                </div>
+
+                <!-- Opzioni per fonte dati File -->
+                <div id="source-file" class="data-source-content active">
+                    <div class="file-input-container">
+                        <label for="reportFileInput" class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Trascina qui i file o clicca per selezionarli</span>
+                        </label>
+                        <input type="file" id="reportFileInput" class="file-input" accept=".json,.csv,.xlsx" multiple/>
+                        <div class="allowed-formats">Formati supportati: JSON, CSV, XLSX</div>
+                    </div>
+                    <div id="reportFileInfo" class="file-info"></div>
+                </div>
+
+                <!-- Opzioni per fonte dati Database -->
+                <div id="source-database" class="data-source-content">
+                    <div class="form-group">
+                        <label for="dbConnectionString">Stringa di connessione</label>
+                        <input type="text" id="dbConnectionString" class="form-control"
+                               placeholder="jdbc:mysql://hostname:port/database">
+                    </div>
+                    <div class="form-group">
+                        <label for="dbQuery">Query SQL</label>
+                        <textarea id="dbQuery" class="form-control" rows="3"
+                                  placeholder="SELECT * FROM tabella WHERE condizione"></textarea>
+                    </div>
+                    <button id="testDbConnection" class="btn btn-info">
+                        <i class="fas fa-plug"></i> Test Connessione
+                    </button>
+                </div>
+
+                <!-- Opzioni per fonte dati API -->
+                <div id="source-api" class="data-source-content">
+                    <div class="form-group">
+                        <label for="apiEndpoint">Endpoint API</label>
+                        <input type="text" id="apiEndpoint" class="form-control"
+                               placeholder="https://api.example.com/data">
+                    </div>
+                    <div class="form-group">
+                        <label for="apiMethod">Metodo</label>
+                        <select id="apiMethod" class="form-control">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                            <option value="PUT">PUT</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="apiHeaders">Headers (JSON)</label>
+                        <textarea id="apiHeaders" class="form-control" rows="2"
+                                  placeholder='{"Content-Type": "application/json", "Authorization": "Bearer token"}'></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="apiBody">Body (JSON)</label>
+                        <textarea id="apiBody" class="form-control" rows="3"
+                                  placeholder='{"param1": "value1", "param2": "value2"}'></textarea>
+                    </div>
+                    <button id="testApiConnection" class="btn btn-info">
+                        <i class="fas fa-paper-plane"></i> Test API
+                    </button>
+                </div>
+            </div>
+
+            <!-- Configurazione Report -->
+            <div class="subsection">
+                <h3>2. Configura il Report</h3>
+
+                <div class="form-group">
+                    <label for="reportName">Nome Report</label>
+                    <input type="text" id="reportName" class="form-control" placeholder="Report Commissioni Marzo 2025">
+                </div>
+
+                <div class="form-group">
+                    <label for="reportDescription">Descrizione</label>
+                    <textarea id="reportDescription" class="form-control" rows="2"
+                              placeholder="Analisi delle commissioni per il mese di marzo 2025"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-half">
+                        <label for="reportType">Tipo Report</label>
+                        <select id="reportType" class="form-control">
+                            <option value="standard">Standard</option>
+                            <option value="summary">Riepilogo</option>
+                            <option value="detailed">Dettagliato</option>
+                            <option value="comparison">Comparativo</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-half">
+                        <label for="reportFormat">Formato Output</label>
+                        <select id="reportFormat" class="form-control">
+                            <option value="all">Tutti i formati</option>
+                            <option value="csv">CSV</option>
+                            <option value="xlsx">Excel (XLSX)</option>
+                            <option value="pdf">PDF</option>
+                            <option value="html">HTML</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="checkbox-container mb-20">
+                    <input type="checkbox" id="includeCharts" checked>
+                    <label for="includeCharts">Includi grafici nel report</label>
+                </div>
+
+                <div class="checkbox-container mb-20">
+                    <input type="checkbox" id="includeStatistics" checked>
+                    <label for="includeStatistics">Includi statistiche avanzate</label>
+                </div>
+            </div>
+
+            <!-- Filtri -->
+            <div class="subsection">
+                <h3>3. Filtri e Parametri</h3>
+
+                <div class="filter-list" id="reportFilters">
+                    <div class="filter-item">
+                        <div class="filter-row">
+                            <select class="form-control filter-field">
+                                <option value="">Seleziona campo...</option>
+                                <option value="Addebito">Addebito</option>
+                                <option value="IBAN">IBAN</option>
+                                <option value="fee scadenza">Fee scadenza</option>
+                                <option value="totale transazioni">Totale transazioni</option>
+                                <option value="descrizione">Descrizione</option>
+                            </select>
+
+                            <select class="form-control filter-operator">
+                                <option value=">">></option>
+                                <option value="<"><</option>
+                                <option value="=">=</option>
+                                <option value=">=">>=</option>
+                                <option value="<="><=</option>
+                                <option value="contiene">contiene</option>
+                            </select>
+
+                            <input type="text" class="form-control filter-value" placeholder="Valore">
+
+                            <button class="btn btn-danger remove-filter">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button id="addFilter" class="btn btn-info">
+                        <i class="fas fa-plus"></i> Aggiungi Filtro
+                    </button>
+                    <button id="clearFilters" class="btn btn-secondary">
+                        <i class="fas fa-broom"></i> Pulisci Filtri
+                    </button>
+                    <button id="loadPreset" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Carica Preset
+                    </button>
+                    <button id="savePreset" class="btn btn-success">
+                        <i class="fas fa-save"></i> Salva Preset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Elaborazione -->
+            <div class="subsection">
+                <h3>4. Genera Report</h3>
+
+                <button id="generateReportBtn" class="btn btn-primary">
+                    <i class="fas fa-cogs"></i> Genera Report
+                </button>
+
+                <div class="progress-container" id="reportProgressContainer">
+                    <div class="progress-info">
+                        <span>Elaborazione in corso...</span>
+                        <span id="reportProgressPercentage">0%</span>
+                    </div>
+                    <progress id="reportProgressBar" value="0" max="100"></progress>
+                </div>
+            </div>
+
+            <!-- Anteprima Report -->
+            <div class="report-preview" id="reportPreview">
+                <h3>Anteprima Report</h3>
+                <div id="reportSummary" class="report-summary"></div>
+                <div id="reportTableContainer" class="table-container"></div>
+                <div id="reportChartContainer" class="charts-container"></div>
+
+                <div class="report-actions">
+                    <button id="exportReportCsv" class="btn btn-success">
+                        <i class="fas fa-file-csv"></i> Esporta CSV
+                    </button>
+                    <button id="exportReportXlsx" class="btn btn-warning">
+                        <i class="fas fa-file-excel"></i> Esporta Excel
+                    </button>
+                    <button id="exportReportPdf" class="btn btn-danger">
+                        <i class="fas fa-file-pdf"></i> Esporta PDF
+                    </button>
+                    <button id="exportReportHtml" class="btn btn-info">
+                        <i class="fas fa-file-code"></i> Esporta HTML
+                    </button>
+                    <button id="emailReport" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i> Invia via Email
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cronologia Report -->
+        <div id="history" class="tab-content">
+            <h2><i class="fas fa-history"></i> Cronologia Report</h2>
+
+            <div class="report-filters">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="historySearch">Cerca</label>
+                        <input type="text" id="historySearch" class="form-control"
+                               placeholder="Cerca per nome, descrizione...">
+                    </div>
+                    <div class="form-group">
+                        <label for="historyDateRange">Periodo</label>
+                        <select id="historyDateRange" class="form-control">
+                            <option value="all">Tutti i periodi</option>
+                            <option value="today">Oggi</option>
+                            <option value="week">Ultima settimana</option>
+                            <option value="month">Ultimo mese</option>
+                            <option value="quarter">Ultimo trimestre</option>
+                            <option value="year">Ultimo anno</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="historyType">Tipo</label>
+                        <select id="historyType" class="form-control">
+                            <option value="all">Tutti i tipi</option>
+                            <option value="standard">Standard</option>
+                            <option value="summary">Riepilogo</option>
+                            <option value="detailed">Dettagliato</option>
+                            <option value="comparison">Comparativo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="historyTable">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Data Creazione</th>
+                        <th>Tipo</th>
+                        <th>Formato</th>
+                        <th>Records</th>
+                        <th>Azioni</th>
+                    </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                    <!-- Contenuto generato dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="historyPagination" class="pagination">
+                <button class="pagination-btn" data-page="prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="pagination-info">Pagina <span id="currentPage">1</span> di <span
+                        id="totalPages">1</span></span>
+                <button class="pagination-btn" data-page="next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Report Programmati -->
+        <div id="scheduled" class="tab-content">
+            <h2><i class="fas fa-calendar-alt"></i> Report Programmati</h2>
+
+            <div class="section-info">
+                <i class="fas fa-info-circle"></i>
+                <p>Configura report da generare automaticamente secondo una pianificazione.</p>
+            </div>
+
+            <button id="addScheduledReport" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Aggiungi Report Programmato
+            </button>
+
+            <div class="table-container">
+                <table id="scheduledTable">
+                    <thead>
+                    <tr>
+                        <th>Nome Report</th>
+                        <th>Frequenza</th>
+                        <th>Prossima Esecuzione</th>
+                        <th>Destinatari Email</th>
+                        <th>Stato</th>
+                        <th>Azioni</th>
+                    </tr>
+                    </thead>
+                    <tbody id="scheduledTableBody">
+                    <!-- Contenuto generato dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modale per aggiungere/modificare report programmato -->
+            <div id="scheduledReportModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Report Programmato</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="scheduledReportName">Nome Report</label>
+                            <input type="text" id="scheduledReportName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="scheduledReportType">Tipo Report</label>
+                            <select id="scheduledReportType" class="form-control">
+                                <option value="standard">Standard</option>
+                                <option value="summary">Riepilogo</option>
+                                <option value="detailed">Dettagliato</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-half">
+                                <label for="scheduledFrequency">Frequenza</label>
+                                <select id="scheduledFrequency" class="form-control">
+                                    <option value="daily">Giornaliero</option>
+                                    <option value="weekly">Settimanale</option>
+                                    <option value="monthly">Mensile</option>
+                                    <option value="quarterly">Trimestrale</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-half">
+                                <label for="scheduledTime">Orario</label>
+                                <input type="time" id="scheduledTime" class="form-control" value="08:00">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="scheduledEmails">Destinatari Email</label>
+                            <input type="text" id="scheduledEmails" class="form-control"
+                                   placeholder="email1@example.com, email2@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="scheduledFormats">Formati</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-container">
+                                    <input type="checkbox" id="scheduledFormatPdf" checked>
+                                    <label for="scheduledFormatPdf">PDF</label>
+                                </div>
+                                <div class="checkbox-container">
+                                    <input type="checkbox" id="scheduledFormatXlsx" checked>
+                                    <label for="scheduledFormatXlsx">Excel</label>
+                                </div>
+                                <div class="checkbox-container">
+                                    <input type="checkbox" id="scheduledFormatCsv">
+                                    <label for="scheduledFormatCsv">CSV</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="saveScheduledReport" class="btn btn-success">Salva</button>
+                        <button class="btn btn-secondary modal-close-btn">Annulla</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modelli di Report -->
+        <div id="templates" class="tab-content">
+            <h2><i class="fas fa-file-invoice"></i> Modelli Report</h2>
+
+            <div class="section-info">
+                <i class="fas fa-info-circle"></i>
+                <p>Crea e gestisci modelli di report personalizzati che puoi riutilizzare.</p>
+            </div>
+
+            <div class="templates-grid">
+                <!-- Template 1 -->
+                <div class="template-card">
+                    <div class="template-header">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>Report Mensile Commissioni</h3>
+                    </div>
+                    <div class="template-body">
+                        <p>Riepilogo mensile delle commissioni con analisi per tipo di transazione e confronto con il
+                            mese precedente.</p>
+                        <div class="template-meta">
+                            <span><i class="fas fa-clock"></i> Creato: 15 Mar 2025</span>
+                            <span><i class="fas fa-sync-alt"></i> Modificato: 20 Mar 2025</span>
+                        </div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="btn btn-primary use-template">Usa Modello</button>
+                        <button class="btn btn-info edit-template">Modifica</button>
+                        <button class="btn btn-danger delete-template">Elimina</button>
+                    </div>
+                </div>
+
+                <!-- Template 2 -->
+                <div class="template-card">
+                    <div class="template-header">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <h3>Report Finanziario</h3>
+                    </div>
+                    <div class="template-body">
+                        <p>Report dettagliato finanziario con analisi dei flussi di cassa e proiezioni future.</p>
+                        <div class="template-meta">
+                            <span><i class="fas fa-clock"></i> Creato: 10 Feb 2025</span>
+                            <span><i class="fas fa-sync-alt"></i> Modificato: 15 Mar 2025</span>
+                        </div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="btn btn-primary use-template">Usa Modello</button>
+                        <button class="btn btn-info edit-template">Modifica</button>
+                        <button class="btn btn-danger delete-template">Elimina</button>
+                    </div>
+                </div>
+
+                <!-- Template 3 -->
+                <div class="template-card">
+                    <div class="template-header">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Analisi Trend</h3>
+                    </div>
+                    <div class="template-body">
+                        <p>Analisi dei trend delle commissioni e transazioni negli ultimi 12 mesi con proiezioni.</p>
+                        <div class="template-meta">
+                            <span><i class="fas fa-clock"></i> Creato: 5 Jan 2025</span>
+                            <span><i class="fas fa-sync-alt"></i> Modificato: 18 Mar 2025</span>
+                        </div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="btn btn-primary use-template">Usa Modello</button>
+                        <button class="btn btn-info edit-template">Modifica</button>
+                        <button class="btn btn-danger delete-template">Elimina</button>
+                    </div>
+                </div>
+
+                <!-- Carta "Nuovo Template" -->
+                <div class="template-card template-new">
+                    <div class="template-new-content">
+                        <i class="fas fa-plus-circle"></i>
+                        <h3>Crea Nuovo Modello</h3>
+                        <p>Definisci un nuovo modello di report personalizzato</p>
+                        <button id="createNewTemplate" class="btn btn-success">Crea Modello</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-content">
+        <p>&copy; 2025 - Tool Reporting Commissioni | Powered by <strong>Serge Guea</strong></p>
+        <div class="footer-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Termini di Servizio</a>
+            <a href="contact.html">Contatti</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Script per la gestione della navbar -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toggle per il menu mobile
+        const navbarToggle = document.getElementById('navbarToggle');
+        const navbarNav = document.getElementById('navbarNav');
+
+        if (navbarToggle) {
+            navbarToggle.addEventListener('click', function () {
+                navbarNav.classList.toggle('show');
+            });
+        }
+
+        // Gestione dropdown utente
+        const userDropdown = document.getElementById('userDropdown');
+        if (userDropdown) {
+            userDropdown.addEventListener('click', function (e) {
+                e.preventDefault();
+                this.nextElementSibling.classList.toggle('show');
+            });
+
+            // Chiudi il dropdown quando si clicca altrove
+            document.addEventListener('click', function (e) {
+                if (userDropdown && !userDropdown.contains(e.target)) {
+                    userDropdown.nextElementSibling.classList.remove('show');
+                }
+            });
+        }
+
+        // Controllo se l'utente è loggato
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+        if (isLoggedIn) {
+            document.getElementById('loggedOutButtons').style.display = 'none';
+            document.getElementById('loggedInButtons').style.display = 'block';
+
+            const userName = localStorage.getItem('userName') || 'Utente';
+            document.getElementById('userName').textContent = userName;
+        } else {
+            document.getElementById('loggedOutButtons').style.display = 'block';
+            document.getElementById('loggedInButtons').style.display = 'none';
+        }
+
+        // Gestione logout
+        const logoutButton = document.getElementById('logoutButton');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userToken');
+
+                window.location.href = 'index.html';
+            });
+        }
+    });
+</script>
+
+<!-- Script principale per la pagina di reporting -->
+<script src="reporting.js"></script>
+</body>
+</html>

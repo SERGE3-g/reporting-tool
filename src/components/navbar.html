@@ -1,0 +1,126 @@
+<!-- navbar.html -->
+<nav class="navbar">
+    <div class="navbar-content">
+        <a href="index.html" class="navbar-brand">
+            <i class="fas fa-exchange-alt"></i> Tool di Reporting Commissioni
+        </a>
+        <button class="navbar-toggler" id="navbarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="navbar-nav" id="navbarNav">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="reporting.html" class="nav-link">
+                    <i class="fas fa-file-alt"></i> Reporting
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="presets.html" class="nav-link">
+                    <i class="fas fa-sliders-h"></i> Preset
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i> Impostazioni
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="help.html" class="nav-link">
+                    <i class="fas fa-question-circle"></i> Guida
+                </a>
+            </li>
+            <!-- Bottoni di autenticazione dinamici (mostrati in base allo stato di login) -->
+            <li class="nav-item auth-buttons" id="loggedOutButtons">
+                <a href="login.html" class="navbar-btn">
+                    Accedi
+                </a>
+            </li>
+            <li class="nav-item auth-buttons dropdown" id="loggedInButtons" style="display: none;">
+                <a href="#" class="nav-link dropdown-toggle" id="userDropdown">
+                    <i class="fas fa-user-circle"></i> <span id="userName">Utente</span>
+                </a>
+                <div class="dropdown-menu">
+                    <a href="profile.html" class="dropdown-item">
+                        <i class="fas fa-id-card"></i> Profilo
+                    </a>
+                    <a href="#" class="dropdown-item" id="logoutButton">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+    // Toggle per il menu mobile
+    document.getElementById('navbarToggle').addEventListener('click', function() {
+        document.getElementById('navbarNav').classList.toggle('show');
+    });
+
+    // Evidenzia la voce di menu attiva in base alla pagina corrente
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === currentPage) {
+                link.classList.add('active');
+            }
+        });
+
+        // Gestione dropdown utente
+        const userDropdown = document.getElementById('userDropdown');
+        if (userDropdown) {
+            userDropdown.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.nextElementSibling.classList.toggle('show');
+            });
+
+            // Chiudi il dropdown quando si clicca altrove
+            document.addEventListener('click', function(e) {
+                if (!userDropdown.contains(e.target)) {
+                    userDropdown.nextElementSibling.classList.remove('show');
+                }
+            });
+        }
+
+        // Esempio: Controllo se l'utente è loggato (da sostituire con logica reale)
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+        if (isLoggedIn) {
+            document.getElementById('loggedOutButtons').style.display = 'none';
+            document.getElementById('loggedInButtons').style.display = 'block';
+
+            // Imposta il nome utente dal localStorage
+            const userName = localStorage.getItem('userName') || 'Utente';
+            document.getElementById('userName').textContent = userName;
+        } else {
+            document.getElementById('loggedOutButtons').style.display = 'block';
+            document.getElementById('loggedInButtons').style.display = 'none';
+        }
+
+        // Gestione logout
+        document.getElementById('logoutButton').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Rimuovi i dati di login (da sostituire con logica reale)
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userToken');
+
+            // Reindirizza alla home o alla pagina di login
+            window.location.href = 'index.html';
+        });
+    });
+</script>

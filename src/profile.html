@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Profilo Utente - Tool di Reporting Commissioni</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- File CSS principale -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Includi la navbar -->
+    <div id="navbar-container"></div>
+
+    <div class="app-container">
+        <header>
+            <h1><i class="fas fa-user-circle"></i> Profilo Utente</h1>
+            <p>Gestisci il tuo account e le informazioni personali</p>
+        </header>
+
+        <div class="profile-container">
+            <!-- Informazioni di base del profilo -->
+            <div class="section profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <h2 id="profileName">Nome Utente</h2>
+                    <p id="profileEmail">utente@esempio.com</p>
+                    <p class="profile-role">Ruolo: <span id="profileRole">Utente Standard</span></p>
+                </div>
+                <div class="profile-actions">
+                    <button id="editProfileBtn" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Modifica Profilo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form modifica profilo (inizialmente nascosto) -->
+            <div id="profileEditForm" class="section" style="display: none;">
+                <h2><i class="fas fa-edit"></i> Modifica Profilo</h2>
+
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="editName">Nome completo</label>
+                        <input type="text" id="editName" class="form-control" placeholder="Il tuo nome e cognome">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editEmail">Email</label>
+                        <input type="email" id="editEmail" class="form-control" placeholder="esempio@dominio.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Immagine Profilo</label>
+                        <div class="avatar-upload">
+                            <div class="avatar-preview">
+                                <div id="avatarPreview" style="background-image: url('assets/default-avatar.png');"></div>
+                            </div>
+                            <div class="avatar-edit">
+                                <input type='file' id="avatarUpload" accept=".png, .jpg, .jpeg" />
+                                <label for="avatarUpload">Cambia immagine</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editBio">Bio</label>
+                        <textarea id="editBio" class="form-control" rows="3" placeholder="Breve descrizione"></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Salva Modifiche
+                        </button>
+                        <button type="button" id="cancelEditBtn" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Annulla
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Statistiche utente -->
+            <div class="section">
+                <h2><i class="fas fa-chart-pie"></i> Statistiche Account</h2>
+
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="reportCount">24</div>
+                        <div class="stat-label">Report Generati</div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-value" id="fileCount">56</div>
+                        <div class="stat-label">File Elaborati</div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-value" id="loginCount">18</div>
+                        <div class="stat-label">Accessi</div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-value" id="daysActive">32</div>
+                        <div class="stat-label">Giorni di Attività</div>
+                    </div>
+                </div>
+
+                <div class="last-activity">
+                    <p>Ultimo accesso: <span id="lastLogin">22 Marzo 2025, 15:30</span></p>
+                    <p>Account creato: <span id="accountCreated">15 Gennaio 2025</span></p>
+                </div>
+            </div>
+
+            <!-- Attività recenti -->
+            <div class="section">
+                <h2><i class="fas fa-history"></i> Attività Recenti</h2>
+
+                <div class="activity-list" id="activityList">
+                    <!-- Contenuto dinamico -->
+                </div>
+            </div>
+
+            <!-- Sicurezza account -->
+            <div class="section">
+                <h2><i class="fas fa-shield-alt"></i> Sicurezza Account</h2>
+
+                <div class="security-options">
+                    <div class="security-option">
+                        <div class="security-info">
+                            <h3>Password</h3>
+                            <p>Ultima modifica: <span id="lastPasswordChange">15 Febbraio 2025</span></p>
+                        </div>
+                        <button id="changePasswordBtn" class="btn btn-primary">
+                            <i class="fas fa-key"></i> Cambia Password
+                        </button>
+                    </div>
+
+                    <div class="security-option">
+                        <div class="security-info">
+                            <h3>Sessioni attive</h3>
+                            <p>Attualmente hai <span id="activeSessions">1</span> sessione attiva</p>
+                        </div>
+                        <button id="logoutAllBtn" class="btn btn-warning">
+                            <i class="fas fa-sign-out-alt"></i> Disconnetti Tutti
+                        </button>
+                    </div>
+
+                    <div class="security-option">
+                        <div class="security-info">
+                            <h3>Eliminazione Account</h3>
+                            <p>Questa operazione cancellerà definitivamente tutti i tuoi dati</p>
+                        </div>
+                        <button id="deleteAccountBtn" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Elimina Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form cambio password (inizialmente nascosto) -->
+            <div id="passwordChangeForm" class="section" style="display: none;">
+                <h2><i class="fas fa-key"></i> Cambia Password</h2>
+
+                <form id="passwordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Password attuale</label>
+                        <input type="password" id="currentPassword" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPassword">Nuova password</label>
+                        <input type="password" id="newPassword" class="form-control" required>
+                        <div class="password-strength">
+                            <div class="strength-meter">
+                                <div class="strength-bar" id="passwordStrength"></div>
+                            </div>
+                            <span id="passwordStrengthText">Sicurezza password</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Conferma nuova password</label>
+                        <input type="password" id="confirmPassword" class="form-control" required>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Salva Nuova Password
+                        </button>
+                        <button type="button" id="cancelPasswordBtn" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Annulla
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Includi il footer -->
+    <div id="footer-container"></div>
+
+    <!-- Script per caricare componenti condivisi -->
+    <script>
+        // Funzione per caricare componenti HTML
+        function loadComponent(url, containerId) {
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById(containerId).innerHTML = html;
+                })
+                .catch(error => {
+                    console.error(`Errore nel caricamento del componente ${url}:`, error);
+                });
+        }
+
+        // Carica navbar e footer
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponent('components/navbar.html', 'navbar-container');
+            loadComponent('components/footer.html', 'footer-container');
+        });
+    </script>
+
+    <!-- Script per la gestione del profilo -->
+    <script src="profile.js"></script>
+</body>
+</html>

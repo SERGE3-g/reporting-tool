@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Gestione Preset - Tool di Reporting Commissioni</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- File CSS principale -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <i class="fas fa-exchange-alt"></i> Tool di Reporting Commissioni
+            </a>
+            <button class="navbar-toggler" id="navbarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="navbar-nav" id="navbarNav">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="reporting.html" class="nav-link">
+                        <i class="fas fa-file-alt"></i> Reporting
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="presets.html" class="nav-link active">
+                        <i class="fas fa-sliders-h"></i> Preset
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="settings.html" class="nav-link">
+                        <i class="fas fa-cog"></i> Impostazioni
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="help.html" class="nav-link">
+                        <i class="fas fa-question-circle"></i> Guida
+                    </a>
+                </li>
+                <!-- Bottoni di autenticazione dinamici (mostrati in base allo stato di login) -->
+                <li class="nav-item auth-buttons" id="loggedOutButtons">
+                    <a href="login.html" class="navbar-btn">
+                        Accedi
+                    </a>
+                </li>
+                <li class="nav-item auth-buttons dropdown" id="loggedInButtons" style="display: none;">
+                    <a href="#" class="nav-link dropdown-toggle" id="userDropdown">
+                        <i class="fas fa-user-circle"></i> <span id="userName">Utente</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-id-card"></i> Profilo
+                        </a>
+                        <a href="#" class="dropdown-item" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <!-- Header della pagina con il titolo principale -->
+        <header>
+            <h1><i class="fas fa-sliders-h"></i> Gestione Preset</h1>
+            <p>Crea, modifica e applica filtri predefiniti per ottimizzare l'analisi dei dati</p>
+        </header>
+
+        <!-- Menu della guida laterale -->
+        <ul class="main-nav">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="reporting.html"><i class="fas fa-file-alt"></i> Reporting</a></li>
+            <li><a href="presets.html" class="active"><i class="fas fa-sliders-h"></i> Gestione Preset</a></li>
+            <li><a href="help.html"><i class="fas fa-question-circle"></i> Guida</a></li>
+        </ul>
+
+        <!-- Sezione Crea Nuovo Preset -->
+        <div class="section">
+            <h2><i class="fas fa-plus-circle"></i> Crea Nuovo Preset</h2>
+            <p>Definisci un nuovo preset di filtri per facilitare le tue analisi future.</p>
+
+            <form id="newPresetForm" class="preset-form">
+                <div class="form-row">
+                    <div class="form-group col-half">
+                        <label for="presetName">Nome Preset</label>
+                        <input type="text" id="presetName" class="form-control" placeholder="Es: Commissioni Elevate">
+                    </div>
+                    <div class="form-group col-half">
+                        <label for="presetCategory">Categoria</label>
+                        <select id="presetCategory" class="form-control">
+                            <option value="reporting">Reporting</option>
+                            <option value="analysis">Analisi</option>
+                            <option value="alert">Alert</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="presetDescription">Descrizione</label>
+                    <textarea id="presetDescription" class="form-control" rows="3" placeholder="Descrivi lo scopo di questo preset..."></textarea>
+                </div>
+
+                <h3>Definisci Criteri di Filtro</h3>
+
+                <div id="filtersCriteria">
+                    <div class="criteria-row">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label for="filterField1">Campo</label>
+                                <select id="filterField1" class="form-control filter-field">
+                                    <option value="Addebito">Addebito</option>
+                                    <option value="IBAN">IBAN</option>
+                                    <option value="fee scadenza">Fee scadenza</option>
+                                    <option value="totale transazioni">Totale transazioni</option>
+                                    <option value="descrizione">Descrizione</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label for="filterOperator1">Operatore</label>
+                                <select id="filterOperator1" class="form-control filter-operator">
+                                    <option value=">">></option>
+                                    <option value="<"><</option>
+                                    <option value="=">=</option>
+                                    <option value=">=">>=</option>
+                                    <option value="<="><=</option>
+                                    <option value="contiene">Contiene</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label for="filterValue1">Valore</label>
+                                <input type="text" id="filterValue1" class="form-control filter-value" placeholder="Valore">
+                            </div>
+                            <div class="form-group" style="align-self: end; width: auto;">
+                                <button type="button" class="btn btn-danger remove-filter">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" id="addFilterCriterion" class="btn btn-info">
+                    <i class="fas fa-plus"></i> Aggiungi Criterio
+                </button>
+
+                <div class="form-actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salva Preset
+                    </button>
+                    <button type="reset" class="btn btn-secondary">
+                        <i class="fas fa-undo"></i> Annulla
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sezione Preset Esistenti -->
+        <div class="section">
+            <h2><i class="fas fa-list"></i> Preset Salvati</h2>
+
+            <div class="preset-filters">
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <input type="text" id="searchPreset" class="form-control" placeholder="Cerca preset...">
+                    </div>
+                    <div class="form-group" style="width: 200px;">
+                        <select id="categoryFilter" class="form-control">
+                            <option value="all">Tutte le categorie</option>
+                            <option value="reporting">Reporting</option>
+                            <option value="analysis">Analisi</option>
+                            <option value="alert">Alert</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="presetsList">
+                <!-- Preset 1 -->
+                <div class="preset-item">
+                    <div class="preset-header">
+                        <div class="preset-name">
+                            Commissioni Elevate
+                            <span class="category-badge category-reporting">Reporting</span>
+                        </div>
+                        <div class="preset-actions">
+                            <button class="btn btn-sm btn-primary use-preset">
+                                <i class="fas fa-play"></i> Usa
+                            </button>
+                            <button class="btn btn-sm btn-info edit-preset">
+                                <i class="fas fa-edit"></i> Modifica
+                            </button>
+                            <button class="btn btn-sm btn-danger delete-preset">
+                                <i class="fas fa-trash"></i> Elimina
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="preset-details">
+                        <p>Filtro per identificare transazioni con commissioni particolarmente alte, utile per analisi di costi.</p>
+
+                        <h4>Criteri di filtro:</h4>
+                        <div class="preset-criteria">
+                            <div class="criteria-item">Addebito > 1000</div>
+                            <div class="criteria-item">Fee scadenza > 50</div>
+                        </div>
+                    </div>
+
+                    <div class="preset-footer">
+                        <div class="preset-meta">
+                            <div class="preset-created">
+                                <i class="fas fa-clock"></i> Creato: 15 Mar 2025
+                            </div>
+                            <div class="preset-updated">
+                                <i class="fas fa-sync-alt"></i> Aggiornato: 18 Mar 2025
+                            </div>
+                        </div>
+                        <div class="preset-usage-count">
+                            <i class="fas fa-eye"></i> Utilizzato 12 volte
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preset 2 -->
+                <div class="preset-item">
+                    <div class="preset-header">
+                        <div class="preset-name">
+                            Analisi Transazioni Bancarie
+                            <span class="category-badge category-analysis">Analisi</span>
+                        </div>
+                        <div class="preset-actions">
+                            <button class="btn btn-sm btn-primary use-preset">
+                                <i class="fas fa-play"></i> Usa
+                            </button>
+                            <button class="btn btn-sm btn-info edit-preset">
+                                <i class="fas fa-edit"></i> Modifica
+                            </button>
+                            <button class="btn btn-sm btn-danger delete-preset">
+                                <i class="fas fa-trash"></i> Elimina
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="preset-details">
+                        <p>Preset per l'analisi delle transazioni bancarie, filtrando per IBAN specifici.</p>
+
+                        <h4>Criteri di filtro:</h4>
+                        <div class="preset-criteria">
+                            <div class="criteria-item">IBAN contiene IT60X</div>
+                            <div class="criteria-item">Totale transazioni > 5</div>
+                        </div>
+                    </div>
+
+                    <div class="preset-footer">
+                        <div class="preset-meta">
+                            <div class="preset-created">
+                                <i class="fas fa-clock"></i> Creato: 10 Feb 2025
+                            </div>
+                            <div class="preset-updated">
+                                <i class="fas fa-sync-alt"></i> Aggiornato: 10 Feb 2025
+                            </div>
+                        </div>
+                        <div class="preset-usage-count">
+                            <i class="fas fa-eye"></i> Utilizzato 8 volte
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preset 3 -->
+                <div class="preset-item">
+                    <div class="preset-header">
+                        <div class="preset-name">
+                            Alert Commissioni Scadute
+                            <span class="category-badge category-alert">Alert</span>
+                        </div>
+                        <div class="preset-actions">
+                            <button class="btn btn-sm btn-primary use-preset">
+                                <i class="fas fa-play"></i> Usa
+                            </button>
+                            <button class="btn btn-sm btn-info edit-preset">
+                                <i class="fas fa-edit"></i> Modifica
+                            </button>
+                            <button class="btn btn-sm btn-danger delete-preset">
+                                <i class="fas fa-trash"></i> Elimina
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="preset-details">
+                        <p>Preset per identificare commissioni con scadenza superata che richiedono attenzione immediata.</p>
+
+                        <h4>Criteri di filtro:</h4>
+                        <div class="preset-criteria">
+                            <div class="criteria-item">Fee scadenza contiene 01/03/2025</div>
+                            <div class="criteria-item">Addebito > 500</div>
+                        </div>
+                    </div>
+
+                    <div class="preset-footer">
+                        <div class="preset-meta">
+                            <div class="preset-created">
+                                <i class="fas fa-clock"></i> Creato: 5 Mar 2025
+                            </div>
+                            <div class="preset-updated">
+                                <i class="fas fa-sync-alt"></i> Aggiornato: 20 Mar 2025
+                            </div>
+                        </div>
+                        <div class="preset-usage-count">
+                            <i class="fas fa-eye"></i> Utilizzato 5 volte
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 - Tool Reporting Commissioni | Powered by <strong>Serge Guea</strong></p>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Termini di Servizio</a>
+                <a href="contact.html">Contatti</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script per la gestione della navbar -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle per il menu mobile
+            const navbarToggle = document.getElementById('navbarToggle');
+            const navbarNav = document.getElementById('navbarNav');
+
+            if (navbarToggle) {
+                navbarToggle.addEventListener('click', function() {
+                    navbarNav.classList.toggle('show');
+                });
+            }
+
+            // Gestione dropdown utente
+            const userDropdown = document.getElementById('userDropdown');
+            if (userDropdown) {
+                userDropdown.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    this.nextElementSibling.classList.toggle('show');
+                });
+
+                // Chiudi il dropdown quando si clicca altrove
+                document.addEventListener('click', function(e) {
+                    if (userDropdown && !userDropdown.contains(e.target)) {
+                        userDropdown.nextElementSibling.classList.remove('show');
+                    }
+                });
+            }
+
+            // Controllo se l'utente è loggato
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+            if (isLoggedIn) {
+                document.getElementById('loggedOutButtons').style.display = 'none';
+                document.getElementById('loggedInButtons').style.display = 'block';
+
+                const userName = localStorage.getItem('userName') || 'Utente';
+                document.getElementById('userName').textContent = userName;
+            } else {
+                document.getElementById('loggedOutButtons').style.display = 'block';
+                document.getElementById('loggedInButtons').style.display = 'none';
+            }
+
+            // Gestione logout
+            const logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userName');
+                    localStorage.removeItem('userToken');
+
+                    window.location.href = 'index.html';
+                });
+            }
+
+            // Gestione aggiunta criterio filtro
+            const addFilterCriterionBtn = document.getElementById('addFilterCriterion');
+            if (addFilterCriterionBtn) {
+                addFilterCriterionBtn.addEventListener('click', function() {
+                    const filtersCriteria = document.getElementById('filtersCriteria');
+                    const criteriaCount = filtersCriteria.querySelectorAll('.criteria-row').length + 1;
+
+                    const newCriteriaRow = document.createElement('div');
+                    newCriteriaRow.className = 'criteria-row';
+                    newCriteriaRow.innerHTML = `
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label for="filterField${criteriaCount}">Campo</label>
+                                <select id="filterField${criteriaCount}" class="form-control filter-field">
+                                    <option value="Addebito">Addebito</option>
+                                    <option value="IBAN">IBAN</option>
+                                    <option value="fee scadenza">Fee scadenza</option>
+                                    <option value="totale transazioni">Totale transazioni</option>
+                                    <option value="descrizione">Descrizione</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label for="filterOperator${criteriaCount}">Operatore</label>
+                                <select id="filterOperator${criteriaCount}" class="form-control filter-operator">
+                                    <option value=">">></option>
+                                    <option value="<"><</option>
+                                    <option value="=">=</option>
+                                    <option value=">=">>=</option>
+                                    <option value="<="><=</option>
+                                    <option value="contiene">Contiene</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label for="filterValue${criteriaCount}">Valore</label>
+                                <input type="text" id="filterValue${criteriaCount}" class="form-control filter-value" placeholder="Valore">
+                            </div>
+                            <div class="form-group" style="align-self: end; width: auto;">
+                                <button type="button" class="btn btn-danger remove-filter">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+
+                    filtersCriteria.appendChild(newCriteriaRow);
+
+                    // Aggiungi event listener per il pulsante di rimozione
+                    newCriteriaRow.querySelector('.remove-filter').addEventListener('click', function() {
+                        newCriteriaRow.remove();
+                    });
+                });
+            }
+
+            // Event delegation per i pulsanti di rimozione esistenti
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-filter') || e.target.closest('.remove-filter')) {
+                    const button = e.target.classList.contains('remove-filter') ? e.target : e.target.closest('.remove-filter');
+                    const criteriaRow = button.closest('.criteria-row');
+
+                    // Assicurati che ci sia sempre almeno un criterio
+                    const allCriteriaRows = document.querySelectorAll('.criteria-row');
+                    if (allCriteriaRows.length > 1) {
+                        criteriaRow.remove();
+                    } else {
+                        showNotification('Deve rimanere almeno un criterio di filtro', 'warning');
+                    }
+                }
+            });
+
+            // Gestione del form del nuovo preset
+            const newPresetForm = document.getElementById('newPresetForm');
+            if (newPresetForm) {
+                newPresetForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    // Raccogli i dati del form
+                    const presetName = document.getElementById('presetName').value;
+                    const presetCategory = document.getElementById('presetCategory').value;
+                    const presetDescription = document.getElementById('presetDescription').value;
+
+                    if (!presetName) {
+                        showNotification('Inserisci un nome per il preset', 'error');
+                        return;
+                    }
+
+                    // Raccogli i criteri di filtro
+                    const filterFields = document.querySelectorAll('.filter-field');
+                    const filterOperators = document.querySelectorAll('.filter-operator');
+                    const filterValues = document.querySelectorAll('.filter-value');
+
+                    const criteria = [];
+                    for (let i = 0; i < filterFields.length; i++) {
+                        const field = filterFields[i].value;
+                        const operator = filterOperators[i].value;
+                        const value = filterValues[i].value;
+
+                        if (field && value) {
+                            criteria.push({
+                                field,
+                                operator,
+                                value
+                            });
+                        }
+                    }
+
+                    if (criteria.length === 0) {
+                        showNotification('Definisci almeno un criterio di filtro valido', 'error');
+                        return;
+                    }
+
+                    // Simula il salvataggio del preset
+                    // In un'app reale, qui invieresti i dati a un server
+                    const preset = {
+                        id: Date.now().toString(),
+                        name: presetName,
+                        category: presetCategory,
+                        description: presetDescription,
+                        criteria,
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString(),
+                        usageCount: 0
+                    };
+
+                    // Salva il preset nel localStorage
+                    const savedPresets = JSON.parse(localStorage.getItem('filterPresets') || '[]');
+                    savedPresets.push(preset);
+                    localStorage.setItem('filterPresets', JSON.stringify(savedPresets));
+
+                    showNotification('Preset salvato con successo', 'success');
+
+                    // Resetta il form
+                    newPresetForm.reset();
+
+                    // Ricarica la pagina o aggiorna la lista dei preset
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                });
+            }
+
+            // Funzione per mostrare notifiche
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.innerHTML = `
+                    <div class="notification-icon">
+                        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'}"></i>
+                    </div>
+                    <div class="notification-message">${message}</div>
+                    <button class="notification-close"><i class="fas fa-times"></i></button>
+                `;
+
+                document.body.appendChild(notification);
+
+                // Aggiungi classe per animazione
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 10);
+
+                // Pulsante per chiudere
+                notification.querySelector('.notification-close').addEventListener('click', () => {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                });
+
+                // Chiudi automaticamente dopo 5 secondi
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        notification.classList.remove('show');
+                        setTimeout(() => {
+                            if (document.body.contains(notification)) {
+                                notification.remove();
+                            }
+                        }, 300);
+                    }
+                }, 5000);
+            }
+        });
+    </script>
+
+    <!-- Script principale per la gestione dei preset -->
+    <script src="presets.js"></script>
+</body>
+</html>

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Guida - Tool di Reporting Commissioni</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- File CSS principale -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <i class="fas fa-exchange-alt"></i> Tool di Reporting Commissioni
+            </a>
+            <button class="navbar-toggler" id="navbarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="navbar-nav" id="navbarNav">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="reporting.html" class="nav-link">
+                        <i class="fas fa-file-alt"></i> Reporting
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="presets.html" class="nav-link">
+                        <i class="fas fa-sliders-h"></i> Preset
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="settings.html" class="nav-link">
+                        <i class="fas fa-cog"></i> Impostazioni
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="help.html" class="nav-link active">
+                        <i class="fas fa-question-circle"></i> Guida
+                    </a>
+                </li>
+                <!-- Bottoni di autenticazione dinamici (mostrati in base allo stato di login) -->
+                <li class="nav-item auth-buttons" id="loggedOutButtons">
+                    <a href="login.html" class="navbar-btn">
+                        Accedi
+                    </a>
+                </li>
+                <li class="nav-item auth-buttons dropdown" id="loggedInButtons" style="display: none;">
+                    <a href="#" class="nav-link dropdown-toggle" id="userDropdown">
+                        <i class="fas fa-user-circle"></i> <span id="userName">Utente</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-id-card"></i> Profilo
+                        </a>
+                        <a href="#" class="dropdown-item" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenuto principale -->
+    <div class="app-container">
+        <header>
+            <h1><i class="fas fa-question-circle"></i> Guida Utente</h1>
+            <p>Tutto ciò che devi sapere per utilizzare al meglio il Tool di Reporting Commissioni</p>
+        </header>
+
+        <!-- Indice -->
+        <div class="section">
+            <h2><i class="fas fa-list"></i> Indice</h2>
+            <div class="toc">
+                <ul>
+                    <li><a href="#introduzione">1. Introduzione</a></li>
+                    <li><a href="#requisiti">2. Requisiti di Sistema</a></li>
+                    <li><a href="#installazione">3. Installazione</a></li>
+                    <li><a href="#uso">4. Guida all'Uso</a>
+                        <ul>
+                            <li><a href="#selezione-file">4.1. Selezione dei File</a></li>
+                            <li><a href="#configurazione">4.2. Configurazione dei Campi e Filtri</a></li>
+                            <li><a href="#elaborazione">4.3. Elaborazione dei File</a></li>
+                            <li><a href="#esportazione">4.4. Esportazione dei Risultati</a></li>
+                            <li><a href="#statistiche">4.5. Analisi Statistica</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#email">5. Configurazione Email</a></li>
+                    <li><a href="#problemi">6. Risoluzione dei Problemi</a></li>
+                    <li><a href="#faq">7. Domande Frequenti</a></li>
+                    <li><a href="#supporto">8. Supporto</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Sezione Introduzione -->
+        <div class="section" id="introduzione">
+            <h2><i class="fas fa-info-circle"></i> 1. Introduzione</h2>
+            <p>Il Tool di Reporting Commissioni Mensile è un'applicazione desktop progettata per semplificare l'estrazione e l'analisi dei dati di commissione contenuti in file JSON, XML e CSV. Questo strumento consente di estrarre automaticamente informazioni chiave, applicare filtri, visualizzare statistiche e esportare i risultati in diversi formati.</p>
+
+            <div class="image-container">
+                <img src="assets/screenshots/main-app.png" alt="Screenshot dell'applicazione" class="responsive-img">
+                <p class="caption">Interfaccia principale dell'applicazione</p>
+            </div>
+
+            <p>Con questa applicazione potrai:</p>
+            <ul class="feature-list">
+                <li><strong>Importare facilmente</strong> file JSON, XML e CSV tramite drag & drop</li>
+                <li><strong>Estrarre automaticamente</strong> campi come descrizioni, importi, IBAN e altri dettagli</li>
+                <li><strong>Filtrare i dati</strong> in base a diversi criteri</li>
+                <li><strong>Visualizzare i risultati</strong> in una tabella ordinata</li>
+                <li><strong>Esportare i dati</strong> in formato CSV, XLSX o PDF</li>
+                <li><strong>Analizzare statisticamente</strong> i dati numerici</li>
+                <li><strong>Visualizzare grafici</strong> per una migliore comprensione dei dati</li>
+                <li><strong>Inviare report</strong> direttamente via email</li>
+            </ul>
+        </div>
+
+        <!-- Sezione Requisiti di Sistema -->
+        <div class="section" id="requisiti">
+            <h2><i class="fas fa-desktop"></i> 2. Requisiti di Sistema</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Componente</th>
+                            <th>Requisito Minimo</th>
+                            <th>Consigliato</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sistema Operativo</td>
+                            <td>Windows 10, macOS 10.13, Ubuntu 18.04</td>
+                            <td>Windows 11, macOS 12, Ubuntu 22.04</td>
+                        </tr>
+                        <tr>
+                            <td>Processore</td>
+                            <td>Dual Core 2 GHz</td>
+                            <td>Quad Core 2.5 GHz o superiore</td>
+                        </tr>
+                        <tr>
+                            <td>Memoria RAM</td>
+                            <td>4 GB</td>
+                            <td>8 GB o superiore</td>
+                        </tr>
+                        <tr>
+                            <td>Spazio su Disco</td>
+                            <td>120 MB</td>
+                            <td>500 MB o superiore</td>
+                        </tr>
+                        <tr>
+                            <td>Risoluzione Schermo</td>
+                            <td>1280 x 720</td>
+                            <td>1920 x 1080 o superiore</td>
+                        </tr>
+                        <tr>
+                            <td>Connessione Internet</td>
+                            <td>Richiesta solo per l'invio email</td>
+                            <td>Connessione stabile</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="note">
+                <p><i class="fas fa-exclamation-triangle"></i> <strong>Nota:</strong> Per file di grandi dimensioni (>50 MB) si consiglia di utilizzare un sistema con almeno 8 GB di RAM.</p>
+            </div>
+        </div>
+
+        <!-- Sezione Installazione -->
+        <div class="section" id="installazione">
+            <h2><i class="fas fa-download"></i> 3. Installazione</h2>
+
+            <div class="subsection">
+                <h3><i class="fab fa-windows"></i> Windows</h3>
+                <ol>
+                    <li>Scaricare il file <code>Reporting-Tool-Setup-1.1.0.exe</code> dalla sezione download</li>
+                    <li>Eseguire il file di installazione facendo doppio clic</li>
+                    <li>Seguire le istruzioni a schermo per completare l'installazione</li>
+                    <li>Avviare l'applicazione dal menu Start o dal desktop</li>
+                </ol>
+            </div>
+
+            <div class="subsection">
+                <h3><i class="fab fa-apple"></i> macOS</h3>
+                <ol>
+                    <li>Scaricare il file <code>Reporting-Tool-1.1.0.dmg</code> dalla sezione download</li>
+                    <li>Aprire il file DMG facendo doppio clic</li>
+                    <li>Trascinare l'icona dell'applicazione nella cartella Applicazioni</li>
+                    <li>Avviare l'applicazione dal Launchpad o dalla cartella Applicazioni</li>
+                    <li>Al primo avvio, potrebbe essere necessario autorizzare l'apertura nelle Preferenze di Sicurezza</li>
+                </ol>
+            </div>
+
+            <div class="subsection">
+                <h3><i class="fab fa-linux"></i> Linux</h3>
+                <ol>
+                    <li>Scaricare il file <code>Reporting-Tool-1.1.0.AppImage</code> dalla sezione download</li>
+                    <li>Rendere il file eseguibile con il comando:
+                        <pre><code>chmod +x Reporting-Tool-1.1.0.AppImage</code></pre>
+                    </li>
+                    <li>Eseguire l'applicazione con il comando:
+                        <pre><code>./Reporting-Tool-1.1.0.AppImage</code></pre>
+                    </li>
+                    <li>Opzionalmente, installare globalmente:
+                        <pre><code>sudo mv Reporting-Tool-1.1.0.AppImage /usr/local/bin/reporting-tool
+sudo chmod +x /usr/local/bin/reporting-tool</code></pre>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Sezione Guida all'Uso -->
+        <div class="section" id="uso">
+            <h2><i class="fas fa-book"></i> 4. Guida all'Uso</h2>
+
+            <!-- Sezione Selezione File -->
+            <div class="subsection" id="selezione-file">
+                <h3><i class="fas fa-file-upload"></i> 4.1. Selezione dei File</h3>
+                <div class="image-container">
+                    <img src="assets/screenshots/file-selection.png" alt="Selezione dei file" class="responsive-img">
+                    <p class="caption">Area di selezione dei file</p>
+                </div>
+                <p>Per importare i file JSON, XML o CSV:</p>
+                <ul>
+                    <li>Clicca sull'area di trascinamento oppure</li>
+                    <li>Trascina direttamente uno o più file nell'area designata</li>
+                    <li>Puoi selezionare più file tenendo premuto CTRL o SHIFT durante la selezione</li>
+                    <li>I file selezionati verranno mostrati con nome e dimensione</li>
+                    <li>Puoi anche accedere ai file recenti dal menu File</li>
+                </ul>
+                <div class="tip">
+                    <p><i class="fas fa-lightbulb"></i> <strong>Suggerimento:</strong> Per una migliore performance, è consigliabile processare file di dimensioni simili contemporaneamente.</p>
+                </div>
+            </div>
+
+            <!-- Sezione Configurazione -->
+            <div class="subsection" id="configurazione">
+                <h3><i class="fas fa-cogs"></i> 4.2. Configurazione dei Campi e Filtri</h3>
+                <div class="image-container">
+                    <img src="assets/screenshots/configuration.png" alt="Configurazione dei campi" class="responsive-img">
+                    <p class="caption">Area di configurazione dei campi e filtri</p>
+                </div>
+                <p>Per configurare i campi da estrarre e i filtri:</p>
+                <ol>
+                    <li>Seleziona o deseleziona i campi che vuoi estrarre:
+                        <ul>
+                            <li>descriptionMerchant</li>
+                            <li>Addebito</li>
+                            <li>IBAN</li>
+                            <li>fee scadenza</li>
+                            <li>totale transazioni</li>
+                            <li>descrizione</li>
+                        </ul>
+                    </li>
+                    <li>Attiva l'opzione "Applica filtro ai risultati" se necessario</li>
+                    <li>Configura il filtro selezionando:
+                        <ul>
+                            <li>Campo su cui filtrare</li>
+                            <li>Operatore di confronto (>, <, =, >=, <=, contiene)</li>
+                            <li>Valore di confronto</li>
+                        </ul>
+                    </li>
+                </ol>
+                <div class="tip">
+                    <p><i class="fas fa-lightbulb"></i> <strong>Suggerimento:</strong> Nella versione 1.1.0 è possibile salvare configurazioni di filtri frequentemente utilizzate come preset [BETA].</p>
+                </div>
+            </div>
+
+            <!-- Sezione Elaborazione -->
+            <div class="subsection" id="elaborazione">
+                <h3><i class="fas fa-play-circle"></i> 4.3. Elaborazione dei File</h3>
+                <div class="image-container">
+                    <img src="assets/screenshots/processing.png" alt="Elaborazione dei file" class="responsive-img">
+                    <p class="caption">Processo di elaborazione dei file</p>
+                </div>
+                <p>Per avviare l'elaborazione dei file:</p>
+                <ol>
+                    <li>Clicca sul pulsante "Elabora i file JSON"</li>
+                    <li>Una barra di progresso mostrerà l'avanzamento dell'operazione</li>
+                    <li>Al termine, verrà visualizzata una tabella con i dati estratti</li>
+                    <li>L'applicazione mostrerà il numero totale di record trovati</li>
+                </ol>
+                <div class="note">
+                    <p><i class="fas fa-exclamation-triangle"></i> <strong>Nota:</strong> L'elaborazione di file di grandi dimensioni potrebbe richiedere più tempo. Non chiudere l'applicazione durante il processo.</p>
+                </div>
+            </div>
+
+            <!-- Sezione Esportazione -->
+            <div class="subsection" id="esportazione">
+                <h3><i class="fas fa-file-export"></i> 4.4. Esportazione dei Risultati</h3>
+                <div class="image-container">
+                    <img src="assets/screenshots/export.png" alt="Esportazione dei risultati" class="responsive-img">
+                    <p class="caption">Opzioni di esportazione</p>
+                </div>
+                <p>Per esportare i dati estratti:</p>
+                <ol>
+                    <li>Controlla l'anteprima dei dati nella tabella dei risultati</li>
+                    <li>Scegli il formato di esportazione desiderato:
+                        <ul>
+                            <li>CSV: clicca sul pulsante "Esporta come CSV"</li>
+                            <li>XLSX: clicca sul pulsante "Esporta come XLSX"</li>
+                            <li>PDF: disponibile dal menu File > "Esporta come PDF"</li>
+                        </ul>
+                    </li>
+                    <li>Seleziona la posizione in cui salvare il file</li>
+                    <li>Attendi il completamento dell'esportazione</li>
+                </ol>
+                <p>Per inviare i risultati via email:</p>
+                <ol>
+                    <li>Configura prima il servizio email (vedi sezione 5)</li>
+                    <li>Clicca su "Invia Report via Email" nel menu Strumenti</li>
+                    <li>Compila i campi del form (destinatari, oggetto, messaggio)</li>
+                    <li>Seleziona il formato di allegato desiderato</li>
+                    <li>Clicca su "Invia" per procedere</li>
+                </ol>
+            </div>
+
+            <!-- Sezione Statistiche -->
+            <div class="subsection" id="statistiche">
+                <h3><i class="fas fa-chart-bar"></i> 4.5. Analisi Statistica</h3>
+                <div class="image-container">
+                    <img src="assets/screenshots/statistics.png" alt="Analisi statistica" class="responsive-img">
+                    <p class="caption">Visualizzazione delle statistiche</p>
+                </div>
+                <p>Per generare statistiche sui dati estratti:</p>
+                <ol>
+                    <li>Seleziona il campo numerico per l'analisi dal menu a tendina (es. "Addebito")</li>
+                    <li>Clicca sul pulsante "Genera statistiche"</li>
+                    <li>I risultati statistici verranno visualizzati, inclusi:
+                        <ul>
+                            <li>Conteggio dei valori</li>
+                            <li>Valore minimo</li>
+                            <li>Valore massimo</li>
+                            <li>Media</li>
+                            <li>Somma totale</li>
+                            <li>Deviazione standard</li>
+                        </ul>
+                    </li>
+                    <li>I grafici mostreranno:
+                        <ul>
+                            <li>Istogramma di distribuzione dei valori</li>
+                            <li>Grafico a barre per minimo, massimo e media</li>
+                        </ul>
+                    </li>
+                </ol>
+                <div class="tip">
+                    <p><i class="fas fa-lightbulb"></i> <strong>Suggerimento:</strong> Per un'analisi più approfondita, utilizza la dashboard interattiva accessibile dal menu principale.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sezione Configurazione Email -->
+        <div class="section" id="email">
+            <h2><i class="fas fa-envelope"></i> 5. Configurazione Email</h2>
+            <div class="image-container">
+                <img src="assets/screenshots/email-config.png" alt="Configurazione email" class="responsive-img">
+                <p class="caption">Schermata di configurazione email</p>
+            </div>
+            <p>Per configurare l'invio di report via email:</p>
+            <ol>
+                <li>Accedi al menu "Strumenti" > "Configura Email"</li>
+                <li>Seleziona il servizio email desiderato:
+                    <ul>
+                        <li>Gmail</li>
+                        <li>Outlook</li>
+                        <li>SMTP personalizzato</li>
+                    </ul>
+                </li>
+                <li>Inserisci le credenziali di accesso:
+                    <ul>
+                        <li>Indirizzo email</li>
+                        <li>Password o password app</li>
+                    </ul>
+                </li>
+                <li>Per SMTP personalizzato, inserisci anche:
+                    <ul>
+                        <li>Server SMTP</li>
+                        <li>Porta SMTP</li>
+                    </ul>
+                </li>
+                <li>Clicca su "Verifica Connessione" per testare la configurazione</li>
+                <li>Clicca su "Salva" per memorizzare le impostazioni</li>
+            </ol>
+            <div class="security-note">
+                <p><i class="fas fa-shield-alt"></i> <strong>Nota sulla sicurezza:</strong> Le credenziali email vengono salvate localmente sul computer dell'utente. Si consiglia di utilizzare una password specifica per l'applicazione o l'autenticazione a due fattori ove possibile.</p>
+            </div>
+        </div>
+
+        <!-- Sezione Risoluzione dei Problemi -->
+        <div class="section" id="problemi">
+            <h2><i class="fas fa-wrench"></i> 6. Risoluzione dei Problemi</h2>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <i class="fas fa-exclamation-circle"></i> L'applicazione non riesce ad aprire i file
+                    </div>
+                    <div class="accordion-content">
+                        <p><strong>Possibili cause:</strong></p>
+                        <ul>
+                            <li>Il file non è in un formato JSON, XML o CSV valido</li>
+                            <li>Il file è danneggiato</li>
+                            <li>Non hai i permessi necessari per accedere al file</li>
+                        </ul>
+                        <p><strong>Soluzioni:</strong></p>
+                        <ul>
+                            <li>Verifica che il file sia valido utilizzando un editor JSON/XML/CSV</li>
+                            <li>Prova a riaprire il file originale e salvarlo nuovamente</li>
+                            <li>Verifica i permessi del file nel sistema operativo</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <i class="fas fa-exclamation-circle"></i> I dati estratti sono incompleti
+                    </div>
+                    <div class="accordion-content">
+                        <p><strong>Possibili cause:</strong></p>
+                        <ul>
+                            <li>Il formato dei dati potrebbe non essere riconosciuto correttamente</li>
+                            <li>I campi potrebbero avere nomi o strutture diverse da quelle attese</li>
+                            <li>Il file potrebbe contenere formattazioni speciali non supportate</li>
+                        </ul>
+                        <p><strong>Soluzioni:</strong></p>
+                        <ul>
+                            <li>Verifica che i file contengano un campo "descriptionMerchant" o simile</li>
+                            <li>Controlla la struttura dei dati nel file originale</li>
+                            <li>Prova a normalizzare il formato del file prima dell'importazione</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <i class="fas fa-exclamation-circle"></i> L'invio email non funziona
+                    </div>
+                    <div class="accordion-content">
+                        <p><strong>Possibili cause:</strong></p>
+                        <ul>
+                            <li>Configurazione del server email errata</li>
+                            <li>Credenziali non valide</li>
+                            <li>Impostazioni di sicurezza dell'account email restrittive</li>
+                            <li>Allegati troppo grandi</li>
+                        </ul>
+                        <p><strong>Soluzioni:</strong></p>
+                        <ul>
+                            <li>Verifica le impostazioni del server e le credenziali</li>
+                            <li>Per Gmail e altri provider, abilita l'accesso per app meno sicure o usa una password app</li>
+                            <li>Riduci la dimensione degli allegati esportando solo i campi necessari</li>
+                            <li>Controlla la connessione internet</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <i class="fas fa-exclamation-circle"></i> L'applicazione si blocca durante l'elaborazione
+                    </div>
+                    <div class="accordion-content">
+                        <p><strong>Possibili cause:</strong></p>
+                        <ul>
+                            <li>File troppo grandi che superano la memoria disponibile</li>
+                            <li>Troppi file elaborati contemporaneamente</li>
+                            <li>Sistema con risorse limitate</li>
+                        </ul>
+                        <p><strong>Soluzioni:</strong></p>
+                        <ul>
+                            <li>Suddividi i file in parti più piccole</li>
+                            <li>Elabora meno file alla volta</li>
+                            <li>Chiudi altre applicazioni per liberare memoria</li>
+                            <li>Aggiorna a un sistema con più RAM</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sezione FAQ -->
+        <div class="section" id="faq">
+            <h2><i class="fas fa-question"></i> 7. Domande Frequenti</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i> Come posso velocizzare l'elaborazione di file di grandi dimensioni?
+                    </div>
+                    <div class="faq-answer">
+                        <p>Per migliorare le prestazioni con file di grandi dimensioni:</p>
+                        <ul>
+                            <li>Chiudi altre applicazioni per liberare memoria</li>
+                            <li>Elabora un numero limitato di file alla volta</li>
+                            <li>Seleziona solo i campi necessari per l'estrazione</li>
+                            <li>Considera di suddividere i file molto grandi in parti più piccole</li>
+                            <li>Utilizza un sistema con più RAM (almeno 8 GB consigliati)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i> L'applicazione è compatibile con tutti i tipi di file JSON?
+                    </div>
+                    <div class="faq-answer">
+                        <p>L'applicazione è progettata per riconoscere la maggior parte dei formati JSON standard, ma con alcune limitazioni:</p>
+                        <ul>
+                            <li>I file JSON devono contenere un campo "descriptionMerchant" o simile per l'estrazione</li>
+                            <li>Strutture JSON molto complesse o nidificate potrebbero non essere completamente supportate</li>
+                            <li>Formati JSON non standard potrebbero richiedere una pre-elaborazione</li>
+                            <li>La versione 1.1.0 ha migliorato il supporto per vari formati JSON</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i> Posso programmare l'elaborazione automatica di file?
+                    </div>
+                    <div class="faq-answer">
+                        <p>Attualmente, l'elaborazione automatica programmata non è disponibile nella versione 1.1.0, ma è pianificata per le versioni future. Nell'attesa, puoi:</p>
+                        <ul>
+                            <li>Utilizzare script del sistema operativo per avviare l'applicazione a orari programmati</li>
+                            <li>Salvare i preset di filtri più utilizzati per velocizzare le operazioni manuali</li>
+                            <li>Seguire gli aggiornamenti dell'applicazione per le nuove funzionalità</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i> Come posso personalizzare i campi estratti?
+                    </div>
+                    <div class="faq-answer">
+                        <p>Per personalizzare i campi estratti:</p>
+                        <ul>
+                            <li>Utilizza la sezione "Campi da estrarre" nella configurazione</li>
+                            <li>Seleziona o deseleziona le caselle di controllo per ogni campo</li>
+                            <li>Solo i campi selezionati saranno inclusi nei risultati e nelle esportazioni</li>
+                            <li>Per funzionalità di personalizzazione avanzata, consulta la documentazione tecnica</li>
+                            <li>Nella versione 1.1.0, i preset di filtri [BETA] consentono di salvare anche configurazioni di campi</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fas fa-question-circle"></i> I miei dati sono sicuri quando uso la funzionalità di invio email?
+                </div>
+                <div class="faq-answer">
+                    <p>La sicurezza dei dati è una priorità:</p>
+                    <ul>
+                        <li>Tutte le credenziali email sono salvate localmente sul tuo computer</li>
+                        <li>L'applicazione utilizza connessioni sicure (TLS/SSL) per l'invio delle email</li>
+                        <li>Nessun dato viene mai inviato ai nostri server</li>
+                        <li>Si consiglia di utilizzare password app o autenticazione a due fattori</li>
+                        <li>Per dati particolarmente sensibili, considera l'utilizzo di file criptati</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sezione Supporto -->
+    <div class="section" id="supporto">
+        <h2><i class="fas fa-headset"></i> 8. Supporto</h2>
+        <p>Se hai bisogno di assistenza tecnica o vuoi segnalare un problema, puoi contattarci attraverso i seguenti canali:</p>
+
+        <div class="support-grid">
+            <div class="support-item">
+                <i class="fas fa-envelope"></i>
+                <h3>Email</h3>
+                <p>gueaserge2@gmail.com</p>
+                <p class="detail">Risposta entro 24-48 ore lavorative</p>
+            </div>
+
+            <div class="support-item">
+                <i class="fas fa-phone-alt"></i>
+                <h3>Telefono</h3>
+                <p>+39 3892978507</p>
+                <p class="detail">Lun-Ven, 9:00-18:00 CET</p>
+            </div>
+
+            <div class="support-item">
+                <i class="fas fa-comments"></i>
+                <h3>Chat Online</h3>
+                <p><a href="#" class="chat-link">Avvia chat</a></p>
+                <p class="detail">Disponibile nei giorni lavorativi</p>
+            </div>
+
+            <div class="support-item">
+                <i class="fas fa-bug"></i>
+                <h3>Segnalazione Bug</h3>
+                <p><a href="#" class="bug-link">Invia segnalazione</a></p>
+                <p class="detail">Fornisci dettagli precisi per aiutarci a risolvere il problema</p>
+            </div>
+        </div>
+
+        <div class="feedback-section">
+            <h3><i class="fas fa-comment-dots"></i> Feedback</h3>
+            <p>Il tuo feedback è importante per migliorare l'applicazione. Condividi le tue idee, suggerimenti o critiche:</p>
+            <div class="feedback-form">
+                <textarea id="feedbackText" placeholder="Scrivi qui il tuo feedback..." rows="4"></textarea>
+                <button id="sendFeedbackBtn" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Invia Feedback
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-logo">
+            <i class="fas fa-exchange-alt"></i> Tool di Reporting Commissioni
+        </div>
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="reporting.html">Reporting</a>
+            <a href="help.html" class="active">Guida</a>
+            <a href="about.html">Chi Siamo</a>
+            <a href="privacy.html">Privacy Policy</a>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; 2025 - Tool Reporting Commissioni | Powered by <strong>Serge Guea</strong></p>
+        </div>
+    </div>
+</footer>
+
+<!-- Script JavaScript -->
+<script src="js/main.js"></script>
+<script src="js/help.js"></script>
+<script>
+    // Gestione degli accordion nella pagina
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestione accordion
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        });
+
+        // Gestione FAQ
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const answer = this.nextElementSibling;
+                if (answer.style.display === 'block') {
+                    answer.style.display = 'none';
+                } else {
+                    answer.style.display = 'block';
+                }
+            });
+        });
+
+        // Invio feedback
+        const feedbackBtn = document.getElementById('sendFeedbackBtn');
+        if (feedbackBtn) {
+            feedbackBtn.addEventListener('click', function() {
+                const feedbackText = document.getElementById('feedbackText').value;
+                if (feedbackText.trim() !== '') {
+                    alert('Grazie per il tuo feedback! Lo abbiamo ricevuto e lo analizzeremo al più presto.');
+                    document.getElementById('feedbackText').value = '';
+                } else {
+                    alert('Per favore, inserisci un feedback prima di inviare.');
+                }
+            });
+        }
+
+        // Dropdown utente
+        const userDropdown = document.getElementById('userDropdown');
+        if (userDropdown) {
+            userDropdown.addEventListener('click', function(e) {
+                e.preventDefault();
+                const dropdownMenu = this.nextElementSibling;
+                dropdownMenu.classList.toggle('show');
+            });
+        }
+
+        // Toggle navbar su mobile
+        const navbarToggle = document.getElementById('navbarToggle');
+        if (navbarToggle) {
+            navbarToggle.addEventListener('click', function() {
+                const navbarNav = document.getElementById('navbarNav');
+                navbarNav.classList.toggle('show');
+            });
+        }
+
+        // Pulsante di logout
+        const logoutButton = document.getElementById('logoutButton');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Simula logout
+                document.getElementById('loggedInButtons').style.display = 'none';
+                document.getElementById('loggedOutButtons').style.display = 'block';
+                alert('Hai effettuato il logout con successo.');
+            });
+        }
+    });
+</script>
+</body>
+</html>

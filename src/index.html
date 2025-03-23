@@ -1,313 +1,343 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Reporting  </title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Tool di Reporting Commissioni</title>
 
-  <!-- Libreria XLSX per esportazione Excel -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Libreria XLSX per esportazione Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-  <!-- Libreria Chart.js per i grafici -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Libreria Chart.js per i grafici -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Libreria jsPDF per esportazione PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <!-- Libreria jsPDF per esportazione PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome per icone -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- File CSS principale -->
-  <link rel="stylesheet" href="styles.css">
+    <!-- File CSS principale -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Banner aggiornamento -->
-  <div id="updateBanner" class="update-banner" style="display: none;">
-    <div class="update-banner-content">
-      <i class="fas fa-sync-alt fa-spin"></i>
-      <span id="updateMessage">Aggiornamento disponibile!</span>
-      <button id="updateNowButton" class="btn btn-sm btn-success">Aggiorna ora</button>
-      <button id="updateLaterButton" class="btn btn-sm btn-light">Più tardi</button>
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-content">
+        <a href="index.html" class="navbar-brand">
+            <i class="fas fa-exchange-alt"></i> Tool di Reporting Commissioni
+        </a>
+        <button class="navbar-toggler" id="navbarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="navbar-nav" id="navbarNav">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link active">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="reporting.html" class="nav-link">
+                    <i class="fas fa-file-alt"></i> Reporting
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="presets.html" class="nav-link">
+                    <i class="fas fa-sliders-h"></i> Preset
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i> Impostazioni
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="help.html" class="nav-link">
+                    <i class="fas fa-question-circle"></i> Guida
+                </a>
+            </li>
+            <!-- Bottoni di autenticazione dinamici (mostrati in base allo stato di login) -->
+            <li class="nav-item auth-buttons" id="loggedOutButtons">
+                <a href="login.html" class="navbar-btn">
+                    Accedi
+                </a>
+            </li>
+            <li class="nav-item auth-buttons dropdown" id="loggedInButtons" style="display: none;">
+                <a href="#" class="nav-link dropdown-toggle" id="userDropdown">
+                    <i class="fas fa-user-circle"></i> <span id="userName">Utente</span>
+                </a>
+                <div class="dropdown-menu">
+                    <a href="profile.html" class="dropdown-item">
+                        <i class="fas fa-id-card"></i> Profilo
+                    </a>
+                    <a href="#" class="dropdown-item" id="logoutButton">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </li>
+        </ul>
     </div>
-  </div>
+</nav>
 
-  <div class="app-container">
-    <!-- Header -->
+<div class="app-container">
     <header>
-      <h1><i class="fas fa-exchange-alt"></i> Tool Reporting Commissioni Mensile</h1>
-      <p>Estrai e analizza dati da file JSON in modo semplice ed efficiente</p>
+        <h1><i class="fas fa-exchange-alt"></i> Tool di Reporting Commissioni Mensile</h1>
+        <p>Estrai e analizza dati da file JSON in modo semplice ed efficiente</p>
     </header>
 
     <!-- SEZIONE 1: Selezione file -->
     <div class="section">
-      <h2><i class="fas fa-file-upload"></i> 1. Seleziona file JSON</h2>
-      <p>Trascina qui i file o selezionali dal tuo dispositivo. Puoi selezionare più file tenendo premuto CTRL o SHIFT.</p>
-      <div class="file-input-container">
-        <label for="jsonFileInput" class="file-input-label">
-          <i class="fas fa-cloud-upload-alt"></i>
-          <span>Trascina qui i file JSON o clicca per selezionarli</span>
-        </label>
-        <input type="file" id="jsonFileInput" class="file-input" accept=".json" multiple />
-      </div>
-      <div id="fileInfo" class="file-info"></div>
+        <h2><i class="fas fa-file-upload"></i> 1. Seleziona file JSON</h2>
+        <p>Trascina qui i file o selezionali dal tuo dispositivo. Puoi selezionare più file tenendo premuto CTRL o
+            SHIFT.</p>
+
+        <div class="file-input-container">
+            <label for="jsonFileInput" class="file-input-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Trascina qui i file JSON o clicca per selezionarli</span>
+            </label>
+            <input type="file" id="jsonFileInput" class="file-input" accept=".json" multiple/>
+        </div>
+        <div id="fileInfo" class="file-info"></div>
     </div>
 
     <!-- SEZIONE 2: Configurazione e Filtri -->
     <div class="section">
-      <h2><i class="fas fa-cogs"></i> 2. Campi da estrarre e filtri</h2>
-      <div class="checkbox-grid">
-        <div class="checkbox-container">
-          <input type="checkbox" id="field_descriptionMerchant" checked>
-          <label for="field_descriptionMerchant">DescriptionMerchant</label>
+        <h2><i class="fas fa-cogs"></i> 2. Campi da estrarre e filtri</h2>
+        <div class="checkbox-grid">
+            <div class="checkbox-container">
+                <input type="checkbox" id="field_descriptionMerchant" checked>
+                <label for="field_descriptionMerchant">DescriptionMerchant</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="field_Addebito" checked>
+                <label for="field_Addebito">Addebito</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="field_IBAN" checked>
+                <label for="field_IBAN">IBAN</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="field_feeScadenza" checked>
+                <label for="field_feeScadenza">Fee scadenza</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="field_totaleTransazioni" checked>
+                <label for="field_totaleTransazioni">Totale transazioni</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="field_descrizione" checked>
+                <label for="field_descrizione">Descrizione</label>
+            </div>
         </div>
-        <div class="checkbox-container">
-          <input type="checkbox" id="field_Addebito" checked>
-          <label for="field_Addebito">Addebito</label>
-        </div>
-        <div class="checkbox-container">
-          <input type="checkbox" id="field_IBAN" checked>
-          <label for="field_IBAN">IBAN</label>
-        </div>
-        <div class="checkbox-container">
-          <input type="checkbox" id="field_feeScadenza" checked>
-          <label for="field_feeScadenza">Fee scadenza</label>
-        </div>
-        <div class="checkbox-container">
-          <input type="checkbox" id="field_totaleTransazioni" checked>
-          <label for="field_totaleTransazioni">Totale transazioni</label>
-        </div>
-        <div class="checkbox-container">
-          <input type="checkbox" id="field_descrizione" checked>
-          <label for="field_descrizione">Descrizione</label>
-        </div>
-      </div>
 
-      <div class="filter-container">
-        <div class="filter-toggle">
-          <input type="checkbox" id="enableFilter">
-          <label for="enableFilter">Applica filtro ai risultati</label>
+        <div class="filter-container">
+            <div class="filter-toggle">
+                <input type="checkbox" id="enableFilter">
+                <label for="enableFilter">Applica filtro ai risultati</label>
+            </div>
+            <div class="filter-controls">
+                <div class="control-group">
+                    <label for="filterField">Campo</label>
+                    <select id="filterField">
+                        <option value="Addebito">Addebito</option>
+                        <option value="IBAN">IBAN</option>
+                        <option value="fee scadenza">fee scadenza</option>
+                        <option value="totale transazioni">totale transazioni</option>
+                        <option value="descrizione">descrizione</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="filterOperator">Operatore</label>
+                    <select id="filterOperator">
+                        <option value=">">></option>
+                        <option value="<"><</option>
+                        <option value="=">=</option>
+                        <option value=">=">>=</option>
+                        <option value="<="><=</option>
+                        <option value="contiene">contiene (string)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="filterValue">Valore</label>
+                    <input type="text" id="filterValue" value="0">
+                </div>
+            </div>
         </div>
-        <div class="filter-controls">
-          <div class="control-group">
-            <label for="filterField">Campo</label>
-            <select id="filterField">
-              <option value="Addebito">Addebito</option>
-              <option value="IBAN">IBAN</option>
-              <option value="fee scadenza">fee scadenza</option>
-              <option value="totale transazioni">totale transazioni</option>
-              <option value="descrizione">descrizione</option>
-            </select>
-          </div>
-          <div class="control-group">
-            <label for="filterOperator">Operatore</label>
-            <select id="filterOperator">
-              <option value=">">></option>
-              <option value="<"><</option>
-              <option value="=">=</option>
-              <option value=">=">>=</option>
-              <option value="<="><=</option>
-              <option value="contiene">contiene (string)</option>
-            </select>
-          </div>
-          <div class="control-group">
-            <label for="filterValue">Valore</label>
-            <input type="text" id="filterValue" value="0">
-          </div>
-        </div>
-      </div>
 
-      <!-- Preset filtri -->
-      <div class="filter-presets">
-        <h3>Preset filtri</h3>
-        <div class="preset-controls">
-          <select id="filterPresetSelect">
-            <option value="">-- Seleziona un preset --</option>
-          </select>
-          <button id="loadPresetButton" class="btn btn-primary">
-            <i class="fas fa-download"></i> Carica
-          </button>
-          <button id="savePresetButton" class="btn btn-success">
-            <i class="fas fa-save"></i> Salva attuale
-          </button>
-          <button id="deletePresetButton" class="btn btn-danger">
-            <i class="fas fa-trash"></i> Elimina
-          </button>
+        <!-- Preset filtri -->
+        <div class="filter-presets">
+            <h3>Preset filtri</h3>
+            <div class="preset-controls">
+                <select id="filterPresetSelect">
+                    <option value="">-- Seleziona un preset --</option>
+                </select>
+                <button id="loadPresetButton" class="btn btn-primary">
+                    <i class="fas fa-download"></i> Carica
+                </button>
+                <button id="savePresetButton" class="btn btn-success">
+                    <i class="fas fa-save"></i> Salva attuale
+                </button>
+                <button id="deletePresetButton" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Elimina
+                </button>
+            </div>
         </div>
-      </div>
     </div>
 
     <!-- SEZIONE 3: Elaborazione -->
     <div class="section">
-      <h2><i class="fas fa-play-circle"></i> 3. Elabora i file</h2>
-      <button id="processButton" class="btn btn-primary" disabled>
-        <i class="fas fa-cogs"></i> Elabora i file JSON
-      </button>
-      <div class="progress-container" id="progressContainer">
-        <div class="progress-info">
-          <span>Elaborazione in corso...</span>
-          <span id="progressPercentage">0%</span>
+        <h2><i class="fas fa-play-circle"></i> 3. Elabora i file</h2>
+        <button id="processButton" class="btn btn-primary" disabled>
+            <i class="fas fa-cogs"></i> Elabora i file JSON
+        </button>
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-info">
+                <span>Elaborazione in corso...</span>
+                <span id="progressPercentage">0%</span>
+            </div>
+            <progress id="progressBar" value="0" max="100"></progress>
         </div>
-        <progress id="progressBar" value="0" max="100"></progress>
-      </div>
-      <div id="resultInfo" class="result-info" style="display: none;"></div>
-      <div class="table-container" id="preview"></div>
+        <div id="resultInfo" class="result-info" style="display: none;"></div>
+        <div class="table-container" id="preview"></div>
     </div>
 
     <!-- SEZIONE 4: Esportazione -->
     <div class="section">
-      <h2><i class="fas fa-file-export"></i> 4. Esporta risultati</h2>
-      <div class="export-buttons">
-        <button id="exportCsvButton" class="btn btn-success" disabled>
-          <i class="fas fa-file-csv"></i> Esporta come CSV
-        </button>
-        <button id="exportXlsxButton" class="btn btn-warning" disabled>
-          <i class="fas fa-file-excel"></i> Esporta come XLSX
-        </button>
-        <button id="exportPdfButton" class="btn btn-danger" disabled>
-          <i class="fas fa-file-pdf"></i> Esporta come PDF
-        </button>
-      </div>
+        <h2><i class="fas fa-file-export"></i> 4. Esporta risultati</h2>
+        <div class="export-buttons">
+            <button id="exportCsvButton" class="btn btn-success" disabled>
+                <i class="fas fa-file-csv"></i> Esporta come CSV
+            </button>
+            <button id="exportXlsxButton" class="btn btn-warning" disabled>
+                <i class="fas fa-file-excel"></i> Esporta come XLSX
+            </button>
+            <button id="exportPdfButton" class="btn btn-danger" disabled>
+                <i class="fas fa-file-pdf"></i> Esporta come PDF
+            </button>
+        </div>
     </div>
 
     <!-- SEZIONE 5: Statistiche e Dashboard -->
     <div class="section">
-      <h2><i class="fas fa-chart-bar"></i> 5. Statistiche e Dashboard</h2>
-      <div class="stats-controls">
-        <button id="generateStatsButton" class="btn btn-primary" disabled>
-          <i class="fas fa-calculator"></i> Genera statistiche
-        </button>
-        <div class="control-group">
-          <label for="statsFieldSelect">Campo per analisi</label>
-          <select id="statsFieldSelect">
-            <option value="Addebito">Addebito</option>
-            <option value="totale transazioni">Totale transazioni</option>
-          </select>
-        </div>
-        <div class="control-group">
-          <label for="visualizationType">Visualizzazione</label>
-          <select id="visualizationType">
-            <option value="basic">Base</option>
-            <option value="dashboard">Dashboard avanzata</option>
-          </select>
-        </div>
-      </div>
-      <div id="statsPreview" class="stats-preview" style="display: none;"></div>
-      <div id="chartsContainer" class="charts-container"></div>
-      <div id="dashboardContainer" class="dashboard-container" style="display: none;"></div>
-    </div>
-
-    <!-- SEZIONE 6: Invio Email (Migliorata) -->
-    <div class="section">
-      <h2><i class="fas fa-envelope"></i> 6. Invia report via email</h2>
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="send-tab">Invia Report</button>
-        <button class="tab-btn" data-tab="config-tab">Configurazione SMTP</button>
-      </div>
-      <div class="tab-content active" id="send-tab">
-        <div class="email-form">
-          <div class="form-group">
-            <label for="emailRecipients">Destinatari:</label>
-            <input type="text" id="emailRecipients" placeholder="email1@example.com, email2@example.com">
-          </div>
-          <div class="form-group">
-            <label for="emailSubject">Oggetto:</label>
-            <input type="text" id="emailSubject" value="Report Commissioni">
-          </div>
-          <div class="form-group">
-            <label for="emailMessage">Messaggio:</label>
-            <textarea id="emailMessage" rows="4">In allegato il report delle commissioni generato.</textarea>
-          </div>
-          <div class="form-group">
-            <label>Formato Report:</label>
-            <div class="radio-group">
-              <div class="radio-container">
-                <input type="radio" id="formatCsv" name="reportFormat" value="csv" checked>
-                <label for="formatCsv">CSV</label>
-              </div>
-              <div class="radio-container">
-                <input type="radio" id="formatXlsx" name="reportFormat" value="xlsx">
-                <label for="formatXlsx">Excel (XLSX)</label>
-              </div>
-            </div>
-          </div>
-          <div class="options-container">
-            <div class="checkbox-container">
-              <input type="checkbox" id="includeStats" checked>
-              <label for="includeStats">Includi statistiche nel messaggio</label>
-            </div>
-          </div>
-          <div id="emailStatus" class="status-message" style="display: none;"></div>
-          <div class="button-group">
-            <button id="sendEmailButton" class="btn btn-primary" disabled>
-              <i class="fas fa-paper-plane"></i> Invia Report
+        <h2><i class="fas fa-chart-bar"></i> 5. Statistiche e Dashboard</h2>
+        <div class="stats-controls">
+            <button id="generateStatsButton" class="btn btn-primary" disabled>
+                <i class="fas fa-calculator"></i> Genera statistiche
             </button>
-          </div>
+            <div class="control-group">
+                <label for="statsFieldSelect">Campo per analisi</label>
+                <select id="statsFieldSelect">
+                    <option value="Addebito">Addebito</option>
+                    <option value="totale transazioni">Totale transazioni</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="visualizationType">Visualizzazione</label>
+                <select id="visualizationType">
+                    <option value="basic">Base</option>
+                    <option value="dashboard">Dashboard avanzata</option>
+                </select>
+            </div>
         </div>
-      </div>
-      <div class="tab-content" id="config-tab">
-        <div class="alert-info">
-          <i class="fas fa-info-circle"></i> Configura i parametri per l'invio delle email.
-        </div>
-        <div class="form-group">
-          <label for="emailService">Servizio Email:</label>
-          <select id="emailService" class="input-field">
-            <option value="">Seleziona un servizio...</option>
-            <option value="gmail">Gmail</option>
-            <option value="outlook">Outlook</option>
-            <option value="yahoo">Yahoo Mail</option>
-            <option value="other">Altro (SMTP personalizzato)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="emailUser">Email / Username:</label>
-          <input type="email" id="emailUser" placeholder="tua@email.com" class="input-field">
-        </div>
-        <div class="form-group">
-          <label for="emailPassword">Password:</label>
-          <input type="password" id="emailPassword" placeholder="Password" class="input-field">
-          <small>Per Gmail potrebbe essere necessario utilizzare una "password per app"</small>
-        </div>
-        <div id="smtpSettings" style="display: none;">
-          <div class="form-group">
-            <label for="smtpServer">Server SMTP:</label>
-            <input type="text" id="smtpServer" placeholder="smtp.example.com" class="input-field">
-          </div>
-          <div class="form-group">
-            <label for="smtpPort">Porta:</label>
-            <input type="number" id="smtpPort" placeholder="587" value="587" class="input-field" style="width: 100px;">
-          </div>
-          <div class="checkbox-container">
-            <input type="checkbox" id="smtpSecure">
-            <label for="smtpSecure">Connessione sicura (SSL/TLS)</label>
-          </div>
-          <div class="form-group">
-            <label for="smtpFrom">Email mittente (opzionale):</label>
-            <input type="email" id="smtpFrom" placeholder="noreply@example.com" class="input-field">
-          </div>
-        </div>
-        <div id="smtpStatus" class="status-message" style="display: none;"></div>
-        <div class="button-group">
-          <button id="testSmtpBtn" class="btn btn-warning">
-            <i class="fas fa-vial"></i> Testa Connessione
-          </button>
-          <button id="saveSmtpBtn" class="btn btn-success">
-            <i class="fas fa-save"></i> Salva Configurazione
-          </button>
-        </div>
-      </div>
+        <div id="statsPreview" class="stats-preview" style="display: none;"></div>
+        <div id="chartsContainer" class="charts-container"></div>
+        <div id="dashboardContainer" class="dashboard-container" style="display: none;"></div>
     </div>
-  </div>
+</div>
 
-  <!-- FOOTER FISSO -->
-  <footer>
-    <p>&copy; 2025 - Tool Reporting Commissioni | Powered by <strong>Serge Guea</strong></p>
-  </footer>
+<!-- Footer -->
+<footer>
+    <div class="footer-content">
+        <p>&copy; 2025 - Tool Reporting Commissioni | Powered by <strong>Serge Guea</strong></p>
+        <div class="footer-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Termini di Servizio</a>
+            <a href="contact.html">Contatti</a>
+        </div>
+    </div>
+</footer>
 
-  <!-- Inclusione del file JavaScript principale -->
-  <script src="script.js"></script>
+<!-- Scripts per la gestione della navbar e del menu mobile -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toggle per il menu mobile
+        const navbarToggle = document.getElementById('navbarToggle');
+        const navbarNav = document.getElementById('navbarNav');
+
+        if (navbarToggle) {
+            navbarToggle.addEventListener('click', function () {
+                navbarNav.classList.toggle('show');
+            });
+        }
+
+        // Chiudi il menu quando si fa clic all'esterno
+        document.addEventListener('click', function (e) {
+            const navbar = document.querySelector('.navbar-content');
+            if (navbarNav.classList.contains('show') && !navbar.contains(e.target)) {
+                navbarNav.classList.remove('show');
+            }
+        });
+
+        // Gestione dropdown utente
+        const userDropdown = document.getElementById('userDropdown');
+        if (userDropdown) {
+            userDropdown.addEventListener('click', function (e) {
+                e.preventDefault();
+                this.nextElementSibling.classList.toggle('show');
+            });
+
+            // Chiudi il dropdown quando si clicca altrove
+            document.addEventListener('click', function (e) {
+                if (userDropdown && !userDropdown.contains(e.target)) {
+                    userDropdown.nextElementSibling.classList.remove('show');
+                }
+            });
+        }
+
+        // Esempio: Controllo se l'utente è loggato (da sostituire con logica reale)
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+        if (isLoggedIn) {
+            document.getElementById('loggedOutButtons').style.display = 'none';
+            document.getElementById('loggedInButtons').style.display = 'block';
+
+            // Imposta il nome utente dal localStorage
+            const userName = localStorage.getItem('userName') || 'Utente';
+            document.getElementById('userName').textContent = userName;
+        } else {
+            document.getElementById('loggedOutButtons').style.display = 'block';
+            document.getElementById('loggedInButtons').style.display = 'none';
+        }
+
+        // Gestione logout
+        const logoutButton = document.getElementById('logoutButton');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Rimuovi i dati di login
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userToken');
+
+                // Reindirizza alla home o alla pagina di login
+                window.location.href = 'index.html';
+            });
+        }
+    });
+</script>
+
+<!-- Inclusione del file JavaScript principale -->
+<script src="script.js"></script>
 </body>
 </html>
