@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Impostazioni di Sistema - Tool di Reporting Commissioni</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS principale -->
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../css/admin.css">
+
+</head>
+<body>
+<!-- Importa la navbar -->
+<div id="navbar-placeholder"></div>
+
+<div class="app-container">
+    <div class="admin-header">
+        <h1><i class="fas fa-cogs"></i> Impostazioni di Sistema</h1>
+        <p>Configurazione globale del Tool di Reporting Commissioni</p>
+    </div>
+
+    <div class="section">
+        <div class="settings-grid">
+            <!-- Impostazioni Generali -->
+            <div class="settings-card">
+                <h3><i class="fas fa-sliders-h"></i> Impostazioni Generali</h3>
+                <form class="settings-form" id="generalSettingsForm">
+                    <div class="form-group">
+                        <label for="appName">Nome Applicazione</label>
+                        <input type="text" id="appName" value="Tool di Reporting Commissioni Mensile">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxRecentFiles">File Recenti (max)</label>
+                        <input type="number" id="maxRecentFiles" min="5" max="50" value="10">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="defaultExportFormat">Formato Esportazione Default</label>
+                        <select id="defaultExportFormat">
+                            <option value="csv">CSV</option>
+                            <option value="xlsx" selected>Excel (XLSX)</option>
+                            <option value="pdf">PDF</option>
+                        </select>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableAutoSave" checked>
+                        <label for="enableAutoSave">Abilita Salvataggio Automatico</label>
+                    </div>
+
+                    <div class="settings-actions">
+                        <button type="button" class="btn btn-danger" onclick="resetGeneralSettings()">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Salva
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Impostazioni SMTP -->
+            <div class="settings-card">
+                <h3><i class="fas fa-envelope"></i> Configurazione Email</h3>
+                <form class="settings-form" id="smtpSettingsForm">
+                    <div class="form-group">
+                        <label for="smtpService">Servizio Email</label>
+                        <select id="smtpService">
+                            <option value="">Personalizzato (SMTP)</option>
+                            <option value="gmail">Gmail</option>
+                            <option value="outlook">Outlook</option>
+                            <option value="yahoo">Yahoo Mail</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group smtp-custom">
+                        <label for="smtpServer">Server SMTP</label>
+                        <input type="text" id="smtpServer" placeholder="smtp.example.com">
+                    </div>
+
+                    <div class="form-group smtp-custom">
+                        <label for="smtpPort">Porta SMTP</label>
+                        <input type="number" id="smtpPort" placeholder="587">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="smtpUser">Username</label>
+                        <input type="text" id="smtpUser" placeholder="user@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="smtpPassword">Password</label>
+                        <input type="password" id="smtpPassword" placeholder="••••••••">
+                    </div>
+
+                    <div class="checkbox-group smtp-custom">
+                        <input type="checkbox" id="smtpSecure" checked>
+                        <label for="smtpSecure">Connessione Sicura (SSL/TLS)</label>
+                    </div>
+
+                    <div class="settings-actions">
+                        <button type="button" class="btn btn-success" onclick="testSmtpConnection()">
+                            <i class="fas fa-check-circle"></i> Test
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Salva
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Gestione Archiviazione -->
+            <div class="settings-card">
+                <h3><i class="fas fa-database"></i> Gestione Archiviazione</h3>
+                <form class="settings-form" id="storageSettingsForm">
+                    <div class="form-group">
+                        <label for="dataStoragePath">Percorso Archiviazione</label>
+                        <div style="display: flex; gap: 5px;">
+                            <input type="text" id="dataStoragePath" value="C:\ProgramData\ReportingTool"
+                                   style="flex-grow: 1;">
+                            <button type="button" class="btn" style="padding: 8px 10px;" onclick="selectStoragePath()">
+                                <i class="fas fa-folder-open"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="backupSchedule">Pianificazione Backup</label>
+                        <select id="backupSchedule">
+                            <option value="none">Disabilitato</option>
+                            <option value="daily" selected>Giornaliero</option>
+                            <option value="weekly">Settimanale</option>
+                            <option value="monthly">Mensile</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxBackups">Numero Massimo Backup</label>
+                        <input type="number" id="maxBackups" min="1" max="50" value="5">
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="compressBackups" checked>
+                        <label for="compressBackups">Comprimi Backup</label>
+                    </div>
+
+                    <div class="settings-actions">
+                        <button type="button" class="btn btn-warning" onclick="backupNow()">
+                            <i class="fas fa-download"></i> Backup Ora
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Salva
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Impostazioni Sicurezza -->
+            <div class="settings-card">
+                <h3><i class="fas fa-shield-alt"></i> Sicurezza</h3>
+                <form class="settings-form" id="securitySettingsForm">
+                    <div class="form-group">
+                        <label for="sessionTimeout">Timeout Sessione (minuti)</label>
+                        <input type="number" id="sessionTimeout" min="5" max="120" value="30">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passwordPolicy">Policy Password</label>
+                        <select id="passwordPolicy">
+                            <option value="basic">Base (min. 8 caratteri)</option>
+                            <option value="standard" selected>Standard (lettere, numeri, min. 8)</option>
+                            <option value="strong">Forte (lettere, numeri, simboli, min. 10)</option>
+                        </select>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableTwoFactor">
+                        <label for="enableTwoFactor">Abilita Autenticazione a Due Fattori</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="logUserActivity" checked>
+                        <label for="logUserActivity">Log Attività Utenti</label>
+                    </div>
+
+                    <div class="settings-actions">
+                        <button type="button" class="btn btn-danger" onclick="resetSecuritySettings()">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Salva
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Stato del Sistema -->
+        <div class="system-status">
+            <h3><i class="fas fa-heartbeat"></i> Stato del Sistema</h3>
+
+            <div class="status-grid">
+                <div class="status-item">
+                    <span class="status-label">Versione</span>
+                    <span class="status-value">1.1.0</span>
+                </div>
+
+                <div class="status-item">
+                    <span class="status-label">Stato Database</span>
+                    <span class="status-value">
+                            <span class="status-indicator status-good"></span> Operativo
+                        </span>
+                </div>
+
+                <div class="status-item">
+                    <span class="status-label">Spazio Disponibile</span>
+                    <span class="status-value">
+                            <span class="status-indicator status-warning"></span> 1.2 GB
+                        </span>
+                </div>
+
+                <div class="status-item">
+                    <span class="status-label">Ultimo Backup</span>
+                    <span class="status-value">22/03/2025 08:30</span>
+                </div>
+
+                <div class="status-item">
+                    <span class="status-label">Stato Email</span>
+                    <span class="status-value">
+                            <span class="status-indicator status-good"></span> Configurato
+                        </span>
+                </div>
+
+                <div class="status-item">
+                    <span class="status-label">Utenti Attivi</span>
+                    <span class="status-value">12</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                <button class="btn btn-primary" onclick="checkSystemStatus()">
+                    <i class="fas fa-sync-alt"></i> Aggiorna Stato
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Importa il footer -->
+<div id="footer-placeholder"></div>
+
+<!-- Script -->
+<script src="../js/common.js"></script>
+<script>
+    // Carica navbar e footer
+    document.addEventListener('DOMContentLoaded', function () {
+       loadComponent('../components/navbar.html', 'navbar-placeholder');
+       loadComponent('../components/footer.html', 'footer-placeholder');
+
+        // Inizializza la pagina
+        initSystemSettings();
+    });
+
+    function initSystemSettings() {
+        // Imposta date e orari
+        updateLastBackupTime();
+
+        // Listener per i form
+        document.getElementById('generalSettingsForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            saveGeneralSettings();
+        });
+
+        document.getElementById('smtpSettingsForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            saveSmtpSettings();
+        });
+
+        document.getElementById('storageSettingsForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            saveStorageSettings();
+        });
+
+        document.getElementById('securitySettingsForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            saveSecuritySettings();
+        });
+
+        // Gestione visualizzazione campi SMTP personalizzati
+        const smtpService = document.getElementById('smtpService');
+        smtpService.addEventListener('change', toggleSmtpCustomFields);
+        toggleSmtpCustomFields(); // Chiamata iniziale
+    }
+
+    function toggleSmtpCustomFields() {
+        const smtpService = document.getElementById('smtpService');
+        const customFields = document.querySelectorAll('.smtp-custom');
+
+        if (smtpService.value === '') {
+            // Mostra i campi personalizzati
+            customFields.forEach(field => {
+                field.style.display = 'block';
+            });
+        } else {
+            // Nascondi i campi personalizzati
+            customFields.forEach(field => {
+                field.style.display = 'none';
+            });
+        }
+    }
+
+    function updateLastBackupTime() {
+        // Qui in un sistema reale si recupererebbe l'orario effettivo dell'ultimo backup
+        // Per ora impostiamo un valore di esempio
+    }
+
+    function saveGeneralSettings() {
+        // Salva le impostazioni generali
+        const settings = {
+            appName: document.getElementById('appName').value,
+            maxRecentFiles: document.getElementById('maxRecentFiles').value,
+            defaultExportFormat: document.getElementById('defaultExportFormat').value,
+            enableAutoSave: document.getElementById('enableAutoSave').checked
+        };
+
+        console.log('Salvataggio impostazioni generali:', settings);
+        // Qui si invierebbe una richiesta al server
+
+        showToast('Impostazioni generali salvate con successo');
+    }
+
+    function saveSmtpSettings() {
+        // Salva le impostazioni SMTP
+        const settings = {
+            service: document.getElementById('smtpService').value,
+            server: document.getElementById('smtpServer').value,
+            port: document.getElementById('smtpPort').value,
+            user: document.getElementById('smtpUser').value,
+            password: document.getElementById('smtpPassword').value,
+            secure: document.getElementById('smtpSecure').checked
+        };
+
+        console.log('Salvataggio impostazioni SMTP:', settings);
+        // Qui si invierebbe una richiesta al server
+
+        showToast('Configurazione email salvata con successo');
+    }
+
+    function saveStorageSettings() {
+        // Salva le impostazioni di archiviazione
+        const settings = {
+            dataStoragePath: document.getElementById('dataStoragePath').value,
+            backupSchedule: document.getElementById('backupSchedule').value,
+            maxBackups: document.getElementById('maxBackups').value,
+            compressBackups: document.getElementById('compressBackups').checked
+        };
+
+        console.log('Salvataggio impostazioni archiviazione:', settings);
+        // Qui si invierebbe una richiesta al server
+
+        showToast('Impostazioni di archiviazione salvate con successo');
+    }
+
+    function saveSecuritySettings() {
+        // Salva le impostazioni di sicurezza
+        const settings = {
+            sessionTimeout: document.getElementById('sessionTimeout').value,
+            passwordPolicy: document.getElementById('passwordPolicy').value,
+            enableTwoFactor: document.getElementById('enableTwoFactor').checked,
+            logUserActivity: document.getElementById('logUserActivity').checked
+        };
+
+        console.log('Salvataggio impostazioni sicurezza:', settings);
+        // Qui si invierebbe una richiesta al server
+
+        showToast('Impostazioni di sicurezza salvate con successo');
+    }
+
+    function resetGeneralSettings() {
+        if (confirm('Sei sicuro di voler ripristinare le impostazioni generali ai valori predefiniti?')) {
+            document.getElementById('appName').value = 'Tool di Reporting Commissioni Mensile';
+            document.getElementById('maxRecentFiles').value = '10';
+            document.getElementById('defaultExportFormat').value = 'xlsx';
+            document.getElementById('enableAutoSave').checked = true;
+
+            showToast('Impostazioni generali ripristinate');
+        }
+    }
+
+    function resetSecuritySettings() {
+        if (confirm('Sei sicuro di voler ripristinare le impostazioni di sicurezza ai valori predefiniti?')) {
+            document.getElementById('sessionTimeout').value = '30';
+            document.getElementById('passwordPolicy').value = 'standard';
+            document.getElementById('enableTwoFactor').checked = false;
+            document.getElementById('logUserActivity').checked = true;
+
+            showToast('Impostazioni di sicurezza ripristinate');
+        }
+    }
+
+    function selectStoragePath() {
+        // In un'implementazione reale, questa funzione aprirebbe un dialog per selezionare una directory
+        alert('Seleziona una directory per l\'archiviazione dei dati');
+    }
+
+    function backupNow() {
+        if (confirm('Vuoi eseguire un backup dei dati ora?')) {
+            // Simulazione di un backup
+            showToast('Backup in corso...');
+
+            setTimeout(() => {
+                showToast('Backup completato con successo', 'success');
+                updateLastBackupTime();
+            }, 2000);
+        }
+    }
+
+    function testSmtpConnection() {
+        showToast('Test connessione in corso...');
+
+        // Simulazione di un test
+        setTimeout(() => {
+            showToast('Connessione al server email riuscita', 'success');
+        }, 1500);
+    }
+
+    function checkSystemStatus() {
+        showToast('Aggiornamento stato sistema in corso...');
+
+        // Simulazione aggiornamento stato
+        setTimeout(() => {
+            showToast('Stato sistema aggiornato', 'success');
+        }, 1000);
+    }
+
+    function showToast(message, type = 'info') {
+        // In un'implementazione reale, questo mostrerebbe un toast/notifica
+        alert(message);
+    }
+</script>

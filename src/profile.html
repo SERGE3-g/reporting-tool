@@ -19,186 +19,192 @@
     <div id="navbar-container"></div>
 
     <div class="app-container">
-        <header>
-            <h1><i class="fas fa-user-circle"></i> Profilo Utente</h1>
-            <p>Gestisci il tuo account e le informazioni personali</p>
-        </header>
+        <div class="content-wrapper">
+            <header class="content-header">
+                <h1><i class="fas fa-user-circle"></i> Profilo Utente</h1>
+                <p>Gestisci il tuo account e le informazioni personali</p>
+            </header>
 
-        <div class="profile-container">
-            <!-- Informazioni di base del profilo -->
-            <div class="section profile-header">
-                <div class="profile-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="profile-info">
-                    <h2 id="profileName">Nome Utente</h2>
-                    <p id="profileEmail">utente@esempio.com</p>
-                    <p class="profile-role">Ruolo: <span id="profileRole">Utente Standard</span></p>
-                </div>
-                <div class="profile-actions">
-                    <button id="editProfileBtn" class="btn btn-primary">
-                        <i class="fas fa-edit"></i> Modifica Profilo
-                    </button>
-                </div>
-            </div>
-
-            <!-- Form modifica profilo (inizialmente nascosto) -->
-            <div id="profileEditForm" class="section" style="display: none;">
-                <h2><i class="fas fa-edit"></i> Modifica Profilo</h2>
-
-                <form id="editForm">
-                    <div class="form-group">
-                        <label for="editName">Nome completo</label>
-                        <input type="text" id="editName" class="form-control" placeholder="Il tuo nome e cognome">
+            <div class="profile-container">
+                <!-- Informazioni di base del profilo -->
+                <div class="section profile-header">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
                     </div>
-
-                    <div class="form-group">
-                        <label for="editEmail">Email</label>
-                        <input type="email" id="editEmail" class="form-control" placeholder="esempio@dominio.com">
+                    <div class="profile-info">
+                        <h2 id="profileName">Nome Utente</h2>
+                        <p id="profileEmail">utente@esempio.com</p>
+                        <p class="profile-role">Ruolo: <span id="profileRole">Utente Standard</span></p>
                     </div>
+                    <div class="profile-actions">
+                        <button id="editProfileBtn" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Modifica Profilo
+                        </button>
+                    </div>
+                </div>
 
-                    <div class="form-group">
-                        <label>Immagine Profilo</label>
-                        <div class="avatar-upload">
-                            <div class="avatar-preview">
-                                <div id="avatarPreview" style="background-image: url('assets/default-avatar.png');"></div>
+                <!-- Form modifica profilo (inizialmente nascosto) -->
+                <div id="profileEditForm" class="section" style="display: none;">
+                    <h2><i class="fas fa-edit"></i> Modifica Profilo</h2>
+
+                    <div id="profileEditAlert" class="alert" style="display: none;"></div>
+
+                    <form id="editForm">
+                        <div class="form-group">
+                            <label for="editName">Nome completo</label>
+                            <input type="text" id="editName" class="form-control" placeholder="Il tuo nome e cognome">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editEmail">Email</label>
+                            <input type="email" id="editEmail" class="form-control" placeholder="esempio@dominio.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Immagine Profilo</label>
+                            <div class="avatar-upload">
+                                <div class="avatar-preview">
+                                    <div id="avatarPreview" style="background-image: url('../../assets/images/default-avatar.png');"></div>
+                                </div>
+                                <div class="avatar-edit">
+                                    <input type='file' id="avatarUpload" accept=".png, .jpg, .jpeg" />
+                                    <label for="avatarUpload">Cambia immagine</label>
+                                </div>
                             </div>
-                            <div class="avatar-edit">
-                                <input type='file' id="avatarUpload" accept=".png, .jpg, .jpeg" />
-                                <label for="avatarUpload">Cambia immagine</label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editBio">Bio</label>
+                            <textarea id="editBio" class="form-control" rows="3" placeholder="Breve descrizione"></textarea>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Salva Modifiche
+                            </button>
+                            <button type="button" id="cancelEditBtn" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Annulla
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Statistiche utente -->
+                <div class="section">
+                    <h2><i class="fas fa-chart-pie"></i> Statistiche Account</h2>
+
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="reportCount">24</div>
+                            <div class="stat-label">Report Generati</div>
+                        </div>
+
+                        <div class="stat-item">
+                            <div class="stat-value" id="fileCount">56</div>
+                            <div class="stat-label">File Elaborati</div>
+                        </div>
+
+                        <div class="stat-item">
+                            <div class="stat-value" id="loginCount">18</div>
+                            <div class="stat-label">Accessi</div>
+                        </div>
+
+                        <div class="stat-item">
+                            <div class="stat-value" id="daysActive">32</div>
+                            <div class="stat-label">Giorni di Attività</div>
+                        </div>
+                    </div>
+
+                    <div class="last-activity">
+                        <p>Ultimo accesso: <span id="lastLogin">22 Marzo 2025, 15:30</span></p>
+                        <p>Account creato: <span id="accountCreated">15 Gennaio 2025</span></p>
+                    </div>
+                </div>
+
+                <!-- Attività recenti -->
+                <div class="section">
+                    <h2><i class="fas fa-history"></i> Attività Recenti</h2>
+
+                    <div class="activity-list" id="activityList">
+                        <!-- Contenuto dinamico -->
+                    </div>
+                </div>
+
+                <!-- Sicurezza account -->
+                <div class="section">
+                    <h2><i class="fas fa-shield-alt"></i> Sicurezza Account</h2>
+
+                    <div class="security-options">
+                        <div class="security-option">
+                            <div class="security-info">
+                                <h3>Password</h3>
+                                <p>Ultima modifica: <span id="lastPasswordChange">15 Febbraio 2025</span></p>
+                            </div>
+                            <button id="changePasswordBtn" class="btn btn-primary">
+                                <i class="fas fa-key"></i> Cambia Password
+                            </button>
+                        </div>
+
+                        <div class="security-option">
+                            <div class="security-info">
+                                <h3>Sessioni attive</h3>
+                                <p>Attualmente hai <span id="activeSessions">1</span> sessione attiva</p>
+                            </div>
+                            <button id="logoutAllBtn" class="btn btn-warning">
+                                <i class="fas fa-sign-out-alt"></i> Disconnetti Tutti
+                            </button>
+                        </div>
+
+                        <div class="security-option">
+                            <div class="security-info">
+                                <h3>Eliminazione Account</h3>
+                                <p>Questa operazione cancellerà definitivamente tutti i tuoi dati</p>
+                            </div>
+                            <button id="deleteAccountBtn" class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i> Elimina Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form cambio password (inizialmente nascosto) -->
+                <div id="passwordChangeForm" class="section" style="display: none;">
+                    <h2><i class="fas fa-key"></i> Cambia Password</h2>
+
+                    <div id="passwordChangeAlert" class="alert" style="display: none;"></div>
+
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label for="currentPassword">Password attuale</label>
+                            <input type="password" id="currentPassword" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPassword">Nuova password</label>
+                            <input type="password" id="newPassword" class="form-control" required>
+                            <div class="password-strength">
+                                <div class="strength-meter">
+                                    <div class="strength-bar" id="passwordStrength"></div>
+                                </div>
+                                <span id="passwordStrengthText">Sicurezza password</span>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="editBio">Bio</label>
-                        <textarea id="editBio" class="form-control" rows="3" placeholder="Breve descrizione"></textarea>
-                    </div>
-
-                    <div class="button-group">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fas fa-save"></i> Salva Modifiche
-                        </button>
-                        <button type="button" id="cancelEditBtn" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Annulla
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Statistiche utente -->
-            <div class="section">
-                <h2><i class="fas fa-chart-pie"></i> Statistiche Account</h2>
-
-                <div class="profile-stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="reportCount">24</div>
-                        <div class="stat-label">Report Generati</div>
-                    </div>
-
-                    <div class="stat-item">
-                        <div class="stat-value" id="fileCount">56</div>
-                        <div class="stat-label">File Elaborati</div>
-                    </div>
-
-                    <div class="stat-item">
-                        <div class="stat-value" id="loginCount">18</div>
-                        <div class="stat-label">Accessi</div>
-                    </div>
-
-                    <div class="stat-item">
-                        <div class="stat-value" id="daysActive">32</div>
-                        <div class="stat-label">Giorni di Attività</div>
-                    </div>
-                </div>
-
-                <div class="last-activity">
-                    <p>Ultimo accesso: <span id="lastLogin">22 Marzo 2025, 15:30</span></p>
-                    <p>Account creato: <span id="accountCreated">15 Gennaio 2025</span></p>
-                </div>
-            </div>
-
-            <!-- Attività recenti -->
-            <div class="section">
-                <h2><i class="fas fa-history"></i> Attività Recenti</h2>
-
-                <div class="activity-list" id="activityList">
-                    <!-- Contenuto dinamico -->
-                </div>
-            </div>
-
-            <!-- Sicurezza account -->
-            <div class="section">
-                <h2><i class="fas fa-shield-alt"></i> Sicurezza Account</h2>
-
-                <div class="security-options">
-                    <div class="security-option">
-                        <div class="security-info">
-                            <h3>Password</h3>
-                            <p>Ultima modifica: <span id="lastPasswordChange">15 Febbraio 2025</span></p>
+                        <div class="form-group">
+                            <label for="confirmPassword">Conferma nuova password</label>
+                            <input type="password" id="confirmPassword" class="form-control" required>
                         </div>
-                        <button id="changePasswordBtn" class="btn btn-primary">
-                            <i class="fas fa-key"></i> Cambia Password
-                        </button>
-                    </div>
 
-                    <div class="security-option">
-                        <div class="security-info">
-                            <h3>Sessioni attive</h3>
-                            <p>Attualmente hai <span id="activeSessions">1</span> sessione attiva</p>
+                        <div class="button-group">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Salva Nuova Password
+                            </button>
+                            <button type="button" id="cancelPasswordBtn" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Annulla
+                            </button>
                         </div>
-                        <button id="logoutAllBtn" class="btn btn-warning">
-                            <i class="fas fa-sign-out-alt"></i> Disconnetti Tutti
-                        </button>
-                    </div>
-
-                    <div class="security-option">
-                        <div class="security-info">
-                            <h3>Eliminazione Account</h3>
-                            <p>Questa operazione cancellerà definitivamente tutti i tuoi dati</p>
-                        </div>
-                        <button id="deleteAccountBtn" class="btn btn-danger">
-                            <i class="fas fa-trash-alt"></i> Elimina Account
-                        </button>
-                    </div>
+                    </form>
                 </div>
-            </div>
-
-            <!-- Form cambio password (inizialmente nascosto) -->
-            <div id="passwordChangeForm" class="section" style="display: none;">
-                <h2><i class="fas fa-key"></i> Cambia Password</h2>
-
-                <form id="passwordForm">
-                    <div class="form-group">
-                        <label for="currentPassword">Password attuale</label>
-                        <input type="password" id="currentPassword" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="newPassword">Nuova password</label>
-                        <input type="password" id="newPassword" class="form-control" required>
-                        <div class="password-strength">
-                            <div class="strength-meter">
-                                <div class="strength-bar" id="passwordStrength"></div>
-                            </div>
-                            <span id="passwordStrengthText">Sicurezza password</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="confirmPassword">Conferma nuova password</label>
-                        <input type="password" id="confirmPassword" class="form-control" required>
-                    </div>
-
-                    <div class="button-group">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fas fa-save"></i> Salva Nuova Password
-                        </button>
-                        <button type="button" id="cancelPasswordBtn" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Annulla
-                        </button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -224,10 +230,355 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadComponent('components/navbar.html', 'navbar-container');
             loadComponent('components/footer.html', 'footer-container');
+
+            // Carica i dati utente dal sistema
+            loadUserProfile();
+
+            // Gestione pulsanti
+            document.getElementById('editProfileBtn').addEventListener('click', function() {
+                document.getElementById('profileEditForm').style.display = 'block';
+                populateEditForm();
+            });
+
+            document.getElementById('cancelEditBtn').addEventListener('click', function() {
+                document.getElementById('profileEditForm').style.display = 'none';
+            });
+
+            document.getElementById('changePasswordBtn').addEventListener('click', function() {
+                document.getElementById('passwordChangeForm').style.display = 'block';
+            });
+
+            document.getElementById('cancelPasswordBtn').addEventListener('click', function() {
+                document.getElementById('passwordChangeForm').style.display = 'none';
+            });
+
+            // Gestione degli eventi dei form
+            document.getElementById('editForm').addEventListener('submit', handleProfileUpdate);
+            document.getElementById('passwordForm').addEventListener('submit', handlePasswordChange);
+
+            // Gestione anteprima immagine profilo
+            document.getElementById('avatarUpload').addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('avatarPreview').style.backgroundImage = `url(${e.target.result})`;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Controllo robustezza nuova password
+            const newPasswordInput = document.getElementById('newPassword');
+            if (newPasswordInput) {
+                newPasswordInput.addEventListener('input', function() {
+                    updatePasswordStrength(this.value);
+                });
+            }
+
+            // Gestione logout generale
+            document.getElementById('logoutAllBtn').addEventListener('click', function() {
+                if (confirm('Sei sicuro di voler disconnettere tutte le sessioni attive?')) {
+                    logoutAllSessions();
+                }
+            });
+
+            // Gestione eliminazione account
+            document.getElementById('deleteAccountBtn').addEventListener('click', function() {
+                if (confirm('ATTENZIONE: Questa operazione cancellerà definitivamente il tuo account e tutti i dati associati. Questa azione è irreversibile. Sei sicuro di voler procedere?')) {
+                    deleteAccount();
+                }
+            });
         });
+
+        // Caricamento profilo utente
+        async function loadUserProfile() {
+            try {
+                const userData = await window.electronAPI.auth.getUserData();
+
+                if (userData) {
+                    // Aggiorna le informazioni base del profilo
+                    document.getElementById('profileName').textContent = userData.name || userData.username;
+                    document.getElementById('profileEmail').textContent = userData.email || '';
+                    document.getElementById('profileRole').textContent = capitalizeFirstLetter(userData.role || 'Utente');
+
+                    // Aggiorna statistiche
+                    // In un'app reale, queste informazioni sarebbero recuperate dal server
+                    document.getElementById('lastLogin').textContent = formatDate(userData.lastLogin);
+                    document.getElementById('accountCreated').textContent = formatDate(userData.created);
+
+                    // Popola la lista delle attività recenti
+                    populateActivityList();
+                }
+            } catch (error) {
+                console.error('Errore nel caricamento del profilo:', error);
+                showAlert(document.getElementById('profileEditAlert'), 'Errore nel caricamento del profilo. Riprova più tardi.', 'error');
+            }
+        }
+
+        // Popolamento form di modifica
+        function populateEditForm() {
+            const name = document.getElementById('profileName').textContent;
+            const email = document.getElementById('profileEmail').textContent;
+
+            document.getElementById('editName').value = name;
+            document.getElementById('editEmail').value = email;
+            document.getElementById('editBio').value = ''; // In un'app reale, questa informazione verrebbe recuperata dal server
+        }
+
+        // Gestione aggiornamento profilo
+        async function handleProfileUpdate(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('editName').value.trim();
+            const email = document.getElementById('editEmail').value.trim();
+            const bio = document.getElementById('editBio').value.trim();
+
+            if (!name || !email) {
+                showAlert(document.getElementById('profileEditAlert'), 'Nome e email sono campi obbligatori.', 'error');
+                return;
+            }
+
+            try {
+                const result = await window.electronAPI.auth.updateUserData({
+                    name,
+                    email,
+                    bio
+                });
+
+                if (result.success) {
+                    showAlert(document.getElementById('profileEditAlert'), 'Profilo aggiornato con successo!', 'success');
+
+                    // Aggiorna le informazioni visualizzate
+                    document.getElementById('profileName').textContent = name;
+                    document.getElementById('profileEmail').textContent = email;
+
+                    // Nascondi il form dopo 2 secondi
+                    setTimeout(() => {
+                        document.getElementById('profileEditForm').style.display = 'none';
+                    }, 2000);
+                } else {
+                    showAlert(document.getElementById('profileEditAlert'), result.message || 'Errore nell\'aggiornamento del profilo.', 'error');
+                }
+            } catch (error) {
+                console.error('Errore nell\'aggiornamento del profilo:', error);
+                showAlert(document.getElementById('profileEditAlert'), 'Si è verificato un errore. Riprova più tardi.', 'error');
+            }
+        }
+
+        // Gestione cambio password
+        async function handlePasswordChange(e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showAlert(document.getElementById('passwordChangeAlert'), 'Tutti i campi sono obbligatori.', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showAlert(document.getElementById('passwordChangeAlert'), 'Le password non corrispondono.', 'error');
+                return;
+            }
+
+            // Verifica robustezza password
+            if (!isStrongPassword(newPassword)) {
+                showAlert(document.getElementById('passwordChangeAlert'), 'La password deve essere più complessa. Usa almeno 8 caratteri, maiuscole, minuscole, numeri e simboli.', 'error');
+                return;
+            }
+
+            try {
+                const result = await window.electronAPI.auth.changePassword({
+                    currentPassword,
+                    newPassword
+                });
+
+                if (result.success) {
+                    showAlert(document.getElementById('passwordChangeAlert'), 'Password cambiata con successo!', 'success');
+
+                    // Aggiorna la data dell'ultimo cambio password
+                    document.getElementById('lastPasswordChange').textContent = formatDate(new Date());
+
+                    // Reset del form e nascondi dopo 2 secondi
+                    document.getElementById('passwordForm').reset();
+                    setTimeout(() => {
+                        document.getElementById('passwordChangeForm').style.display = 'none';
+                    }, 2000);
+                } else {
+                    showAlert(document.getElementById('passwordChangeAlert'), result.message || 'Errore nel cambio password.', 'error');
+                }
+            } catch (error) {
+                console.error('Errore nel cambio password:', error);
+                showAlert(document.getElementById('passwordChangeAlert'), 'Si è verificato un errore. Riprova più tardi.', 'error');
+            }
+        }
+
+        // Gestione logout di tutte le sessioni
+        async function logoutAllSessions() {
+            try {
+                // In un'app reale, questa chiamata andrebbe al backend per invalidare tutte le sessioni
+                const result = { success: true }; // simuliamo una risposta positiva
+
+                if (result.success) {
+                    // Effettua il logout dell'utente corrente
+                    window.electronAPI.auth.logout();
+                }
+            } catch (error) {
+                console.error('Errore nel logout generale:', error);
+                alert('Si è verificato un errore. Riprova più tardi.');
+            }
+        }
+
+        // Gestione eliminazione account
+        async function deleteAccount() {
+            try {
+                // In un'app reale, questa chiamata andrebbe al backend per eliminare l'account
+                const result = { success: true }; // simuliamo una risposta positiva
+
+                if (result.success) {
+                    alert('Account eliminato con successo.');
+                    // Effettua il logout dell'utente
+                    window.electronAPI.auth.logout();
+                }
+            } catch (error) {
+                console.error('Errore nell\'eliminazione dell\'account:', error);
+                alert('Si è verificato un errore. Riprova più tardi.');
+            }
+        }
+
+        // Popola la lista delle attività recenti
+        function populateActivityList() {
+            const activityList = document.getElementById('activityList');
+
+            // In un'app reale, questi dati sarebbero recuperati dal server
+            const activities = [
+                { type: 'login', date: new Date(2025, 2, 22, 15, 30), details: 'Accesso effettuato' },
+                { type: 'report', date: new Date(2025, 2, 21, 10, 15), details: 'Report mensile generato' },
+                { type: 'import', date: new Date(2025, 2, 20, 9, 45), details: 'Importati 14 file JSON' },
+                { type: 'password', date: new Date(2025, 1, 15, 16, 20), details: 'Password modificata' },
+                { type: 'login', date: new Date(2025, 1, 10, 8, 30), details: 'Accesso effettuato' }
+            ];
+
+            let html = '';
+
+            activities.forEach(activity => {
+                let iconClass = '';
+                switch (activity.type) {
+                    case 'login': iconClass = 'fas fa-sign-in-alt'; break;
+                    case 'report': iconClass = 'fas fa-file-alt'; break;
+                    case 'import': iconClass = 'fas fa-file-import'; break;
+                    case 'password': iconClass = 'fas fa-key'; break;
+                    default: iconClass = 'fas fa-info-circle';
+                }
+
+                html += `
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="${iconClass}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-details">${activity.details}</div>
+                        <div class="activity-date">${formatDateTime(activity.date)}</div>
+                    </div>
+                </div>
+                `;
+            });
+
+            activityList.innerHTML = html;
+        }
+
+        // Controllo robustezza password
+        function updatePasswordStrength(password) {
+            const strengthBar = document.getElementById('passwordStrength');
+            const strengthText = document.getElementById('passwordStrengthText');
+            let strength = 0;
+
+            // Requisiti della password
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+            // Calcola il punteggio di robustezza (0-4)
+            if (hasLength) strength += 1;
+            if (hasUppercase) strength += 1;
+            if (hasLowercase) strength += 1;
+            if (hasNumber) strength += 1;
+            if (hasSpecial) strength += 1;
+
+            // Aggiorna l'indicatore
+            let barWidth = (strength / 5) * 100;
+            strengthBar.style.width = barWidth + '%';
+
+            if (password === '') {
+                strengthBar.style.backgroundColor = '#e2e8f0';
+                strengthText.textContent = 'Sicurezza password';
+            } else if (strength <= 2) {
+                strengthBar.style.backgroundColor = '#ef4444';
+                strengthText.textContent = 'Debole';
+            } else if (strength <= 3) {
+                strengthBar.style.backgroundColor = '#f97316';
+                strengthText.textContent = 'Media';
+            } else if (strength === 4) {
+                strengthBar.style.backgroundColor = '#22c55e';
+                strengthText.textContent = 'Forte';
+            } else {
+                strengthBar.style.backgroundColor = '#166534';
+                strengthText.textContent = 'Molto forte';
+            }
+        }
+
+        // Verifica se una password è robusta
+        function isStrongPassword(password) {
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+            return hasLength && hasUppercase && hasLowercase && hasNumber && hasSpecial;
+        }
+
+        // Funzione per mostrare messaggi di alert
+        function showAlert(element, message, type) {
+            element.textContent = message;
+            element.className = 'alert';
+            element.classList.add(`alert-${type}`);
+            element.style.display = 'block';
+        }
+
+        // Funzioni di utilità
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return 'N/D';
+
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('it-IT', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        function formatDateTime(date) {
+            return date.toLocaleDateString('it-IT', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
     </script>
 
-    <!-- Script per la gestione del profilo -->
+        <!-- Script per la gestione del profilo -->
     <script src="profile.js"></script>
 </body>
 </html>

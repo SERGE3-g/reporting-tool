@@ -1,10 +1,179 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Contatti - Tool di Reporting Commissioni</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS principale -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/admin.css">
+
 </head>
 <body>
+    <!-- Importa la navbar -->
+    <div id="navbar-placeholder"></div>
 
+    <div class="app-container">
+        <div class="contact-container">
+            <div class="contact-header">
+                <h1><i class="fas fa-envelope"></i> Contattaci</h1>
+                <p>Per qualsiasi richiesta di assistenza, informazione o collaborazione, non esitare a contattarci. Il nostro team è a tua disposizione.</p>
+            </div>
+
+            <div class="contact-sections">
+                <div class="contact-card">
+                    <h3><i class="fas fa-headset"></i> Supporto Tecnico</h3>
+                    <p>Il nostro team di supporto tecnico è disponibile per risolvere qualsiasi problema o domanda sull'utilizzo dell'applicazione.</p>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:supporto@aziendale.com" class="contact-link">supporto@aziendale.com</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+390212345678" class="contact-link">+39 02 1234567</a></li>
+                        <li><i class="fas fa-clock"></i> Lun-Ven: 9:00-18:00</li>
+                    </ul>
+                </div>
+
+                <div class="contact-card">
+                    <h3><i class="fas fa-briefcase"></i> Informazioni Commerciali</h3>
+                    <p>Per informazioni su licenze, prezzi o per richiedere una demo personalizzata della nostra applicazione.</p>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:commerciale@aziendale.com" class="contact-link">commerciale@aziendale.com</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+390212345679" class="contact-link">+39 02 1234568</a></li>
+                        <li><i class="fas fa-clock"></i> Lun-Ven: 9:00-18:00</li>
+                    </ul>
+                </div>
+
+                <div class="contact-card">
+                    <h3><i class="fas fa-map-marker-alt"></i> Sede</h3>
+                    <p>La nostra sede principale è situata nel centro di Roma, facilmente raggiungibile con i mezzi pubblici.</p>
+                    <ul>
+                        <li><i class="fas fa-building"></i> Serge Guea</li>
+                        <li><i class="fas fa-map-pin"></i> Via dei Reporting 123, 00100</li>
+                        <li><i class="fas fa-city"></i> Roma (RM), Italia</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contact-form-container">
+                <h2>Inviaci un messaggio</h2>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Nome *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Telefono</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Oggetto *</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Seleziona un'opzione</option>
+                            <option value="support">Supporto Tecnico</option>
+                            <option value="info">Informazioni Generali</option>
+                            <option value="sales">Informazioni Commerciali</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="other">Altro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="message">Messaggio *</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+
+                    <div class="form-note">
+                        <small>* Campi obbligatori</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Invia Messaggio
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="map-container">
+                <i class="fas fa-map-marked-alt" style="font-size: 3rem; color: var(--primary);"></i>
+                <p>Mappa interattiva da caricare qui</p>
+                <!-- In un'implementazione reale, qui verrebbe visualizzata una mappa interattiva -->
+            </div>
+
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h3 style="color: var(--primary); margin-bottom: 15px;">Seguici sui Social</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importa il footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Script -->
+    <script src="js/common.js"></script>
+    <script>
+        // Carica navbar e footer
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponent('components/navbar.html', 'navbar-placeholder');
+            loadComponent('components/footer.html', 'footer-placeholder');
+
+            // Inizializza la pagina
+            initContactPage();
+        });
+
+        function initContactPage() {
+            // Inizializza il form di contatto
+            const contactForm = document.getElementById('contactForm');
+
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Raccolta dati dal form
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value
+                };
+
+                console.log('Invio messaggio:', formData);
+
+                // Simulazione invio (in un'implementazione reale qui ci sarebbe una chiamata AJAX)
+                alert('Grazie per averci contattato. Ti risponderemo il prima possibile!');
+
+                // Reset del form
+                contactForm.reset();
+            });
+
+            // Qui si potrebbero aggiungere altre inizializzazioni, come il caricamento della mappa
+            initMap();
+        }
+
+        function initMap() {
+            // In un'implementazione reale, qui verrebbe inizializzata una mappa
+            // Ad esempio con Google Maps, Leaflet, o altre librerie
+            console.log('Inizializzazione mappa');
+        }
+    </script>
 </body>
 </html>

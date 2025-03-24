@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Log Attività - Tool di Reporting Commissioni</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS principale -->
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../css/admin.css">
+
+    <style>
+        .log-entry {
+            border-left: 4px solid #4361ee;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .log-entry:hover {
+            background-color: #e2e8f0;
+            transform: translateX(2px);
+        }
+
+        .log-entry.warning {
+            border-left-color: #f8961e;
+        }
+
+        .log-entry.error {
+            border-left-color: #f72585;
+        }
+
+        .log-timestamp {
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .log-user {
+            font-weight: 500;
+            color: #1e40af;
+        }
+
+        .log-action {
+            font-weight: 500;
+        }
+
+        .log-details {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #334155;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .date-range {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #exportLogsBtn {
+            margin-left: auto;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .page-btn {
+            padding: 5px 10px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Importa la navbar -->
+    <div id="navbar-placeholder"></div>
+
+    <div class="app-container">
+        <div class="admin-header">
+            <h1><i class="fas fa-list-alt"></i> Log Attività</h1>
+            <p>Monitoraggio delle azioni degli utenti nel sistema</p>
+        </div>
+
+        <div class="section">
+            <div class="filter-bar">
+                <div class="control-group">
+                    <label for="actionFilter">Tipo di Azione</label>
+                    <select id="actionFilter">
+                        <option value="">Tutte le azioni</option>
+                        <option value="login">Login</option>
+                        <option value="file_process">Elaborazione File</option>
+                        <option value="export">Esportazione</option>
+                        <option value="email">Invio Email</option>
+                        <option value="settings">Modifica Impostazioni</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="userFilter">Utente</label>
+                    <select id="userFilter">
+                        <option value="">Tutti gli utenti</option>
+                        <!-- Opzioni generate dinamicamente -->
+                    </select>
+                </div>
+
+                <div class="date-range">
+                    <div class="control-group">
+                        <label for="startDate">Da</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="control-group">
+                        <label for="endDate">A</label>
+                        <input type="date" id="endDate">
+                    </div>
+                </div>
+
+                <button id="exportLogsBtn" class="btn btn-primary">
+                    <i class="fas fa-file-export"></i> Esporta Log
+                </button>
+            </div>
+
+            <div id="logsContainer">
+                <!-- I log verranno inseriti qui dinamicamente -->
+
+                <!-- Esempio di log -->
+                <div class="log-entry">
+                    <div class="log-header">
+                        <span class="log-timestamp">22/03/2025 14:30:45</span> -
+                        <span class="log-user">mario.rossi</span> -
+                        <span class="log-action">Elaborazione File</span>
+                    </div>
+                    <div class="log-details">
+                        Elaborati 3 file JSON con 150 record estratti. IP: 192.168.1.5
+                    </div>
+                </div>
+
+                <div class="log-entry warning">
+                    <div class="log-header">
+                        <span class="log-timestamp">22/03/2025 12:15:22</span> -
+                        <span class="log-user">giuseppe.verdi</span> -
+                        <span class="log-action">Esportazione</span>
+                    </div>
+                    <div class="log-details">
+                        Tentativo di esportazione di 0 record. IP: 192.168.1.10
+                    </div>
+                </div>
+
+                <div class="log-entry error">
+                    <div class="log-header">
+                        <span class="log-timestamp">21/03/2025 09:45:12</span> -
+                        <span class="log-user">anna.bianchi</span> -
+                        <span class="log-action">Invio Email</span>
+                    </div>
+                    <div class="log-details">
+                        Errore durante l'invio dell'email: Autenticazione fallita. IP: 192.168.1.15
+                    </div>
+                </div>
+
+                <!-- Altri log... -->
+            </div>
+
+            <div class="pagination">
+                <button class="page-btn" onclick="changePage(1)"><i class="fas fa-angle-double-left"></i></button>
+                <button class="page-btn" onclick="changePage(currentPage - 1)"><i class="fas fa-angle-left"></i></button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn" onclick="changePage(currentPage + 1)"><i class="fas fa-angle-right"></i></button>
+                <button class="page-btn" onclick="changePage(totalPages)"><i class="fas fa-angle-double-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importa il footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Script -->
+    <script src="../js/common.js"></script>
+    <script>
+        // Carica navbar e footer
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponent('../components/navbar.html', 'navbar-placeholder');
+            loadComponent('../components/footer.html', 'footer-placeholder');
+
+            // Inizializza la pagina
+            initActivityLogs();
+        });
+
+        // Variabili di stato
+        let currentPage = 1;
+        let totalPages = 10; // Esempio
+        let logsPerPage = 20;
+
+        function initActivityLogs() {
+            // Imposta la data di oggi per endDate
+            const today = new Date();
+            document.getElementById('endDate').valueAsDate = today;
+
+            // Imposta la data di 7 giorni fa per startDate
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            document.getElementById('startDate').valueAsDate = weekAgo;
+
+            // Carica gli utenti per il filtro
+            loadUsers();
+
+            // Carica i log iniziali
+            loadLogs();
+
+            // Aggiungi listener agli eventi
+            document.getElementById('actionFilter').addEventListener('change', loadLogs);
+            document.getElementById('userFilter').addEventListener('change', loadLogs);
+            document.getElementById('startDate').addEventListener('change', loadLogs);
+            document.getElementById('endDate').addEventListener('change', loadLogs);
+            document.getElementById('exportLogsBtn').addEventListener('click', exportLogs);
+        }
+
+        function loadUsers() {
+            // In un'implementazione reale, questo verrebbe caricato dal server
+            const users = [
+                { id: 1, username: 'admin' },
+                { id: 2, username: 'mario.rossi' },
+                { id: 3, username: 'giuseppe.verdi' },
+                { id: 4, username: 'anna.bianchi' }
+            ];
+
+            const userFilter = document.getElementById('userFilter');
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = user.username;
+                userFilter.appendChild(option);
+            });
+        }
+
+        function loadLogs() {
+            // In un'implementazione reale, questa funzione farebbe una richiesta al server
+            // per ottenere i log filtrati in base ai criteri selezionati
+            console.log('Caricamento log con filtri applicati');
+
+            // Esempio di logica per filtrare
+            const actionFilter = document.getElementById('actionFilter').value;
+            const userFilter = document.getElementById('userFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            console.log(`Filtri applicati: Azione=${actionFilter}, Utente=${userFilter}, Da=${startDate}, A=${endDate}`);
+
+            // Qui si farebbe la chiamata al server
+            // Per ora usiamo i log di esempio già presenti nell'HTML
+        }
+
+        function changePage(page) {
+            // Validazione pagina
+            if (page < 1 || page > totalPages) return;
+
+            currentPage = page;
+            loadLogs();
+
+            // Aggiorna l'UI della paginazione
+            updatePaginationUI();
+        }
+
+        function updatePaginationUI() {
+            // Aggiorna l'interfaccia della paginazione
+            const pagination = document.querySelector('.pagination');
+            // Implementazione reale andrebbe qui
+        }
+
+        function exportLogs() {
+            // Logica per esportare i log in CSV o Excel
+            alert('Esportazione log in corso...');
+
+            // In un'implementazione reale, chiamata al server per generare il file
+            // e poi download
+        }
+    </script>
+</body>
+</html>

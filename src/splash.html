@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avvio in corso - Tool di Reporting Commissioni</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: transparent;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .splash-container {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 1s ease;
+            max-width: 90%;
+            width: 400px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-container img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .version {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 15px;
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background-color: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .loading-bar::after {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 20%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary), var(--secondary), var(--success));
+            animation: loading 1.5s infinite ease-in-out;
+            border-radius: 2px;
+        }
+
+        @keyframes loading {
+            0% { left: -20%; }
+            100% { left: 100%; }
+        }
+
+        .loading-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+            height: 20px;
+        }
+
+        .loading-text span {
+            animation: dots 1.5s infinite;
+        }
+
+        .loading-text span:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .loading-text span:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes dots {
+            0%, 20% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .author {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-container">
+        <div class="logo-container">
+            <img src="../icon.png" alt="Logo" onerror="this.src='../../assets/icons/icon-fallback.png'">
+        </div>
+
+        <h1>Tool di Reporting Commissioni</h1>
+        <p>Estrai, analizza ed elabora i dati in modo semplice e intuitivo</p>
+
+        <div class="loading-bar"></div>
+
+        <div class="loading-text">
+            Inizializzazione<span>.</span><span>.</span><span>.</span>
+        </div>
+
+        <div class="version">Versione 1.1.0</div>
+
+        <div class="author">© 2025 - Powered by Serge Guea</div>
+    </div>
+
+    <script>
+        // Cambia il testo di caricamento ogni 2 secondi
+        const loadingTexts = [
+            'Inizializzazione<span>.</span><span>.</span><span>.</span>',
+            'Controllo aggiornamenti<span>.</span><span>.</span><span>.</span>',
+            'Caricamento dati<span>.</span><span>.</span><span>.</span>',
+            'Quasi pronto<span>.</span><span>.</span><span>.</span>',
+        ];
+
+        const loadingElement = document.querySelector('.loading-text');
+        let currentIndex = 0;
+
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % loadingTexts.length;
+            loadingElement.innerHTML = loadingTexts[currentIndex];
+        }, 2000);
+
+        // Ottieni la versione corrente dall'API Electron
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Se disponibile, usa il preload per ottenere la versione
+                if (window.electronAPI && window.electronAPI.app && window.electronAPI.app.getVersion) {
+                    const version = await window.electronAPI.app.getVersion();
+                    document.querySelector('.version').textContent = `Versione ${version}`;
+                }
+            } catch (error) {
+                console.log('Impossibile recuperare la versione:', error);
+            }
+        });
+    </script>
+</body>
+</html>

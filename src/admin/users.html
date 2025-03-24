@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Gestione Utenti - Tool di Reporting Commissioni</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS principale -->
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../css/admin.css">
+
+</head>
+<body>
+    <!-- Importa la navbar -->
+    <div id="navbar-placeholder"></div>
+
+    <div class="app-container">
+        <div class="admin-header">
+            <h1><i class="fas fa-users"></i> Gestione Utenti</h1>
+            <p>Amministrazione degli account utente e controllo accessi</p>
+        </div>
+
+        <div class="section">
+            <div class="user-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="userSearch" placeholder="Cerca utente...">
+                </div>
+
+                <div class="filter-controls">
+                    <select id="roleFilter">
+                        <option value="">Tutti i ruoli</option>
+                        <option value="admin">Amministratore</option>
+                        <option value="manager">Manager</option>
+                        <option value="user">Utente</option>
+                    </select>
+
+                    <select id="statusFilter">
+                        <option value="">Tutti gli stati</option>
+                        <option value="active">Attivo</option>
+                        <option value="inactive">Inattivo</option>
+                        <option value="locked">Bloccato</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" onclick="openUserModal()">
+                    <i class="fas fa-user-plus"></i> Nuovo Utente
+                </button>
+            </div>
+
+            <div class="user-grid" id="userGrid">
+                <!-- Gli utenti verranno generati dinamicamente -->
+
+                <!-- Esempio di utente -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="user-name">Mario Rossi</h3>
+                        <p class="user-email">mario.rossi@example.com</p>
+                        <span class="user-role">Manager</span>
+                    </div>
+                    <div class="user-body">
+                        <div class="user-info">
+                            <div class="info-item">
+                                <span class="info-label">Username:</span>
+                                <span class="info-value">mario.rossi</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Data creazione:</span>
+                                <span class="info-value">15/01/2025</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Ultimo accesso:</span>
+                                <span class="info-value">22/03/2025</span>
+                            </div>
+                            <div class="user-status">
+                                <span class="status-badge status-active"></span>
+                                <span>Attivo</span>
+                            </div>
+                        </div>
+
+                        <div class="user-actions">
+                            <button class="action-btn btn-edit" onclick="editUser(1)">
+                                <i class="fas fa-edit"></i> Modifica
+                            </button>
+                            <button class="action-btn btn-lock" onclick="toggleUserStatus(1)">
+                                <i class="fas fa-lock"></i> Blocca
+                            </button>
+                            <button class="action-btn btn-delete" onclick="deleteUser(1)">
+                                <i class="fas fa-trash"></i> Elimina
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Esempio di utente inattivo -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="user-name">Anna Bianchi</h3>
+                        <p class="user-email">anna.bianchi@example.com</p>
+                        <span class="user-role">Utente</span>
+                    </div>
+                    <div class="user-body">
+                        <div class="user-info">
+                            <div class="info-item">
+                                <span class="info-label">Username:</span>
+                                <span class="info-value">anna.bianchi</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Data creazione:</span>
+                                <span class="info-value">20/01/2025</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Ultimo accesso:</span>
+                                <span class="info-value">15/02/2025</span>
+                            </div>
+                            <div class="user-status">
+                                <span class="status-badge status-inactive"></span>
+                                <span>Inattivo</span>
+                            </div>
+                        </div>
+
+                        <div class="user-actions">
+                            <button class="action-btn btn-edit" onclick="editUser(2)">
+                                <i class="fas fa-edit"></i> Modifica
+                            </button>
+                            <button class="action-btn btn-lock" onclick="toggleUserStatus(2)">
+                                <i class="fas fa-unlock"></i> Attiva
+                            </button>
+                            <button class="action-btn btn-delete" onclick="deleteUser(2)">
+                                <i class="fas fa-trash"></i> Elimina
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Esempio di admin -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="user-name">Serge Guea</h3>
+                        <p class="user-email">serge.guea@example.com</p>
+                        <span class="user-role">Admin</span>
+                    </div>
+                    <div class="user-body">
+                        <div class="user-info">
+                            <div class="info-item">
+                                <span class="info-label">Username:</span>
+                                <span class="info-value">admin</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Data creazione:</span>
+                                <span class="info-value">01/01/2025</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Ultimo accesso:</span>
+                                <span class="info-value">22/03/2025</span>
+                            </div>
+                            <div class="user-status">
+                                <span class="status-badge status-active"></span>
+                                <span>Attivo</span>
+                            </div>
+                        </div>
+
+                        <div class="user-actions">
+                            <button class="action-btn btn-edit" onclick="editUser(3)">
+                                <i class="fas fa-edit"></i> Modifica
+                            </button>
+                            <button class="action-btn btn-lock" onclick="toggleUserStatus(3)" disabled>
+                                <i class="fas fa-lock"></i> Blocca
+                            </button>
+                            <button class="action-btn btn-delete" onclick="deleteUser(3)" disabled>
+                                <i class="fas fa-trash"></i> Elimina
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Utente bloccato -->
+                <div class="user-card">
+                    <div class="user-header">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="user-name">Giuseppe Verdi</h3>
+                        <p class="user-email">giuseppe.verdi@example.com</p>
+                        <span class="user-role">Utente</span>
+                    </div>
+                    <div class="user-body">
+                        <div class="user-info">
+                            <div class="info-item">
+                                <span class="info-label">Username:</span>
+                                <span class="info-value">giuseppe.verdi</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Data creazione:</span>
+                                <span class="info-value">10/02/2025</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Ultimo accesso:</span>
+                                <span class="info-value">15/03/2025</span>
+                            </div>
+                            <div class="user-status">
+                                <span class="status-badge status-locked"></span>
+                                <span>Bloccato</span>
+                            </div>
+                        </div>
+
+                        <div class="user-actions">
+                            <button class="action-btn btn-edit" onclick="editUser(4)">
+                                <i class="fas fa-edit"></i> Modifica
+                            </button>
+                            <button class="action-btn btn-lock" onclick="toggleUserStatus(4)">
+                                <i class="fas fa-unlock"></i> Sblocca
+                            </button>
+                            <button class="action-btn btn-delete" onclick="deleteUser(4)">
+                                <i class="fas fa-trash"></i> Elimina
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <button class="page-btn" onclick="changePage(1)"><i class="fas fa-angle-double-left"></i></button>
+                <button class="page-btn" onclick="changePage(currentPage - 1)"><i class="fas fa-angle-left"></i></button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn" onclick="changePage(currentPage + 1)"><i class="fas fa-angle-right"></i></button>
+                <button class="page-btn" onclick="changePage(totalPages)"><i class="fas fa-angle-double-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal per aggiungere/modificare utente -->
+    <div class="user-modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Nuovo Utente</h3>
+                <button class="modal-close" onclick="closeUserModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="user-form" id="userForm">
+                    <input type="hidden" id="userId" value="">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="userName">Nome</label>
+                            <input type="text" id="userName" placeholder="Nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="userSurname">Cognome</label>
+                            <input type="text" id="userSurname" placeholder="Cognome" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userEmail">Email</label>
+                        <input type="email" id="userEmail" placeholder="Email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userUsername">Username</label>
+                        <input type="text" id="userUsername" placeholder="Username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userPassword">Password</label>
+                        <input type="password" id="userPassword" placeholder="Password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userRole">Ruolo</label>
+                        <select id="userRole" required>
+                            <option value="user">Utente</option>
+                            <option value="manager">Manager</option>
+                            <option value="admin">Amministratore</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userStatus">Stato</label>
+                        <select id="userStatus" required>
+                            <option value="active">Attivo</option>
+                            <option value="inactive">Inattivo</option>
+                            <option value="locked">Bloccato</option>
+                        </select>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="userSendEmail" checked>
+                        <label for="userSendEmail">Invia email con credenziali</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="userForcePasswordChange" checked>
+                        <label for="userForcePasswordChange">Richiedi cambio password al primo accesso</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeUserModal()">Annulla</button>
+                <button class="btn btn-primary" onclick="saveUser()">Salva</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importa il footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Script -->
+    <script src="../js/common.js"></script>
+    <script>
+        // Carica navbar e footer
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponent('../components/navbar.html', 'navbar-placeholder');
+            loadComponent('../components/footer.html', 'footer-placeholder');
+            // Inizializza la pagina
+            initUserPage();
+        });
+
+        // Variabili di stato
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentEditingUserId = null;
+
+        function initUserPage() {
+            // Aggiunge listener agli eventi
+            document.getElementById('userSearch').addEventListener('input', filterUsers);
+            document.getElementById('roleFilter').addEventListener('change', filterUsers);
+            document.getElementById('statusFilter').addEventListener('change', filterUsers);
+
+            // Carica dati iniziali
+            loadUsers();
+        }
+
+        function loadUsers() {
+            // In un'implementazione reale, questa funzione farebbe una richiesta al server
+            // per ottenere gli utenti
+            console.log('Caricamento utenti');
+
+            // Gli utenti sono già caricati staticamente per questo esempio
+        }
+
+        function filterUsers() {
+            // Ottiene i valori dei filtri
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            const roleFilter = document.getElementById('roleFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            console.log(`Filtri: Cerca="${searchTerm}", Ruolo=${roleFilter}, Stato=${statusFilter}`);
+
+            // In un'implementazione reale, questa funzione filtrerebbe gli utenti
+            // in base ai criteri selezionati
+        }
+
+        function changePage(page) {
+            // Validazione pagina
+            if (page < 1 || page > totalPages) return;
+
+            currentPage = page;
+            loadUsers();
+        }
+
+        function openUserModal(userId = null) {
+            const modal = document.getElementById('userModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const form = document.getElementById('userForm');
+
+            // Reset del form
+            form.reset();
+
+            if (userId) {
+                // Modifica utente esistente
+                currentEditingUserId = userId;
+                modalTitle.textContent = 'Modifica Utente';
+                document.getElementById('userId').value = userId;
+
+                // In un'implementazione reale, qui si caricherebbero i dati dell'utente
+                // Per questo esempio, usiamo dati di test
+                if (userId === 1) {
+                    document.getElementById('userName').value = 'Mario';
+                    document.getElementById('userSurname').value = 'Rossi';
+                    document.getElementById('userEmail').value = 'mario.rossi@example.com';
+                    document.getElementById('userUsername').value = 'mario.rossi';
+                    document.getElementById('userRole').value = 'manager';
+                    document.getElementById('userStatus').value = 'active';
+                }
+            } else {
+                // Nuovo utente
+                currentEditingUserId = null;
+                modalTitle.textContent = 'Nuovo Utente';
+                document.getElementById('userId').value = '';
+            }
+
+            // Mostra la modal
+            modal.style.display = 'flex';
+        }
+
+        function closeUserModal() {
+            const modal = document.getElementById('userModal');
+            modal.style.display = 'none';
+        }
+
+        function saveUser() {
+            const form = document.getElementById('userForm');
+
+            // Validazione form base
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // Raccolta dati
+            const userData = {
+                id: document.getElementById('userId').value,
+                name: document.getElementById('userName').value,
+                surname: document.getElementById('userSurname').value,
+                email: document.getElementById('userEmail').value,
+                username: document.getElementById('userUsername').value,
+                password: document.getElementById('userPassword').value,
+                role: document.getElementById('userRole').value,
+                status: document.getElementById('userStatus').value,
+                sendEmail: document.getElementById('userSendEmail').checked,
+                forcePasswordChange: document.getElementById('userForcePasswordChange').checked
+            };
+
+            console.log('Salvataggio utente:', userData);
+
+            // In un'implementazione reale, questa funzione invierebbe i dati al server
+
+            alert(currentEditingUserId ? 'Utente aggiornato con successo!' : 'Nuovo utente creato con successo!');
+
+            // Chiudi la modal
+            closeUserModal();
+
+            // Ricarica gli utenti
+            loadUsers();
+        }
+
+        function editUser(userId) {
+            openUserModal(userId);
+        }
+
+        function deleteUser(userId) {
+            // Check se è l'utente admin (non eliminabile)
+            if (userId === 3) {
+                alert('L\'utente amministratore non può essere eliminato.');
+                return;
+            }
+
+            if (confirm('Sei sicuro di voler eliminare questo utente? Questa azione non può essere annullata.')) {
+                console.log('Eliminazione utente ID:', userId);
+
+                // In un'implementazione reale, questa funzione invierebbe una richiesta al server
+
+                alert('Utente eliminato con successo!');
+
+                // Ricarica gli utenti
+                loadUsers();
+            }
+        }
+
+        function toggleUserStatus(userId) {
+            // Check se è l'utente admin (non bloccabile)
+            if (userId === 3) {
+                alert('Lo stato dell\'utente amministratore non può essere modificato.');
+                return;
+            }
+
+            let action = '';
+
+            // In un'implementazione reale, lo stato verrebbe letto dai dati dell'utente
+            if (userId === 2) {
+                action = 'attivare';
+            } else if (userId === 4) {
+                action = 'sbloccare';
+            } else {
+                action = 'bloccare';
+            }
+
+            if (confirm(`Sei sicuro di voler ${action} questo utente?`)) {
+                console.log('Cambio stato utente ID:', userId);
+
+                // In un'implementazione reale, questa funzione invierebbe una richiesta al server
+
+                alert(`Utente ${action.slice(0, -1)}o con successo!`);
+
+                // Ricarica gli utenti
+                loadUsers();
+            }
+        }
+    </script>
+</body>
+</html>
