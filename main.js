@@ -2,12 +2,12 @@
 // Autore: Serge Guea
 // Data: 22/03/2025
 
-const { app, BrowserWindow, ipcMain, dialog, shell, Menu } = require('electron');
+const {app, BrowserWindow, ipcMain, dialog, shell, Menu} = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const nodemailer = require('nodemailer');
-const { autoUpdater } = require('electron-updater');
+const {autoUpdater} = require('electron-updater');
 const bcrypt = require('bcryptjs');
 const mysql = require('mysql2/promise');
 const emailService = require('./emailService');
@@ -56,7 +56,7 @@ const appConfig = {
             // Carica configurazione MySQL
             if (fs.existsSync(this.mysqlConfigPath)) {
                 const mysqlData = JSON.parse(fs.readFileSync(this.mysqlConfigPath, 'utf8'));
-                mysqlConfig = { ...mysqlConfig, ...mysqlData };
+                mysqlConfig = {...mysqlConfig, ...mysqlData};
                 console.log('Configurazione MySQL caricata');
             }
         } catch (error) {
@@ -80,13 +80,13 @@ const appConfig = {
     // Salva configurazione MySQL
     saveMySQLConfig(config) {
         try {
-            mysqlConfig = { ...mysqlConfig, ...config };
+            mysqlConfig = {...mysqlConfig, ...config};
             fs.writeFileSync(this.mysqlConfigPath, JSON.stringify(mysqlConfig, null, 2), 'utf8');
             console.log('Configurazione MySQL salvata');
-            return { success: true };
+            return {success: true};
         } catch (error) {
             console.error('Errore nel salvataggio della configurazione MySQL:', error);
-            return { success: false, message: error.message };
+            return {success: false, message: error.message};
         }
     },
 
@@ -113,12 +113,12 @@ const appConfig = {
 
     // Ottiene i file recenti dell'utente dal database
     async getUserRecentFiles(userId) {
-        if (!userId) return { success: false, files: [] };
+        if (!userId) return {success: false, files: []};
         try {
             return await database.getRecentFiles(userId);
         } catch (error) {
             console.error('Errore nel recupero dei file recenti:', error);
-            return { success: false, files: [] };
+            return {success: false, files: []};
         }
     },
 
@@ -269,10 +269,10 @@ async function testMySQLConnection() {
         const connection = await pool.getConnection();
         connection.release();
         console.log('Connessione MySQL testata con successo');
-        return { success: true, message: 'Connessione MySQL stabilita con successo' };
+        return {success: true, message: 'Connessione MySQL stabilita con successo'};
     } catch (error) {
         console.error('Errore nel test della connessione MySQL:', error);
-        return { success: false, message: `Errore nella connessione MySQL: ${error.message}` };
+        return {success: false, message: `Errore nella connessione MySQL: ${error.message}`};
     }
 }
 
@@ -323,12 +323,12 @@ async function loginWithMySQL(credentials) {
             [credentials.username]
         );
         if (rows.length === 0) {
-            return { success: false, message: 'Utente non trovato' };
+            return {success: false, message: 'Utente non trovato'};
         }
         const user = rows[0];
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password_hash);
         if (!isPasswordValid) {
-            return { success: false, message: 'Password non valida' };
+            return {success: false, message: 'Password non valida'};
         }
         await pool.query(
             'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE user_id = ?',
@@ -347,7 +347,7 @@ async function loginWithMySQL(credentials) {
         };
     } catch (error) {
         console.error('Errore durante il login MySQL:', error);
-        return { success: false, message: `Errore di database: ${error.message}` };
+        return {success: false, message: `Errore di database: ${error.message}`};
     }
 }
 
@@ -359,7 +359,7 @@ async function registerWithMySQL(userData) {
             [userData.email]
         );
         if (existingUsers.length > 0) {
-            return { success: false, message: 'Questa email è già registrata' };
+            return {success: false, message: 'Questa email è già registrata'};
         }
         const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(userData.password, salt);
@@ -368,7 +368,7 @@ async function registerWithMySQL(userData) {
             [userData.username, userData.email, userData.full_name, passwordHash, salt, 'user']
         );
         if (result.affectedRows !== 1) {
-            return { success: false, message: 'Errore durante la registrazione' };
+            return {success: false, message: 'Errore durante la registrazione'};
         }
         return {
             success: true,
@@ -383,7 +383,7 @@ async function registerWithMySQL(userData) {
         };
     } catch (error) {
         console.error('Errore durante la registrazione MySQL:', error);
-        return { success: false, message: `Errore di database: ${error.message}` };
+        return {success: false, message: `Errore di database: ${error.message}`};
     }
 }
 
@@ -418,10 +418,10 @@ async function addRecentFileToMySQL(userId, filePath, fileName, fileType) {
                 }
             }
         }
-        return { success: true };
+        return {success: true};
     } catch (error) {
         console.error('Errore nell\'aggiunta del file recente a MySQL:', error);
-        return { success: false, message: error.message };
+        return {success: false, message: error.message};
     }
 }
 
@@ -432,10 +432,10 @@ async function getRecentFilesFromMySQL(userId) {
             'SELECT file_id, file_path, file_name, file_type, last_accessed FROM recent_files WHERE user_id = ? ORDER BY last_accessed DESC',
             [userId]
         );
-        return { success: true, files };
+        return {success: true, files};
     } catch (error) {
         console.error('Errore nel recupero dei file recenti da MySQL:', error);
-        return { success: false, message: error.message, files: [] };
+        return {success: false, message: error.message, files: []};
     }
 }
 
@@ -446,10 +446,10 @@ async function logActivityToMySQL(userId, action, details, ipAddress = '', userA
             'INSERT INTO activity_logs (user_id, action, details, ip_address, user_agent) VALUES (?, ?, ?, ?, ?)',
             [userId, action, details, ipAddress, userAgent]
         );
-        return { success: true };
+        return {success: true};
     } catch (error) {
         console.error('Errore nella registrazione dell\'attività su MySQL:', error);
-        return { success: false, message: error.message };
+        return {success: false, message: error.message};
     }
 }
 
@@ -542,13 +542,13 @@ function createAppMenu() {
                     label: 'Apri JSON...',
                     accelerator: 'CmdOrCtrl+O',
                     click: async () => {
-                        const { canceled, filePaths } = await dialog.showOpenDialog({
+                        const {canceled, filePaths} = await dialog.showOpenDialog({
                             properties: ['openFile', 'multiSelections'],
                             filters: [
-                                { name: 'JSON', extensions: ['json'] },
-                                { name: 'XML', extensions: ['xml'] },
-                                { name: 'CSV', extensions: ['csv'] },
-                                { name: 'Tutti i file', extensions: ['*'] }
+                                {name: 'JSON', extensions: ['json']},
+                                {name: 'XML', extensions: ['xml']},
+                                {name: 'CSV', extensions: ['csv']},
+                                {name: 'Tutti i file', extensions: ['*']}
                             ]
                         });
                         if (!canceled && filePaths.length > 0) {
@@ -565,9 +565,9 @@ function createAppMenu() {
                 },
                 {
                     label: 'File recenti',
-                    submenu: [{ label: 'Nessun file recente', enabled: false }]
+                    submenu: [{label: 'Nessun file recente', enabled: false}]
                 },
-                { type: 'separator' },
+                {type: 'separator'},
                 {
                     label: 'Esporta come CSV',
                     accelerator: 'CmdOrCtrl+E',
@@ -589,42 +589,42 @@ function createAppMenu() {
                         mainWindow.webContents.send('app:exportPdf');
                     }
                 },
-                { type: 'separator' },
-                isMac ? { role: 'close' } : { role: 'quit' }
+                {type: 'separator'},
+                isMac ? {role: 'close'} : {role: 'quit'}
             ]
         },
         {
             label: 'Modifica',
             submenu: [
-                { role: 'undo' },
-                { role: 'redo' },
-                { type: 'separator' },
-                { role: 'cut' },
-                { role: 'copy' },
-                { role: 'paste' },
+                {role: 'undo'},
+                {role: 'redo'},
+                {type: 'separator'},
+                {role: 'cut'},
+                {role: 'copy'},
+                {role: 'paste'},
                 ...(isMac ? [
-                    { role: 'delete' },
-                    { role: 'selectAll' },
-                    { type: 'separator' }
+                    {role: 'delete'},
+                    {role: 'selectAll'},
+                    {type: 'separator'}
                 ] : [
-                    { role: 'delete' },
-                    { type: 'separator' },
-                    { role: 'selectAll' }
+                    {role: 'delete'},
+                    {type: 'separator'},
+                    {role: 'selectAll'}
                 ])
             ]
         },
         {
             label: 'Visualizza',
             submenu: [
-                { role: 'reload' },
-                { role: 'forceReload' },
-                { type: 'separator' },
-                { role: 'resetZoom' },
-                { role: 'zoomIn' },
-                { role: 'zoomOut' },
-                { type: 'separator' },
-                { role: 'togglefullscreen' },
-                { type: 'separator' },
+                {role: 'reload'},
+                {role: 'forceReload'},
+                {type: 'separator'},
+                {role: 'resetZoom'},
+                {role: 'zoomIn'},
+                {role: 'zoomOut'},
+                {type: 'separator'},
+                {role: 'togglefullscreen'},
+                {type: 'separator'},
                 {
                     label: 'Dashboard',
                     click: () => {
@@ -660,7 +660,7 @@ function createAppMenu() {
                         mainWindow.loadFile(path.join(__dirname, 'src/database-config.html'));
                     }
                 },
-                { type: 'separator' },
+                {type: 'separator'},
                 {
                     label: 'Impostazioni',
                     click: () => {
@@ -684,7 +684,7 @@ function createAppMenu() {
                         mainWindow.webContents.send('app:changePassword');
                     }
                 },
-                { type: 'separator' },
+                {type: 'separator'},
                 {
                     label: 'Logout',
                     click: () => {
@@ -708,7 +708,7 @@ function createAppMenu() {
                         autoUpdater.checkForUpdatesAndNotify();
                     }
                 },
-                { type: 'separator' },
+                {type: 'separator'},
                 {
                     label: 'Informazioni su',
                     click: () => {
@@ -726,61 +726,61 @@ function createAppMenu() {
         }
     ];
 
-  // Menu Amministrazione disponibile per tutti gli utenti
-template.splice(4, 0, {
-    label: 'Amministrazione',
-    submenu: [
-        {
-            label: 'Gestione Utenti',
-            click: () => {
-                mainWindow.loadFile(path.join(__dirname, 'src/admin/users.html'));
-            }
-        },
-        {
-            label: 'Log Attività',
-            click: () => {
-                mainWindow.loadFile(path.join(__dirname, 'src/admin/activity-logs.html'));
-            }
-        },
-        {
-            label: 'Configurazione Database',
-            click: () => {
-                mainWindow.loadFile(path.join(__dirname, 'src/database-config.html'));
-            }
-        },
-        { type: 'separator' },
-        {
-            label: 'Impostazioni di Sistema',
-            click: () => {
-                mainWindow.loadFile(path.join(__dirname, 'src/admin/system-settings.html'));
-            }
-        },
-        { type: 'separator' },
-        {
-            label: 'Informazioni Legali',
-            submenu: [
-                {
-                    label: 'Privacy',
-                    click: () => {
-                        mainWindow.loadFile(path.join(__dirname, 'src/privacy.html'));
-                    }
-                },
-                {
-                    label: 'Termini e Condizioni',
-                    click: () => {
-                        mainWindow.loadFile(path.join(__dirname, 'src/terms.html'));
-                    }
-                },
-                {
-                    label: 'Contatti',
-                    click: () => {
-                        mainWindow.loadFile(path.join(__dirname, 'src/contact.html'));
-                    }
+    // Menu Amministrazione disponibile per tutti gli utenti
+    template.splice(4, 0, {
+        label: 'Amministrazione',
+        submenu: [
+            {
+                label: 'Gestione Utenti',
+                click: () => {
+                    mainWindow.loadFile(path.join(__dirname, 'src/admin/users.html'));
                 }
-            ]
-        }
-    ]
-});
+            },
+            {
+                label: 'Log Attività',
+                click: () => {
+                    mainWindow.loadFile(path.join(__dirname, 'src/admin/activity-logs.html'));
+                }
+            },
+            {
+                label: 'Configurazione Database',
+                click: () => {
+                    mainWindow.loadFile(path.join(__dirname, 'src/database-config.html'));
+                }
+            },
+            {type: 'separator'},
+            {
+                label: 'Impostazioni di Sistema',
+                click: () => {
+                    mainWindow.loadFile(path.join(__dirname, 'src/admin/system-settings.html'));
+                }
+            },
+            {type: 'separator'},
+            {
+                label: 'Informazioni Legali',
+                submenu: [
+                    {
+                        label: 'Privacy',
+                        click: () => {
+                            mainWindow.loadFile(path.join(__dirname, 'src/privacy.html'));
+                        }
+                    },
+                    {
+                        label: 'Termini e Condizioni',
+                        click: () => {
+                            mainWindow.loadFile(path.join(__dirname, 'src/terms.html'));
+                        }
+                    },
+                    {
+                        label: 'Contatti',
+                        click: () => {
+                            mainWindow.loadFile(path.join(__dirname, 'src/contact.html'));
+                        }
+                    }
+                ]
+            }
+        ]
+    });
     updateRecentFilesMenu(template);
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
@@ -834,7 +834,7 @@ async function updateRecentFilesMenu(template) {
                 });
             }
         });
-        recentFilesMenu.push({ type: 'separator' });
+        recentFilesMenu.push({type: 'separator'});
         recentFilesMenu.push({
             label: 'Cancella file recenti',
             click: async () => {
@@ -854,7 +854,7 @@ async function updateRecentFilesMenu(template) {
         });
     } else {
         recentFilesMenu.length = 0;
-        recentFilesMenu.push({ label: 'Nessun file recente', enabled: false });
+        recentFilesMenu.push({label: 'Nessun file recente', enabled: false});
     }
 }
 
@@ -940,13 +940,115 @@ function setupIpcHandlers() {
                 currentUser = result.user;
                 // Non viene richiamata la pagina di login
                 createMainWindow();
-                return { success: true, user: currentUser };
+                return {success: true, user: currentUser};
             } else {
-                return { success: false, message: result.message };
+                return {success: false, message: result.message};
             }
         } catch (error) {
             console.error('Errore durante il login SQLite:', error);
-            return { success: false, message: 'Errore durante l\'autenticazione' };
+            return {success: false, message: 'Errore durante l\'autenticazione'};
+        }
+    });
+
+    // Aggiungi questo handler nella funzione setupIpcHandlers()
+// insieme agli altri handler ipcMain
+
+    ipcMain.handle('email:send', async (event, emailData) => {
+        try {
+            // Crea un'istanza di transporter temporaneo se non è disponibile il servizio email
+            let transporter = null;
+
+            // Primo tentativo: utilizza la configurazione email dell'utente corrente
+            if (currentUser && currentUser.userId) {
+                try {
+                    const pool = await getMySQLConnection();
+                    const [configs] = await pool.query(
+                        'SELECT service, smtp_host, smtp_port, smtp_secure, username, password_encrypted, from_address FROM email_configs WHERE user_id = ?',
+                        [currentUser.userId]
+                    );
+
+                    if (configs.length > 0) {
+                        const config = configs[0];
+                        let transportConfig;
+
+                        if (config.service && config.service !== 'other') {
+                            transportConfig = {
+                                service: config.service,
+                                auth: {
+                                    user: config.username,
+                                    pass: config.password_encrypted // In produzione, decifrare la password
+                                }
+                            };
+                        } else {
+                            transportConfig = {
+                                host: config.smtp_host,
+                                port: parseInt(config.smtp_port),
+                                secure: config.smtp_secure === 1,
+                                auth: {
+                                    user: config.username,
+                                    pass: config.password_encrypted // In produzione, decifrare la password
+                                },
+                                tls: {
+                                    rejectUnauthorized: false
+                                }
+                            };
+                        }
+
+                        transporter = nodemailer.createTransport(transportConfig);
+
+                        // Log dell'attività
+                        await logActivityToMySQL(
+                            currentUser.userId,
+                            'send_email',
+                            `Email inviata a ${emailData.to} con oggetto "${emailData.subject}"`
+                        );
+                    }
+                } catch (error) {
+                    console.error('Errore nel recupero della configurazione email da MySQL:', error);
+                }
+            }
+
+            // Secondo tentativo: utilizza il servizio email dell'applicazione
+            if (!transporter) {
+                transporter = emailService.getTransporter();
+
+                // Se non è disponibile nemmeno il transporter dell'applicazione, creane uno temporaneo
+                if (!transporter) {
+                    // Configurazione di default per l'invio di email
+                    const defaultConfig = {
+                        host: 'smtp.gmail.com',
+                        port: 587,
+                        secure: false,
+                        auth: {
+                            user: 'gueaserge2@gmail.com', // Usa la tua email qui
+                            pass: process.env.EMAIL_PASSWORD || 'password_app' // In produzione, usare variabili d'ambiente
+                        }
+                    };
+
+                    transporter = nodemailer.createTransport(defaultConfig);
+                }
+            }
+
+            // Verifica la connessione prima di inviare
+            await transporter.verify();
+
+            // Prepara le opzioni email
+            const mailOptions = {
+                from: emailData.from || 'gueaserge2@gmail.com',
+                to: emailData.to,
+                subject: emailData.subject,
+                html: emailData.html,
+                replyTo: emailData.replyTo || emailData.from
+            };
+
+            // Invia l'email
+            const info = await transporter.sendMail(mailOptions);
+
+            console.log('Email inviata con successo:', info.messageId);
+            return {success: true, messageId: info.messageId};
+        } catch (error) {
+            console.error('Errore nell\'invio dell\'email:', error);
+            return {success: false, error: error.message};
         }
     });
 
@@ -958,13 +1060,13 @@ function setupIpcHandlers() {
             if (result.success) {
                 currentUser = result.userData;
                 createMainWindow();
-                return { success: true, userData: result.userData };
+                return {success: true, userData: result.userData};
             } else {
-                return { success: false, message: result.message };
+                return {success: false, message: result.message};
             }
         } catch (error) {
             console.error('Errore durante il login MySQL:', error);
-            return { success: false, message: `Errore durante l'autenticazione: ${error.message}` };
+            return {success: false, message: `Errore durante l'autenticazione: ${error.message}`};
         }
     });
 
@@ -980,7 +1082,7 @@ function setupIpcHandlers() {
             return result;
         } catch (error) {
             console.error('Errore durante la registrazione SQLite:', error);
-            return { success: false, message: 'Errore durante la registrazione: ' + error.message };
+            return {success: false, message: 'Errore durante la registrazione: ' + error.message};
         }
     });
 
@@ -996,7 +1098,7 @@ function setupIpcHandlers() {
             return result;
         } catch (error) {
             console.error('Errore durante la registrazione MySQL:', error);
-            return { success: false, message: `Errore durante la registrazione: ${error.message}` };
+            return {success: false, message: `Errore durante la registrazione: ${error.message}`};
         }
     });
 
@@ -1010,7 +1112,7 @@ function setupIpcHandlers() {
 
     ipcMain.handle('user:updateProfile', async (event, userData) => {
         if (!currentUser || !currentUser.userId) {
-            return { success: false, message: 'Utente non autenticato' };
+            return {success: false, message: 'Utente non autenticato'};
         }
         try {
             try {
@@ -1019,8 +1121,8 @@ function setupIpcHandlers() {
                     'UPDATE users SET full_name = ?, email = ? WHERE user_id = ?',
                     [userData.fullName, userData.email, currentUser.userId]
                 );
-                currentUser = { ...currentUser, fullName: userData.fullName, email: userData.email };
-                return { success: true, user: currentUser };
+                currentUser = {...currentUser, fullName: userData.fullName, email: userData.email};
+                return {success: true, user: currentUser};
             } catch (mysqlError) {
                 console.error('Errore nell\'aggiornamento del profilo su MySQL:', mysqlError);
                 const result = await authService.updateUserData(userData);
@@ -1029,13 +1131,13 @@ function setupIpcHandlers() {
             }
         } catch (error) {
             console.error('Errore durante l\'aggiornamento del profilo:', error);
-            return { success: false, message: 'Errore durante l\'aggiornamento del profilo' };
+            return {success: false, message: 'Errore durante l\'aggiornamento del profilo'};
         }
     });
 
     ipcMain.handle('user:changePassword', async (event, passwordData) => {
         if (!currentUser || !currentUser.userId) {
-            return { success: false, message: 'Utente non autenticato' };
+            return {success: false, message: 'Utente non autenticato'};
         }
         try {
             try {
@@ -1045,14 +1147,14 @@ function setupIpcHandlers() {
                     [currentUser.userId]
                 );
                 if (rows.length === 0) {
-                    return { success: false, message: 'Utente non trovato' };
+                    return {success: false, message: 'Utente non trovato'};
                 }
                 const isCurrentPasswordValid = await bcrypt.compare(
                     passwordData.currentPassword,
                     rows[0].password_hash
                 );
                 if (!isCurrentPasswordValid) {
-                    return { success: false, message: 'Password attuale non valida' };
+                    return {success: false, message: 'Password attuale non valida'};
                 }
                 const salt = await bcrypt.genSalt(10);
                 const newPasswordHash = await bcrypt.hash(passwordData.newPassword, salt);
@@ -1061,30 +1163,30 @@ function setupIpcHandlers() {
                     [newPasswordHash, salt, currentUser.userId]
                 );
                 await logActivityToMySQL(currentUser.userId, 'password_change', 'Password cambiata con successo');
-                return { success: true, message: 'Password cambiata con successo' };
+                return {success: true, message: 'Password cambiata con successo'};
             } catch (mysqlError) {
                 console.error('Errore nel cambio password su MySQL:', mysqlError);
                 return await authService.changePassword(passwordData);
             }
         } catch (error) {
             console.error('Errore durante il cambio password:', error);
-            return { success: false, message: 'Errore durante il cambio password' };
+            return {success: false, message: 'Errore durante il cambio password'};
         }
     });
 
     ipcMain.handle('dialog:saveFile', async (event, options) => {
-        const { defaultPath, fileTypes } = options;
+        const {defaultPath, fileTypes} = options;
         const result = await dialog.showSaveDialog({
             defaultPath: defaultPath || 'export.csv',
             filters: fileTypes || [
-                { name: 'CSV', extensions: ['csv'] },
-                { name: 'Excel', extensions: ['xlsx'] },
-                { name: 'PDF', extensions: ['pdf'] },
-                { name: 'Tutti i file', extensions: ['*'] }
+                {name: 'CSV', extensions: ['csv']},
+                {name: 'Excel', extensions: ['xlsx']},
+                {name: 'PDF', extensions: ['pdf']},
+                {name: 'Tutti i file', extensions: ['*']}
             ],
             properties: ['createDirectory', 'showOverwriteConfirmation']
         });
-        return { canceled: result.canceled, filePath: result.filePath };
+        return {canceled: result.canceled, filePath: result.filePath};
     });
 
     ipcMain.handle('app:getVersion', () => app.getVersion());
@@ -1110,12 +1212,12 @@ function setupIpcHandlers() {
         } else {
             await appConfig.addRecentFile(filePath);
         }
-        const template = Menu.getApplicationMenu().items.map(item => ({ ...item }));
+        const template = Menu.getApplicationMenu().items.map(item => ({...item}));
         await updateRecentFilesMenu(template);
         Menu.setApplicationMenu(Menu.buildFromTemplate(template));
     });
 
-    ipcMain.on('app:addRecentFileToMySQL', async (event, { filePath, fileName, fileType }) => {
+    ipcMain.on('app:addRecentFileToMySQL', async (event, {filePath, fileName, fileType}) => {
         if (currentUser && currentUser.userId) {
             try {
                 await addRecentFileToMySQL(
@@ -1124,7 +1226,7 @@ function setupIpcHandlers() {
                     fileName || path.basename(filePath),
                     fileType || path.extname(filePath).substring(1)
                 );
-                const template = Menu.getApplicationMenu().items.map(item => ({ ...item }));
+                const template = Menu.getApplicationMenu().items.map(item => ({...item}));
                 await updateRecentFilesMenu(template);
                 Menu.setApplicationMenu(Menu.buildFromTemplate(template));
             } catch (error) {
@@ -1206,19 +1308,19 @@ function setupIpcHandlers() {
                         [preset.presetId, currentUser.userId]
                     );
                     if (existingPresets.length === 0) {
-                        return { success: false, message: 'Preset non trovato o non autorizzato' };
+                        return {success: false, message: 'Preset non trovato o non autorizzato'};
                     }
                     await pool.query(
                         'UPDATE filter_presets SET name = ?, description = ?, filter_config = ?, updated_at = NOW() WHERE preset_id = ?',
                         [preset.name, preset.description, JSON.stringify(preset.filterConfig), preset.presetId]
                     );
-                    return { success: true, presetId: preset.presetId, message: 'Preset aggiornato con successo' };
+                    return {success: true, presetId: preset.presetId, message: 'Preset aggiornato con successo'};
                 } else {
                     const [result] = await pool.query(
                         'INSERT INTO filter_presets (user_id, name, description, filter_config) VALUES (?, ?, ?, ?)',
                         [currentUser.userId, preset.name, preset.description, JSON.stringify(preset.filterConfig)]
                     );
-                    return { success: true, presetId: result.insertId, message: 'Preset salvato con successo' };
+                    return {success: true, presetId: result.insertId, message: 'Preset salvato con successo'};
                 }
             } catch (mysqlError) {
                 console.error('Errore nel salvataggio del preset di filtro su MySQL:', mysqlError);
@@ -1238,10 +1340,10 @@ function setupIpcHandlers() {
                     [presetId, currentUser.userId]
                 );
                 if (existingPresets.length === 0) {
-                    return { success: false, message: 'Preset non trovato o non autorizzato' };
+                    return {success: false, message: 'Preset non trovato o non autorizzato'};
                 }
                 await pool.query('DELETE FROM filter_presets WHERE preset_id = ?', [presetId]);
-                return { success: true, message: 'Preset eliminato con successo' };
+                return {success: true, message: 'Preset eliminato con successo'};
             } catch (mysqlError) {
                 console.error('Errore nell\'eliminazione del preset di filtro da MySQL:', mysqlError);
                 return await database.deleteFilterPreset(currentUser.userId, presetId);
@@ -1260,9 +1362,9 @@ function setupIpcHandlers() {
                     [currentUser.userId]
                 );
                 if (configs.length === 0) {
-                    return { success: false, message: 'Configurazione email non trovata' };
+                    return {success: false, message: 'Configurazione email non trovata'};
                 }
-                return { success: true, config: configs[0] };
+                return {success: true, config: configs[0]};
             } catch (mysqlError) {
                 console.error('Errore nel recupero della configurazione email da MySQL:', mysqlError);
                 return await database.getEmailConfig(currentUser.userId);
@@ -1292,7 +1394,7 @@ function setupIpcHandlers() {
                         [currentUser.userId, config.service, config.smtpHost, config.smtpPort, config.smtpSecure ? 1 : 0, config.username, passwordEncrypted, config.fromAddress]
                     );
                 }
-                return { success: true, message: 'Configurazione email salvata con successo' };
+                return {success: true, message: 'Configurazione email salvata con successo'};
             } catch (mysqlError) {
                 console.error('Errore nel salvataggio della configurazione email su MySQL:', mysqlError);
                 return await database.saveEmailConfig(currentUser.userId, config);
@@ -1314,54 +1416,54 @@ function setupIpcHandlers() {
         return await emailService.sendReportFromData(options);
     });
 
-    ipcMain.handle('report:saveCsv', async (event, { data, defaultFilename }) => {
+    ipcMain.handle('report:saveCsv', async (event, {data, defaultFilename}) => {
         try {
             const result = await dialog.showSaveDialog({
                 defaultPath: defaultFilename || 'Report_Commissioni.csv',
-                filters: [{ name: 'CSV', extensions: ['csv'] }],
+                filters: [{name: 'CSV', extensions: ['csv']}],
                 properties: ['createDirectory', 'showOverwriteConfirmation']
             });
-            if (result.canceled) return { success: false, message: 'Operazione annullata.' };
+            if (result.canceled) return {success: false, message: 'Operazione annullata.'};
             fs.writeFileSync(result.filePath, data, 'utf8');
-            return { success: true, filePath: result.filePath };
+            return {success: true, filePath: result.filePath};
         } catch (error) {
-            return { success: false, message: error.message };
+            return {success: false, message: error.message};
         }
     });
 
-    ipcMain.handle('report:saveXlsx', async (event, { data, defaultFilename }) => {
+    ipcMain.handle('report:saveXlsx', async (event, {data, defaultFilename}) => {
         try {
             const result = await dialog.showSaveDialog({
                 defaultPath: defaultFilename || 'Report_Commissioni.xlsx',
-                filters: [{ name: 'Excel', extensions: ['xlsx'] }],
+                filters: [{name: 'Excel', extensions: ['xlsx']}],
                 properties: ['createDirectory', 'showOverwriteConfirmation']
             });
-            if (result.canceled) return { success: false, message: 'Operazione annullata.' };
+            if (result.canceled) return {success: false, message: 'Operazione annullata.'};
             fs.writeFileSync(result.filePath, data);
-            return { success: true, filePath: result.filePath };
+            return {success: true, filePath: result.filePath};
         } catch (error) {
-            return { success: false, message: error.message };
+            return {success: false, message: error.message};
         }
     });
 
-    ipcMain.handle('report:savePdf', async (event, { data, defaultFilename }) => {
+    ipcMain.handle('report:savePdf', async (event, {data, defaultFilename}) => {
         try {
             const result = await dialog.showSaveDialog({
                 defaultPath: defaultFilename || 'Report_Commissioni.pdf',
-                filters: [{ name: 'PDF', extensions: ['pdf'] }],
+                filters: [{name: 'PDF', extensions: ['pdf']}],
                 properties: ['createDirectory', 'showOverwriteConfirmation']
             });
-            if (result.canceled) return { success: false, message: 'Operazione annullata.' };
+            if (result.canceled) return {success: false, message: 'Operazione annullata.'};
             fs.writeFileSync(result.filePath, data);
-            return { success: true, filePath: result.filePath };
+            return {success: true, filePath: result.filePath};
         } catch (error) {
-            return { success: false, message: error.message };
+            return {success: false, message: error.message};
         }
     });
 
-    ipcMain.handle('report:saveReport', async (event, { title, description, data }) => {
+    ipcMain.handle('report:saveReport', async (event, {title, description, data}) => {
         if (!currentUser || !currentUser.userId) {
-            return { success: false, message: 'Utente non autenticato' };
+            return {success: false, message: 'Utente non autenticato'};
         }
         try {
             try {
@@ -1370,7 +1472,7 @@ function setupIpcHandlers() {
                     'INSERT INTO saved_reports (user_id, title, description, report_data) VALUES (?, ?, ?, ?)',
                     [currentUser.userId, title, description, JSON.stringify(data)]
                 );
-                return { success: true, reportId: result.insertId, message: 'Report salvato con successo' };
+                return {success: true, reportId: result.insertId, message: 'Report salvato con successo'};
             } catch (mysqlError) {
                 console.error('Errore nel salvataggio del report su MySQL:', mysqlError);
                 await database.run(
@@ -1378,17 +1480,17 @@ function setupIpcHandlers() {
                      VALUES (?, ?, ?, ?)`,
                     [currentUser.userId, title, description, JSON.stringify(data)]
                 );
-                return { success: true, message: 'Report salvato con successo' };
+                return {success: true, message: 'Report salvato con successo'};
             }
         } catch (error) {
             console.error('Errore durante il salvataggio del report:', error);
-            return { success: false, message: error.message };
+            return {success: false, message: error.message};
         }
     });
 
     ipcMain.handle('report:getSavedReports', async () => {
         if (!currentUser || !currentUser.userId) {
-            return { success: false, message: 'Utente non autenticato', reports: [] };
+            return {success: false, message: 'Utente non autenticato', reports: []};
         }
         try {
             try {
@@ -1400,7 +1502,7 @@ function setupIpcHandlers() {
                      ORDER BY updated_at DESC`,
                     [currentUser.userId]
                 );
-                return { success: true, reports };
+                return {success: true, reports};
             } catch (mysqlError) {
                 console.error('Errore nel recupero dei report da MySQL:', mysqlError);
                 const reports = await database.all(
@@ -1410,17 +1512,17 @@ function setupIpcHandlers() {
                      ORDER BY updated_at DESC`,
                     [currentUser.userId]
                 );
-                return { success: true, reports };
+                return {success: true, reports};
             }
         } catch (error) {
             console.error('Errore durante il recupero dei report:', error);
-            return { success: false, message: error.message, reports: [] };
+            return {success: false, message: error.message, reports: []};
         }
     });
 
     ipcMain.handle('report:getSavedReport', async (event, reportId) => {
         if (!currentUser || !currentUser.userId) {
-            return { success: false, message: 'Utente non autenticato' };
+            return {success: false, message: 'Utente non autenticato'};
         }
         try {
             try {
@@ -1428,35 +1530,37 @@ function setupIpcHandlers() {
                 const [reports] = await pool.query(
                     `SELECT report_id, title, description, report_data, created_at, updated_at
                      FROM saved_reports
-                     WHERE report_id = ? AND user_id = ?`,
+                     WHERE report_id = ?
+                       AND user_id = ?`,
                     [reportId, currentUser.userId]
                 );
                 if (reports.length === 0) {
-                    return { success: false, message: 'Report non trovato' };
+                    return {success: false, message: 'Report non trovato'};
                 }
-                return { success: true, report: { ...reports[0], reportData: JSON.parse(reports[0].report_data) } };
+                return {success: true, report: {...reports[0], reportData: JSON.parse(reports[0].report_data)}};
             } catch (mysqlError) {
                 console.error('Errore nel recupero del report da MySQL:', mysqlError);
                 const report = await database.get(
                     `SELECT report_id, title, description, report_data, created_at, updated_at
                      FROM saved_reports
-                     WHERE report_id = ? AND user_id = ?`,
+                     WHERE report_id = ?
+                       AND user_id = ?`,
                     [reportId, currentUser.userId]
                 );
                 if (!report) {
-                    return { success: false, message: 'Report non trovato' };
+                    return {success: false, message: 'Report non trovato'};
                 }
-                return { success: true, report: { ...report, reportData: JSON.parse(report.report_data) } };
+                return {success: true, report: {...report, reportData: JSON.parse(report.report_data)}};
             }
         } catch (error) {
             console.error('Errore durante il recupero del report:', error);
-            return { success: false, message: error.message };
+            return {success: false, message: error.message};
         }
     });
 
     ipcMain.handle('report:deleteReport', async (event, reportId) => {
         if (!currentUser || !currentUser.userId) {
-            return { success: false, message: 'Utente non autenticato' };
+            return {success: false, message: 'Utente non autenticato'};
         }
         try {
             try {
@@ -1466,29 +1570,29 @@ function setupIpcHandlers() {
                     [reportId, currentUser.userId]
                 );
                 if (reports.length === 0) {
-                    return { success: false, message: 'Report non trovato' };
+                    return {success: false, message: 'Report non trovato'};
                 }
                 await pool.query(
                     "DELETE FROM saved_reports WHERE report_id = ? AND user_id = ?",
                     [reportId, currentUser.userId]
                 );
-                return { success: true, message: 'Report eliminato con successo' };
+                return {success: true, message: 'Report eliminato con successo'};
             } catch (mysqlError) {
                 console.error('Errore nell\'eliminazione del report da MySQL:', mysqlError);
                 const report = await database.get(
                     "SELECT title FROM saved_reports WHERE report_id = ? AND user_id = ?",
                     [reportId, currentUser.userId]
                 );
-                if (!report) return { success: false, message: 'Report non trovato' };
+                if (!report) return {success: false, message: 'Report non trovato'};
                 await database.run(
                     "DELETE FROM saved_reports WHERE report_id = ? AND user_id = ?",
                     [reportId, currentUser.userId]
                 );
-                return { success: true, message: 'Report eliminato con successo' };
+                return {success: true, message: 'Report eliminato con successo'};
             }
         } catch (error) {
             console.error('Errore durante l\'eliminazione del report:', error);
-            return { success: false, message: error.message };
+            return {success: false, message: error.message};
         }
     });
 
@@ -1509,25 +1613,25 @@ function setupIpcHandlers() {
             return await testMySQLConnection();
         } catch (error) {
             console.error('Errore nella configurazione della connessione MySQL:', error);
-            return { success: false, message: `Errore: ${error.message}` };
+            return {success: false, message: `Errore: ${error.message}`};
         }
     });
 
     ipcMain.handle('database:getMySQLConfig', async () => {
-        return { success: true, config: mysqlConfig };
+        return {success: true, config: mysqlConfig};
     });
 
-    ipcMain.handle('database:executeQuery', async (event, { query, params }) => {
+    ipcMain.handle('database:executeQuery', async (event, {query, params}) => {
         if (!currentUser || currentUser.role !== 'admin') {
-            return { success: false, message: 'Autorizzazione negata' };
+            return {success: false, message: 'Autorizzazione negata'};
         }
         try {
             const pool = await getMySQLConnection();
             const [results] = await pool.query(query, params || []);
-            return { success: true, results };
+            return {success: true, results};
         } catch (error) {
             console.error('Errore nell\'esecuzione della query:', error);
-            return { success: false, message: `Errore: ${error.message}` };
+            return {success: false, message: `Errore: ${error.message}`};
         }
     });
 
@@ -1539,21 +1643,21 @@ function setupIpcHandlers() {
                 [email]
             );
             if (users.length === 0) {
-                return { success: true, message: 'Se l\'email esiste, riceverai le istruzioni per il reset' };
+                return {success: true, message: 'Se l\'email esiste, riceverai le istruzioni per il reset'};
             }
             const user = users[0];
             console.log(`Reset password richiesto per ${email} (ID: ${user.user_id}, Nome: ${user.full_name})`);
             await logActivityToMySQL(user.user_id, 'password_reset_request', 'Richiesta di reset password');
-            return { success: true, message: 'Se l\'email esiste, riceverai le istruzioni per il reset' };
+            return {success: true, message: 'Se l\'email esiste, riceverai le istruzioni per il reset'};
         } catch (error) {
             console.error('Errore nella richiesta di reset password:', error);
-            return { success: true, message: 'Se l\'email esiste, riceverai le istruzioni per il reset' };
+            return {success: true, message: 'Se l\'email esiste, riceverai le istruzioni per il reset'};
         }
     });
 
     ipcMain.handle('admin:getAllUsers', async () => {
         if (!currentUser || currentUser.role !== 'admin') {
-            return { success: false, message: 'Autorizzazione negata', users: [] };
+            return {success: false, message: 'Autorizzazione negata', users: []};
         }
         try {
             const pool = await getMySQLConnection();
@@ -1569,16 +1673,16 @@ function setupIpcHandlers() {
                  FROM users
                  ORDER BY created_at DESC`
             );
-            return { success: true, users };
+            return {success: true, users};
         } catch (error) {
             console.error('Errore nel recupero degli utenti:', error);
-            return { success: false, message: error.message, users: [] };
+            return {success: false, message: error.message, users: []};
         }
     });
 
     ipcMain.handle('admin:resetUserPassword', async (event, userId) => {
         if (!currentUser || currentUser.role !== 'admin') {
-            return { success: false, message: 'Autorizzazione negata' };
+            return {success: false, message: 'Autorizzazione negata'};
         }
         try {
             const pool = await getMySQLConnection();
@@ -1590,16 +1694,16 @@ function setupIpcHandlers() {
                 [newPasswordHash, salt, userId]
             );
             await logActivityToMySQL(currentUser.userId, 'admin_reset_password', `Reset password per l'utente ID: ${userId}`);
-            return { success: true, message: 'Password resettata con successo', newPassword };
+            return {success: true, message: 'Password resettata con successo', newPassword};
         } catch (error) {
             console.error('Errore nel reset della password:', error);
-            return { success: false, message: error.message };
+            return {success: false, message: error.message};
         }
     });
 
     ipcMain.handle('admin:toggleUserStatus', async (event, userId) => {
         if (!currentUser || currentUser.role !== 'admin') {
-            return { success: false, message: 'Autorizzazione negata' };
+            return {success: false, message: 'Autorizzazione negata'};
         }
         try {
             const pool = await getMySQLConnection();
@@ -1608,7 +1712,7 @@ function setupIpcHandlers() {
                 [userId]
             );
             if (users.length === 0) {
-                return { success: false, message: 'Utente non trovato' };
+                return {success: false, message: 'Utente non trovato'};
             }
             const newStatus = users[0].is_active ? 0 : 1;
             await pool.query(
@@ -1618,16 +1722,20 @@ function setupIpcHandlers() {
             const action = newStatus ? 'activate_user' : 'deactivate_user';
             const details = `${newStatus ? 'Attivazione' : 'Disattivazione'} dell'utente ID: ${userId}`;
             await logActivityToMySQL(currentUser.userId, action, details);
-            return { success: true, message: `Utente ${newStatus ? 'attivato' : 'disattivato'} con successo`, isActive: newStatus };
+            return {
+                success: true,
+                message: `Utente ${newStatus ? 'attivato' : 'disattivato'} con successo`,
+                isActive: newStatus
+            };
         } catch (error) {
             console.error('Errore nel cambio stato utente:', error);
-            return { success: false, message: error.message };
+            return {success: false, message: error.message};
         }
     });
 
     ipcMain.handle('admin:getActivityLogs', async (event, filters = {}) => {
         if (!currentUser || currentUser.role !== 'admin') {
-            return { success: false, message: 'Autorizzazione negata', logs: [] };
+            return {success: false, message: 'Autorizzazione negata', logs: []};
         }
         try {
             const pool = await getMySQLConnection();
@@ -1673,11 +1781,13 @@ function setupIpcHandlers() {
                 query += ' LIMIT 100';
             }
             const [logs] = await pool.query(query, queryParams);
-            return { success: true, logs };
+            return {success: true, logs};
         } catch (error) {
             console.error('Errore nel recupero dei log di attività:', error);
-            return { success: false, message: error.message, logs: [] };
+            return {success: false, message: error.message, logs: []};
         }
     });
 }
+
+
 

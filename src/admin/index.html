@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pannello Amministrazione - Tool di Reporting Commissioni</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <div class="app-container">
+        <h1>Pannello di Amministrazione</h1>
+        <p>Seleziona una delle opzioni dal menu Amministrazione per gestire il sistema.</p>
+
+        <div class="admin-dashboard">
+            <div class="admin-card" onclick="window.location.href='users.html'">
+                <i class="fas fa-users"></i>
+                <h3>Gestione Utenti</h3>
+                <p>Aggiungi, modifica o disattiva account utente</p>
+            </div>
+
+            <div class="admin-card" onclick="window.location.href='activity-logs.html'">
+                <i class="fas fa-list-alt"></i>
+                <h3>Log Attività</h3>
+                <p>Visualizza log delle attività degli utenti</p>
+            </div>
+
+            <div class="admin-card" onclick="window.location.href='../database-config.html'">
+                <i class="fas fa-database"></i>
+                <h3>Configurazione Database</h3>
+                <p>Gestisci le impostazioni del database</p>
+            </div>
+
+            <div class="admin-card" onclick="window.location.href='system-settings.html'">
+                <i class="fas fa-cogs"></i>
+                <h3>Impostazioni di Sistema</h3>
+                <p>Configura le impostazioni globali dell'applicazione</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="../js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponent('../components/navbar.html', 'navbar-placeholder');
+            loadComponent('../components/footer.html', 'footer-placeholder');
+        });
+    </script>
+</body>
+</html>

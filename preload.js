@@ -413,6 +413,14 @@ contextBridge.exposeInMainWorld('reportingTool', {
     sendEmailReportFromData: async (options) => {
         return await ipcRenderer.invoke('email:sendReportFromData', options);
     },
+     sendEmail: async (emailData) => {
+        try {
+            return await ipcRenderer.invoke('email:send', emailData);
+        } catch (error) {
+            console.error("Errore in reportingTool.sendEmail:", error);
+            return {success: false, message: error.message || "Errore nell'invio dell'email"};
+        }
+    },
     getFilterPresets: async () => {
         return await ipcRenderer.invoke('filters:getPresets');
     },
