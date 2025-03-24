@@ -19,6 +19,10 @@
     "directories": {
       "output": "dist"
     },
+    "electronDownload": {
+      "mirror": "https://npm.taobao.org/mirrors/electron/",
+      "strictSSL": false
+    },
     "files": [
       "**/*",
       "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
@@ -48,7 +52,8 @@
     "publish": {
       "provider": "generic",
       "url": "https://github.com/SERGE3-g/reporting-tool/releases/"
-    }
+    },
+    "npmRebuild": false
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
@@ -58,12 +63,12 @@
     "jspdf-autotable": "^5.0.2",
     "mysql2": "^3.14.0",
     "nodemailer": "^6.10.0",
-    "sqlite3": "^5.1.7",
+    "sqlite3": "^5.0.2",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "electron": "^29.4.6",
-    "electron-builder": "^24.13.3",
+    "electron": "^24.8.8",
+    "electron-builder": "^24.6.4",
     "electron-icon-maker": "^0.0.5",
     "svg2png": "^4.1.1"
   }
