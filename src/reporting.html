@@ -1,110 +1,108 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Reporting - Tool di Reporting Commissioni</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reporting - Tool di Reporting Commissioni</title>
 
-    <!-- Libreria XLSX per esportazione Excel -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- Libreria XLSX per esportazione Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-    <!-- Libreria Chart.js per i grafici -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Libreria Chart.js per i grafici -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Libreria jsPDF per esportazione PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  <!-- Librerie per l'esportazione -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome per icone -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Font Awesome per icone -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- File CSS principale -->
-    <link rel="stylesheet" href="stylesReport.css">
+  <!-- File CSS principale -->
+  <link rel="stylesheet" href="stylesReport.css">
 </head>
 <body>
-<!-- Navbar -->
-<nav class="navbar">
+  <!-- Navbar -->
+  <nav class="navbar">
     <div class="navbar-content">
-        <a href="index.html" class="navbar-brand">
-            <i class="fas fa-exchange-alt"></i> Tool di Reporting Commissioni
-        </a>
-        <button class="navbar-toggler" id="navbarToggle">
-            <i class="fas fa-bars"></i>
-        </button>
-        <ul class="navbar-nav" id="navbarNav">
-            <li class="nav-item">
-                <a href="index.html" class="nav-link">
-                    <i class="fas fa-home"></i> Home
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="dashboard.html" class="nav-link">
-                    <i class="fas fa-chart-line"></i> Dashboard
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="reporting.html" class="nav-link active">
-                    <i class="fas fa-file-alt"></i> Reporting
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="presets.html" class="nav-link">
-                    <i class="fas fa-sliders-h"></i> Preset
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="settings.html" class="nav-link">
-                    <i class="fas fa-cog"></i> Impostazioni
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="help.html" class="nav-link">
-                    <i class="fas fa-question-circle"></i> Guida
-                </a>
-            </li>
-            <!-- Bottoni di autenticazione dinamici (mostrati in base allo stato di login) -->
-            <li class="nav-item auth-buttons" id="loggedOutButtons">
-                <a href="login.html" class="navbar-btn">
-                    Accedi
-                </a>
-            </li>
-            <li class="nav-item auth-buttons dropdown" id="loggedInButtons" style="display: none;">
-                <a href="#" class="nav-link dropdown-toggle" id="userDropdown">
-                    <i class="fas fa-user-circle"></i> <span id="userName">Utente</span>
-                </a>
-                <div class="dropdown-menu">
-                    <a href="profile.html" class="dropdown-item">
-                        <i class="fas fa-id-card"></i> Profilo
-                    </a>
-                    <a href="#" class="dropdown-item" id="logoutButton">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                </div>
-            </li>
-        </ul>
+      <a href="index.html" class="navbar-brand">
+        <i class="fas fa-exchange-alt"></i> Tool di Reporting Commissioni
+      </a>
+      <button class="navbar-toggler" id="navbarToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="navbar-nav" id="navbarNav">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <i class="fas fa-home"></i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="dashboard.html" class="nav-link">
+            <i class="fas fa-chart-line"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="reporting.html" class="nav-link active">
+            <i class="fas fa-file-alt"></i> Reporting
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="presets.html" class="nav-link">
+            <i class="fas fa-sliders-h"></i> Preset
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="settings.html" class="nav-link">
+            <i class="fas fa-cog"></i> Impostazioni
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="help.html" class="nav-link">
+            <i class="fas fa-question-circle"></i> Guida
+          </a>
+        </li>
+        <!-- Bottoni di autenticazione dinamici -->
+        <li class="nav-item auth-buttons" id="loggedOutButtons">
+          <a href="login.html" class="navbar-btn">Accedi</a>
+        </li>
+        <li class="nav-item auth-buttons dropdown" id="loggedInButtons" style="display: none;">
+          <a href="#" class="nav-link dropdown-toggle" id="userDropdown">
+            <i class="fas fa-user-circle"></i> <span id="userName">Utente</span>
+          </a>
+          <div class="dropdown-menu">
+            <a href="profile.html" class="dropdown-item">
+              <i class="fas fa-id-card"></i> Profilo
+            </a>
+            <a href="#" class="dropdown-item" id="logoutButton">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+          </div>
+        </li>
+      </ul>
     </div>
-</nav>
+  </nav>
 
-<div class="app-container">
+  <div class="app-container">
     <header>
-        <h1><i class="fas fa-file-alt"></i> Generazione Report</h1>
-        <p>Elabora dati e genera report dettagliati per la tua analisi</p>
+      <h1><i class="fas fa-file-alt"></i> Generazione Report</h1>
+      <p>Elabora dati e genera report dettagliati per la tua analisi</p>
     </header>
 
     <!-- Tab di navigazione per le diverse opzioni di reporting -->
     <div class="section">
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="new-report">Nuovo Report</button>
-            <button class="tab-btn" data-tab="history">Cronologia Report</button>
-            <button class="tab-btn" data-tab="scheduled">Report Programmati</button>
-            <button class="tab-btn" data-tab="templates">Modelli</button>
-        </div>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="new-report">Nuovo Report</button>
+        <button class="tab-btn" data-tab="history">Cronologia Report</button>
+        <button class="tab-btn" data-tab="scheduled">Report Programmati</button>
+        <button class="tab-btn" data-tab="templates">Modelli</button>
+      </div>
 
-        <!-- Nuovo Report -->
-        <div id="new-report" class="tab-content active">
+      <!-- Nuovo Report -->
+      <div id="new-report" class="tab-content active">
             <h2><i class="fas fa-plus-circle"></i> Crea un nuovo report</h2>
 
             <!-- Selezione file -->
@@ -328,8 +326,9 @@
             </div>
         </div>
 
-        <!-- Cronologia Report -->
-        <div id="history" class="tab-content">
+
+      <!-- Cronologia Report -->
+      <div id="history" class="tab-content">
             <h2><i class="fas fa-history"></i> Cronologia Report</h2>
 
             <div class="report-filters">
@@ -393,7 +392,8 @@
             </div>
         </div>
 
-        <!-- Report Programmati -->
+
+      <!-- Report Programmati -->
         <div id="scheduled" class="tab-content">
             <h2><i class="fas fa-calendar-alt"></i> Report Programmati</h2>
 
@@ -490,163 +490,799 @@
             </div>
         </div>
 
-        <!-- Modelli di Report -->
-        <div id="templates" class="tab-content">
-            <h2><i class="fas fa-file-invoice"></i> Modelli Report</h2>
 
-            <div class="section-info">
-                <i class="fas fa-info-circle"></i>
-                <p>Crea e gestisci modelli di report personalizzati che puoi riutilizzare.</p>
-            </div>
-
-            <div class="templates-grid">
-                <!-- Template 1 -->
-                <div class="template-card">
-                    <div class="template-header">
-                        <i class="fas fa-file-alt"></i>
-                        <h3>Report Mensile Commissioni</h3>
-                    </div>
-                    <div class="template-body">
-                        <p>Riepilogo mensile delle commissioni con analisi per tipo di transazione e confronto con il
-                            mese precedente.</p>
-                        <div class="template-meta">
-                            <span><i class="fas fa-clock"></i> Creato: 15 Mar 2025</span>
-                            <span><i class="fas fa-sync-alt"></i> Modificato: 20 Mar 2025</span>
-                        </div>
-                    </div>
-                    <div class="template-actions">
-                        <button class="btn btn-primary use-template">Usa Modello</button>
-                        <button class="btn btn-info edit-template">Modifica</button>
-                        <button class="btn btn-danger delete-template">Elimina</button>
-                    </div>
-                </div>
-
-                <!-- Template 2 -->
-                <div class="template-card">
-                    <div class="template-header">
-                        <i class="fas fa-file-invoice-dollar"></i>
-                        <h3>Report Finanziario</h3>
-                    </div>
-                    <div class="template-body">
-                        <p>Report dettagliato finanziario con analisi dei flussi di cassa e proiezioni future.</p>
-                        <div class="template-meta">
-                            <span><i class="fas fa-clock"></i> Creato: 10 Feb 2025</span>
-                            <span><i class="fas fa-sync-alt"></i> Modificato: 15 Mar 2025</span>
-                        </div>
-                    </div>
-                    <div class="template-actions">
-                        <button class="btn btn-primary use-template">Usa Modello</button>
-                        <button class="btn btn-info edit-template">Modifica</button>
-                        <button class="btn btn-danger delete-template">Elimina</button>
-                    </div>
-                </div>
-
-                <!-- Template 3 -->
-                <div class="template-card">
-                    <div class="template-header">
-                        <i class="fas fa-chart-line"></i>
-                        <h3>Analisi Trend</h3>
-                    </div>
-                    <div class="template-body">
-                        <p>Analisi dei trend delle commissioni e transazioni negli ultimi 12 mesi con proiezioni.</p>
-                        <div class="template-meta">
-                            <span><i class="fas fa-clock"></i> Creato: 5 Jan 2025</span>
-                            <span><i class="fas fa-sync-alt"></i> Modificato: 18 Mar 2025</span>
-                        </div>
-                    </div>
-                    <div class="template-actions">
-                        <button class="btn btn-primary use-template">Usa Modello</button>
-                        <button class="btn btn-info edit-template">Modifica</button>
-                        <button class="btn btn-danger delete-template">Elimina</button>
-                    </div>
-                </div>
-
-                <!-- Carta "Nuovo Template" -->
-                <div class="template-card template-new">
-                    <div class="template-new-content">
-                        <i class="fas fa-plus-circle"></i>
-                        <h3>Crea Nuovo Modello</h3>
-                        <p>Definisci un nuovo modello di report personalizzato</p>
-                        <button id="createNewTemplate" class="btn btn-success">Crea Modello</button>
-                    </div>
-                </div>
-            </div>
+      <!-- Modelli di Report -->
+      <div id="templates" class="tab-content">
+        <h2><i class="fas fa-file-invoice"></i> Modelli Report</h2>
+        <div class="section-info">
+          <i class="fas fa-info-circle"></i>
+          <p>Crea e gestisci modelli di report personalizzati che puoi riutilizzare.</p>
         </div>
+        <div class="templates-grid">
+          <!-- I template verranno inseriti dinamicamente -->
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- Footer -->
-<footer>
+  <!-- Footer -->
+  <footer>
     <div class="footer-content">
-        <p>&copy; 2025 - Tool Reporting Commissioni | Powered by <strong>Serge Guea</strong></p>
-        <div class="footer-links">
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Termini di Servizio</a>
-            <a href="contact.html">Contatti</a>
-        </div>
+      <p>&copy; 2025 - Tool Reporting Commissioni | Powered by <strong>Serge Guea</strong></p>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Termini di Servizio</a>
+        <a href="contact.html">Contatti</a>
+      </div>
     </div>
-</footer>
+  </footer>
 
-<!-- Script per la gestione della navbar -->
-<script>
+  <!-- Script per la gestione della navbar, autenticazione e cambio tab -->
+  <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Toggle per il menu mobile
-        const navbarToggle = document.getElementById('navbarToggle');
-        const navbarNav = document.getElementById('navbarNav');
-
-        if (navbarToggle) {
-            navbarToggle.addEventListener('click', function () {
-                navbarNav.classList.toggle('show');
-            });
-        }
-
-        // Gestione dropdown utente
-        const userDropdown = document.getElementById('userDropdown');
-        if (userDropdown) {
-            userDropdown.addEventListener('click', function (e) {
-                e.preventDefault();
-                this.nextElementSibling.classList.toggle('show');
-            });
-
-            // Chiudi il dropdown quando si clicca altrove
-            document.addEventListener('click', function (e) {
-                if (userDropdown && !userDropdown.contains(e.target)) {
-                    userDropdown.nextElementSibling.classList.remove('show');
-                }
-            });
-        }
-
-        // Controllo se l'utente è loggato
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-
-        if (isLoggedIn) {
-            document.getElementById('loggedOutButtons').style.display = 'none';
-            document.getElementById('loggedInButtons').style.display = 'block';
-
-            const userName = localStorage.getItem('userName') || 'Utente';
-            document.getElementById('userName').textContent = userName;
-        } else {
-            document.getElementById('loggedOutButtons').style.display = 'block';
-            document.getElementById('loggedInButtons').style.display = 'none';
-        }
-
-        // Gestione logout
-        const logoutButton = document.getElementById('logoutButton');
-        if (logoutButton) {
-            logoutButton.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('userName');
-                localStorage.removeItem('userToken');
-
-                window.location.href = 'index.html';
-            });
-        }
+      // Toggle per il menu mobile
+      const navbarToggle = document.getElementById('navbarToggle');
+      const navbarNav = document.getElementById('navbarNav');
+      if (navbarToggle) {
+        navbarToggle.addEventListener('click', function () {
+          navbarNav.classList.toggle('show');
+        });
+      }
+      // Dropdown utente
+      const userDropdown = document.getElementById('userDropdown');
+      if (userDropdown) {
+        userDropdown.addEventListener('click', function (e) {
+          e.preventDefault();
+          this.nextElementSibling.classList.toggle('show');
+        });
+        document.addEventListener('click', function (e) {
+          if (userDropdown && !userDropdown.contains(e.target)) {
+            userDropdown.nextElementSibling.classList.remove('show');
+          }
+        });
+      }
+      // Stato login
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      if (isLoggedIn) {
+        document.getElementById('loggedOutButtons').style.display = 'none';
+        document.getElementById('loggedInButtons').style.display = 'block';
+        const userName = localStorage.getItem('userName') || 'Utente';
+        document.getElementById('userName').textContent = userName;
+      } else {
+        document.getElementById('loggedOutButtons').style.display = 'block';
+        document.getElementById('loggedInButtons').style.display = 'none';
+      }
+      // Logout
+      const logoutButton = document.getElementById('logoutButton');
+      if (logoutButton) {
+        logoutButton.addEventListener('click', function (e) {
+          e.preventDefault();
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('userName');
+          localStorage.removeItem('userToken');
+          window.location.href = 'index.html';
+        });
+      }
+      // Logica per cambio tab
+      document.querySelectorAll('.tab-btn').forEach(tabButton => {
+        tabButton.addEventListener('click', function () {
+          document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+          this.classList.add('active');
+          const tabId = this.getAttribute('data-tab');
+          const tabContent = document.getElementById(tabId);
+          if (tabContent) tabContent.classList.add('active');
+        });
+      });
+      // Inizializza la gestione dei template nel tab "Modelli"
+      initTemplateManagement();
     });
-</script>
+  </script>
 
-<!-- Script principale per la pagina di reporting -->
-<script src="reporting.js"></script>
+  <!-- script per la gestione dei template -->
+  <script>
+      // js/templateManagement.js
+
+// Costanti e variabili globali
+const STORAGE_KEY_TEMPLATES = 'reportTemplates';
+let currentTemplateId = null;
+
+// --- Helper minimal per l'esempio ---
+const getFrequencyText = frequency => {
+  switch (frequency) {
+    case 'daily': return 'Giornaliera';
+    case 'weekly': return 'Settimanale';
+    case 'monthly': return 'Mensile';
+    case 'quarterly': return 'Trimestrale';
+    default: return 'Manuale';
+  }
+};
+
+const calculateNextRun = frequency => "Data non calcolata";
+
+const createFormGroup = (labelText, id, type, value, placeholder, required) => {
+  const group = document.createElement('div');
+  group.className = 'form-group';
+  const label = document.createElement('label');
+  label.htmlFor = id;
+  label.textContent = labelText;
+  group.appendChild(label);
+  let input;
+  if (type === 'textarea') {
+    input = document.createElement('textarea');
+  } else {
+    input = document.createElement('input');
+    input.type = type;
+  }
+  input.id = id;
+  input.className = 'form-control';
+  input.placeholder = placeholder || '';
+  if (value) input.value = value;
+  if (required) input.required = true;
+  group.appendChild(input);
+  return group;
+};
+
+const addFilterRow = (container, filter = { field: '', operator: '', value: '' }) => {
+  const row = document.createElement('div');
+  row.className = 'filter-row';
+  const fieldInput = document.createElement('input');
+  fieldInput.type = 'text';
+  fieldInput.className = 'form-control';
+  fieldInput.placeholder = 'Campo';
+  fieldInput.value = filter.field;
+  row.appendChild(fieldInput);
+  const operatorInput = document.createElement('input');
+  operatorInput.type = 'text';
+  operatorInput.className = 'form-control';
+  operatorInput.placeholder = 'Operatore';
+  operatorInput.value = filter.operator;
+  row.appendChild(operatorInput);
+  const valueInput = document.createElement('input');
+  valueInput.type = 'text';
+  valueInput.className = 'form-control';
+  valueInput.placeholder = 'Valore';
+  valueInput.value = filter.value;
+  row.appendChild(valueInput);
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'btn btn-danger';
+  removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+  removeBtn.addEventListener('click', () => container.removeChild(row));
+  row.appendChild(removeBtn);
+  container.appendChild(row);
+};
+
+const addRecipientToForm = (email, container) => {
+  const div = document.createElement('div');
+  div.className = 'recipient-item';
+  div.textContent = email;
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'btn btn-danger btn-sm';
+  removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+  removeBtn.addEventListener('click', () => container.removeChild(div));
+  div.appendChild(removeBtn);
+  container.appendChild(div);
+};
+
+const isValidEmail = email => /\S+@\S+\.\S+/.test(email);
+
+const showNotification = (message, type) => {
+  console.log(`[${type}] ${message}`);
+};
+
+const saveTemplateFromDialog = (form, existingTemplate) => {
+  const name = form.querySelector('#template-name').value.trim();
+  const description = form.querySelector('#template-description').value.trim();
+  const type = form.querySelector('#template-type').value;
+  const format = form.querySelector('#template-format').value;
+  const includeCharts = form.querySelector('#template-charts').checked;
+  const includeStatistics = form.querySelector('#template-stats').checked;
+  const frequency = form.querySelector('#template-frequency').value;
+
+  // Recupera destinatari
+  const recipients = [];
+  form.querySelectorAll('.recipient-item').forEach(item => {
+    recipients.push(item.firstChild.textContent);
+  });
+
+  // Recupera filtri
+  const filters = [];
+  form.querySelectorAll('.filter-row').forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    if (inputs.length >= 3) {
+      filters.push({
+        field: inputs[0].value,
+        operator: inputs[1].value,
+        value: inputs[2].value
+      });
+    }
+  });
+
+  let templates = loadTemplates();
+  if (existingTemplate) {
+    templates = templates.map(t => {
+      if (t.id === existingTemplate.id) {
+        return {
+          ...t,
+          name,
+          description,
+          type,
+          format,
+          includeCharts,
+          includeStatistics,
+          frequency,
+          recipients,
+          filters,
+          lastModified: new Date().toLocaleDateString('it-IT')
+        };
+      }
+      return t;
+    });
+    showNotification(`Template "${name}" aggiornato`, 'success');
+  } else {
+    const newTemplate = {
+      id: 'template' + (templates.length + 1),
+      name,
+      description,
+      type,
+      format,
+      includeCharts,
+      includeStatistics,
+      frequency,
+      recipients,
+      filters,
+      created: new Date().toLocaleDateString('it-IT'),
+      lastModified: new Date().toLocaleDateString('it-IT'),
+      usageCount: 0,
+      lastUsed: null
+    };
+    templates.push(newTemplate);
+    showNotification(`Template "${name}" creato`, 'success');
+  }
+  saveTemplates(templates);
+  populateTemplateGrid();
+  return true;
+};
+
+const populateReportForm = template => {
+  // Qui inserisci la logica per pre-compilare il form del report
+  console.log('Populating report form with template:', template);
+};
+
+//
+// --- Funzioni principali di gestione template ---
+//
+
+const initTemplateManagement = () => {
+  const templates = loadTemplates();
+  if (templates.length === 0) {
+    createDefaultTemplates();
+  }
+  populateTemplateGrid();
+  setupTemplateButtons();
+  setupTemplateFormListeners();
+  console.log('Gestione template inizializzata');
+};
+
+const loadTemplates = () => {
+  try {
+    const templatesJson = localStorage.getItem(STORAGE_KEY_TEMPLATES);
+    return templatesJson ? JSON.parse(templatesJson) : [];
+  } catch (error) {
+    console.error('Errore nel caricamento dei template:', error);
+    return [];
+  }
+};
+
+const saveTemplates = templates => {
+  try {
+    localStorage.setItem(STORAGE_KEY_TEMPLATES, JSON.stringify(templates));
+  } catch (error) {
+    console.error('Errore nel salvataggio dei template:', error);
+    showNotification('Errore nel salvataggio dei template', 'error');
+  }
+};
+
+const createDefaultTemplates = () => {
+  const defaultTemplates = [
+    {
+      id: 'template1',
+      name: 'Report Mensile Commissioni',
+      description: 'Riepilogo mensile delle commissioni con analisi per tipo di transazione e confronto con il mese precedente.',
+      type: 'detailed',
+      format: 'pdf',
+      includeCharts: true,
+      includeStatistics: true,
+      frequency: 'monthly',
+      recipients: ['finance@example.com', 'manager@example.com'],
+      filters: [{ field: 'Addebito', operator: '>', value: '100' }],
+      created: new Date().toLocaleDateString('it-IT'),
+      lastModified: null,
+      usageCount: 0,
+      lastUsed: null
+    },
+    {
+      id: 'template2',
+      name: 'Report Finanziario',
+      description: 'Report dettagliato finanziario con analisi dei flussi di cassa e proiezioni future.',
+      type: 'summary',
+      format: 'xlsx',
+      includeCharts: true,
+      includeStatistics: true,
+      frequency: 'quarterly',
+      recipients: ['cfo@example.com'],
+      filters: [{ field: 'totale transazioni', operator: '>', value: '10' }],
+      created: new Date().toLocaleDateString('it-IT'),
+      lastModified: null,
+      usageCount: 0,
+      lastUsed: null
+    },
+    {
+      id: 'template3',
+      name: 'Analisi Trend',
+      description: 'Analisi dei trend delle commissioni e transazioni negli ultimi 12 mesi con proiezioni.',
+      type: 'comparison',
+      format: 'pdf',
+      includeCharts: true,
+      includeStatistics: true,
+      frequency: 'weekly',
+      recipients: ['marketing@example.com', 'analysis@example.com'],
+      filters: [{ field: 'fee scadenza', operator: 'contiene', value: '2023' }],
+      created: new Date().toLocaleDateString('it-IT'),
+      lastModified: null,
+      usageCount: 0,
+      lastUsed: null
+    }
+  ];
+  saveTemplates(defaultTemplates);
+  return defaultTemplates;
+};
+
+const populateTemplateGrid = () => {
+  const templateGrid = document.querySelector('.templates-grid');
+  if (!templateGrid) return;
+  templateGrid.innerHTML = '';
+  const templates = loadTemplates();
+  templates.forEach(template => {
+    const templateCard = createTemplateCard(template);
+    templateGrid.appendChild(templateCard);
+  });
+  if (!document.querySelector('.template-new')) {
+    templateGrid.appendChild(createNewTemplateCard());
+  }
+};
+
+const createTemplateCard = template => {
+  const card = document.createElement('div');
+  card.className = 'template-card';
+  card.dataset.templateId = template.id;
+  const header = document.createElement('div');
+  header.className = 'template-header';
+  const icon = document.createElement('i');
+  if (template.type === 'detailed') {
+    icon.className = 'fas fa-chart-line';
+  } else if (template.type === 'summary') {
+    icon.className = 'fas fa-file-invoice-dollar';
+  } else if (template.type === 'comparison') {
+    icon.className = 'fas fa-chart-line';
+  } else {
+    icon.className = 'fas fa-file-alt';
+  }
+  header.appendChild(icon);
+  const title = document.createElement('h3');
+  title.textContent = template.name;
+  header.appendChild(title);
+  card.appendChild(header);
+  const body = document.createElement('div');
+  body.className = 'template-body';
+  const desc = document.createElement('p');
+  desc.textContent = template.description;
+  body.appendChild(desc);
+  const meta = document.createElement('div');
+  meta.className = 'template-meta';
+  const createdSpan = document.createElement('span');
+  createdSpan.innerHTML = `<i class="fas fa-clock"></i> Creato: ${template.created}`;
+  meta.appendChild(createdSpan);
+  if (template.lastModified) {
+    const modifiedSpan = document.createElement('span');
+    modifiedSpan.innerHTML = `<i class="fas fa-sync-alt"></i> Modificato: ${template.lastModified}`;
+    meta.appendChild(modifiedSpan);
+  }
+  body.appendChild(meta);
+  card.appendChild(body);
+  const actions = document.createElement('div');
+  actions.className = 'template-actions';
+  const useBtn = document.createElement('button');
+  useBtn.className = 'btn btn-primary use-template';
+  useBtn.textContent = 'Usa Modello';
+  actions.appendChild(useBtn);
+  const editBtn = document.createElement('button');
+  editBtn.className = 'btn btn-info edit-template';
+  editBtn.textContent = 'Modifica';
+  actions.appendChild(editBtn);
+  const deleteBtn = document.createElement('button');
+  deleteBtn.className = 'btn btn-danger delete-template';
+  deleteBtn.textContent = 'Elimina';
+  actions.appendChild(deleteBtn);
+  card.appendChild(actions);
+  return card;
+};
+
+const createNewTemplateCard = () => {
+  const card = document.createElement('div');
+  card.className = 'template-card template-new';
+  const content = document.createElement('div');
+  content.className = 'template-new-content';
+  const icon = document.createElement('i');
+  icon.className = 'fas fa-plus-circle';
+  content.appendChild(icon);
+  const title = document.createElement('h3');
+  title.textContent = 'Crea Nuovo Modello';
+  content.appendChild(title);
+  const desc = document.createElement('p');
+  desc.textContent = 'Definisci un nuovo modello di report personalizzato';
+  content.appendChild(desc);
+  const btn = document.createElement('button');
+  btn.id = 'createNewTemplate';
+  btn.className = 'btn btn-success';
+  btn.textContent = 'Crea Modello';
+  btn.addEventListener('click', () => showTemplateDialog());
+  content.appendChild(btn);
+  card.appendChild(content);
+  return card;
+};
+
+const setupTemplateButtons = () => {
+  document.querySelectorAll('.use-template').forEach(button => {
+    button.addEventListener('click', function () {
+      const templateId = this.closest('.template-card').dataset.templateId;
+      useReportTemplate(templateId);
+    });
+  });
+  document.querySelectorAll('.edit-template').forEach(button => {
+    button.addEventListener('click', function () {
+      const templateId = this.closest('.template-card').dataset.templateId;
+      editReportTemplate(templateId);
+    });
+  });
+  document.querySelectorAll('.delete-template').forEach(button => {
+    button.addEventListener('click', function () {
+      const templateId = this.closest('.template-card').dataset.templateId;
+      const templateName = this.closest('.template-card').querySelector('h3').textContent;
+      deleteReportTemplate(templateId, templateName);
+    });
+  });
+};
+
+const setupTemplateFormListeners = () => {
+  const templateForm = document.getElementById('templateForm');
+  if (!templateForm) return;
+  templateForm.addEventListener('submit', e => {
+    e.preventDefault();
+    saveTemplateFromDialog(templateForm, null);
+  });
+};
+
+// Nella funzione "use", cambiamo anche il tab verso "Nuovo Report"
+const useReportTemplate = templateId => {
+  const templates = loadTemplates();
+  const template = templates.find(t => t.id === templateId);
+  if (!template) {
+    showNotification('Template non trovato', 'error');
+    return;
+  }
+  template.usageCount = (template.usageCount || 0) + 1;
+  template.lastUsed = new Date().toLocaleDateString('it-IT');
+  const updatedTemplates = templates.map(t => (t.id === templateId ? template : t));
+  saveTemplates(updatedTemplates);
+  // Cambio tab verso "Nuovo Report"
+  const newReportTabButton = document.querySelector('.tab-btn[data-tab="new-report"]');
+  if (newReportTabButton) newReportTabButton.click();
+  populateReportForm(template);
+  showNotification(`Template "${template.name}" caricato con successo`, 'success');
+};
+
+const editReportTemplate = templateId => {
+  const templates = loadTemplates();
+  const template = templates.find(t => t.id === templateId);
+  if (!template) {
+    showNotification('Template non trovato', 'error');
+    return;
+  }
+  currentTemplateId = templateId;
+  showTemplateDialog(template);
+};
+
+const deleteReportTemplate = (templateId, templateName) => {
+  if (confirm(`Sei sicuro di voler eliminare il template "${templateName}"?`)) {
+    const templates = loadTemplates();
+    const updatedTemplates = templates.filter(t => t.id !== templateId);
+    saveTemplates(updatedTemplates);
+    populateTemplateGrid();
+    showNotification(`Template "${templateName}" eliminato con successo`, 'success');
+  }
+};
+
+const showTemplateDialog = (template = null) => {
+  const dialogOverlay = document.createElement('div');
+  dialogOverlay.className = 'dialog-overlay';
+  dialogOverlay.style.cssText =
+    'position: fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center; z-index:1000;';
+  const dialogBox = document.createElement('div');
+  dialogBox.className = 'dialog-box';
+  dialogBox.style.cssText =
+    'background-color: white; border-radius: 5px; padding: 20px; width:700px; max-width:90%;';
+  const dialogTitle = document.createElement('h2');
+  dialogTitle.style.color = 'var(--primary)';
+  dialogTitle.style.marginBottom = '20px';
+  dialogTitle.innerHTML = template
+    ? `<i class="fas fa-edit"></i> Modifica Template: ${template.name}`
+    : '<i class="fas fa-plus-circle"></i> Crea Nuovo Template';
+  dialogBox.appendChild(dialogTitle);
+  const form = createTemplateForm(template);
+  dialogBox.appendChild(form);
+  dialogOverlay.appendChild(dialogBox);
+  document.body.appendChild(dialogOverlay);
+  setTimeout(() => {
+    const firstInput = form.querySelector('input[type="text"]');
+    if (firstInput) firstInput.focus();
+  }, 100);
+  const closeDialog = () => {
+    dialogOverlay.style.opacity = '0';
+    setTimeout(() => {
+      document.body.removeChild(dialogOverlay);
+    }, 300);
+  };
+  dialogOverlay.addEventListener('click', e => {
+    if (e.target === dialogOverlay) closeDialog();
+  });
+  document.addEventListener('keydown', function escHandler(e) {
+    if (e.key === 'Escape') {
+      closeDialog();
+      document.removeEventListener('keydown', escHandler);
+    }
+  });
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const success = saveTemplateFromDialog(form, template);
+    if (success) closeDialog();
+  });
+  const cancelButton = form.querySelector('.btn-cancel');
+  if (cancelButton) {
+    cancelButton.addEventListener('click', closeDialog);
+  }
+};
+
+const createTemplateForm = (template = null) => {
+  const form = document.createElement('form');
+  form.id = 'templateForm';
+  form.className = 'template-form';
+  const basicSection = document.createElement('div');
+  basicSection.className = 'form-section';
+  const basicTitle = document.createElement('h3');
+  basicTitle.innerHTML = '<i class="fas fa-info-circle"></i> Informazioni di base';
+  basicTitle.style.cssText = 'border-bottom: 1px solid #e2e8f0; padding-bottom:10px; margin-bottom:15px;';
+  basicSection.appendChild(basicTitle);
+  const nameGroup = createFormGroup('Nome template:', 'template-name', 'text', template ? template.name : '', 'Nome del template', true);
+  basicSection.appendChild(nameGroup);
+  const descGroup = createFormGroup('Descrizione:', 'template-description', 'textarea', template ? template.description : '', 'Descrivi cosa fa questo template');
+  basicSection.appendChild(descGroup);
+  form.appendChild(basicSection);
+  const optionsSection = document.createElement('div');
+  optionsSection.className = 'form-section';
+  optionsSection.style.marginTop = '20px';
+  const optionsTitle = document.createElement('h3');
+  optionsTitle.innerHTML = '<i class="fas fa-cog"></i> Opzioni report';
+  optionsTitle.style.cssText = 'border-bottom: 1px solid #e2e8f0; padding-bottom:10px; margin-bottom:15px;';
+  optionsSection.appendChild(optionsTitle);
+  const typeGroup = document.createElement('div');
+  typeGroup.className = 'form-group';
+  typeGroup.style.marginBottom = '15px';
+  const typeLabel = document.createElement('label');
+  typeLabel.htmlFor = 'template-type';
+  typeLabel.textContent = 'Tipo di report:';
+  typeGroup.appendChild(typeLabel);
+  const typeSelect = document.createElement('select');
+  typeSelect.id = 'template-type';
+  typeSelect.className = 'form-control';
+  typeSelect.required = true;
+  const typeOptions = [
+    { value: 'detailed', text: 'Dettagliato' },
+    { value: 'summary', text: 'Riepilogativo' },
+    { value: 'comparison', text: 'Comparativo' }
+  ];
+  typeOptions.forEach(option => {
+    const opt = document.createElement('option');
+    opt.value = option.value;
+    opt.textContent = option.text;
+    if (template && template.type === option.value) opt.selected = true;
+    typeSelect.appendChild(opt);
+  });
+  typeGroup.appendChild(typeSelect);
+  optionsSection.appendChild(typeGroup);
+  const formatGroup = document.createElement('div');
+  formatGroup.className = 'form-group';
+  formatGroup.style.marginBottom = '15px';
+  const formatLabel = document.createElement('label');
+  formatLabel.htmlFor = 'template-format';
+  formatLabel.textContent = 'Formato:';
+  formatGroup.appendChild(formatLabel);
+  const formatSelect = document.createElement('select');
+  formatSelect.id = 'template-format';
+  formatSelect.className = 'form-control';
+  formatSelect.required = true;
+  const formatOptions = [
+    { value: 'pdf', text: 'PDF' },
+    { value: 'xlsx', text: 'Excel (XLSX)' },
+    { value: 'csv', text: 'CSV' }
+  ];
+  formatOptions.forEach(option => {
+    const opt = document.createElement('option');
+    opt.value = option.value;
+    opt.textContent = option.text;
+    if (template && template.format === option.value) opt.selected = true;
+    formatSelect.appendChild(opt);
+  });
+  formatGroup.appendChild(formatSelect);
+  optionsSection.appendChild(formatGroup);
+  const checkboxGroup = document.createElement('div');
+  checkboxGroup.className = 'form-group checkbox-group';
+  checkboxGroup.style.cssText = 'margin-bottom:15px; display:flex; gap:20px;';
+  const chartsContainer = document.createElement('div');
+  chartsContainer.className = 'checkbox-container';
+  chartsContainer.style.display = 'flex';
+  chartsContainer.style.alignItems = 'center';
+  const chartsCheck = document.createElement('input');
+  chartsCheck.type = 'checkbox';
+  chartsCheck.id = 'template-charts';
+  chartsCheck.checked = template ? !!template.includeCharts : true;
+  chartsCheck.style.marginRight = '5px';
+  chartsContainer.appendChild(chartsCheck);
+  const chartsLabel = document.createElement('label');
+  chartsLabel.htmlFor = 'template-charts';
+  chartsLabel.textContent = 'Includi grafici';
+  chartsContainer.appendChild(chartsLabel);
+  checkboxGroup.appendChild(chartsContainer);
+  const statsContainer = document.createElement('div');
+  statsContainer.className = 'checkbox-container';
+  statsContainer.style.display = 'flex';
+  statsContainer.style.alignItems = 'center';
+  const statsCheck = document.createElement('input');
+  statsCheck.type = 'checkbox';
+  statsCheck.id = 'template-stats';
+  statsCheck.checked = template ? !!template.includeStatistics : true;
+  statsCheck.style.marginRight = '5px';
+  statsContainer.appendChild(statsCheck);
+  const statsLabel = document.createElement('label');
+  statsLabel.htmlFor = 'template-stats';
+  statsLabel.textContent = 'Includi statistiche';
+  statsContainer.appendChild(statsLabel);
+  checkboxGroup.appendChild(statsContainer);
+  optionsSection.appendChild(checkboxGroup);
+  const frequencyGroup = document.createElement('div');
+  frequencyGroup.className = 'form-group';
+  frequencyGroup.style.marginBottom = '15px';
+  const frequencyLabel = document.createElement('label');
+  frequencyLabel.htmlFor = 'template-frequency';
+  frequencyLabel.textContent = 'Frequenza di esecuzione:';
+  frequencyGroup.appendChild(frequencyLabel);
+  const frequencySelect = document.createElement('select');
+  frequencySelect.id = 'template-frequency';
+  frequencySelect.className = 'form-control';
+  const frequencyOptions = [
+    { value: '', text: 'Nessuna (manuale)' },
+    { value: 'daily', text: 'Giornaliera' },
+    { value: 'weekly', text: 'Settimanale' },
+    { value: 'monthly', text: 'Mensile' },
+    { value: 'quarterly', text: 'Trimestrale' }
+  ];
+  frequencyOptions.forEach(option => {
+    const opt = document.createElement('option');
+    opt.value = option.value;
+    opt.textContent = option.text;
+    if (template && template.frequency === option.value) opt.selected = true;
+    frequencySelect.appendChild(opt);
+  });
+  frequencyGroup.appendChild(frequencySelect);
+  optionsSection.appendChild(frequencyGroup);
+  form.appendChild(optionsSection);
+  const recipientsSection = document.createElement('div');
+  recipientsSection.className = 'form-section';
+  recipientsSection.style.marginTop = '20px';
+  const recipientsTitle = document.createElement('h3');
+  recipientsTitle.innerHTML = '<i class="fas fa-envelope"></i> Destinatari Email';
+  recipientsTitle.style.cssText = 'border-bottom: 1px solid #e2e8f0; padding-bottom:10px; margin-bottom:15px;';
+  recipientsSection.appendChild(recipientsTitle);
+  const recipientGroup = document.createElement('div');
+  recipientGroup.className = 'form-group';
+  recipientGroup.style.cssText = 'margin-bottom:15px; display:flex; gap:10px;';
+  const recipientInput = document.createElement('input');
+  recipientInput.type = 'email';
+  recipientInput.id = 'template-recipient';
+  recipientInput.className = 'form-control';
+  recipientInput.placeholder = 'Aggiungi indirizzo email';
+  recipientInput.style.flex = '1';
+  recipientGroup.appendChild(recipientInput);
+  const addRecipientButton = document.createElement('button');
+  addRecipientButton.type = 'button';
+  addRecipientButton.className = 'btn btn-primary';
+  addRecipientButton.innerHTML = '<i class="fas fa-plus"></i> Aggiungi';
+  addRecipientButton.addEventListener('click', () => {
+    const email = recipientInput.value.trim();
+    if (email && isValidEmail(email)) {
+      addRecipientToForm(email, recipientsList);
+      recipientInput.value = '';
+      recipientInput.focus();
+    } else {
+      showNotification('Inserisci un indirizzo email valido', 'warning');
+    }
+  });
+  recipientGroup.appendChild(addRecipientButton);
+  recipientsSection.appendChild(recipientGroup);
+  const recipientsList = document.createElement('div');
+  recipientsList.className = 'recipients-list';
+  recipientsList.style.cssText = 'margin-bottom:15px; max-height:150px; overflow-y:auto;';
+  if (template && template.recipients && template.recipients.length > 0) {
+    template.recipients.forEach(email => addRecipientToForm(email, recipientsList));
+  }
+  recipientsSection.appendChild(recipientsList);
+  form.appendChild(recipientsSection);
+  const filtersSection = document.createElement('div');
+  filtersSection.className = 'form-section';
+  filtersSection.style.marginTop = '20px';
+  const filtersTitle = document.createElement('h3');
+  filtersTitle.innerHTML = '<i class="fas fa-filter"></i> Filtri';
+  filtersTitle.style.cssText = 'border-bottom: 1px solid #e2e8f0; padding-bottom:10px; margin-bottom:15px;';
+  filtersSection.appendChild(filtersTitle);
+  const filtersContainer = document.createElement('div');
+  filtersContainer.id = 'template-filters-container';
+  filtersContainer.style.marginBottom = '15px';
+  if (template && template.filters && template.filters.length > 0) {
+    template.filters.forEach(filter => addFilterRow(filtersContainer, filter));
+  } else {
+    addFilterRow(filtersContainer);
+  }
+  filtersSection.appendChild(filtersContainer);
+  const addFilterButton = document.createElement('button');
+  addFilterButton.type = 'button';
+  addFilterButton.className = 'btn btn-primary';
+  addFilterButton.innerHTML = '<i class="fas fa-plus"></i> Aggiungi filtro';
+  addFilterButton.addEventListener('click', () => addFilterRow(filtersContainer));
+  filtersSection.appendChild(addFilterButton);
+  form.appendChild(filtersSection);
+  const actionButtons = document.createElement('div');
+  actionButtons.className = 'form-actions';
+  actionButtons.style.cssText = 'display:flex; justify-content:flex-end; gap:10px; margin-top:20px; border-top: 1px solid #e2e8f0; padding-top:20px;';
+  const cancelButton = document.createElement('button');
+  cancelButton.type = 'button';
+  cancelButton.className = 'btn btn-cancel';
+  cancelButton.textContent = 'Annulla';
+  cancelButton.style.backgroundColor = '#cbd5e1';
+  actionButtons.appendChild(cancelButton);
+  const saveButton = document.createElement('button');
+  saveButton.type = 'submit';
+  saveButton.className = 'btn btn-primary';
+  saveButton.innerHTML = template ? '<i class="fas fa-save"></i> Aggiorna Template' : '<i class="fas fa-plus"></i> Crea Template';
+  actionButtons.appendChild(saveButton);
+  form.appendChild(actionButtons);
+  return form;
+};
+
+// Se il documento è già pronto, esegue immediatamente l'inizializzazione
+if (document.readyState !== 'loading') {
+  initTemplateManagement();
+} else {
+  document.addEventListener('DOMContentLoaded', initTemplateManagement);
+}
+
+  </script>
+  <!-- Script principale per la pagina di reporting e altri script esterni -->
+  <script src="reporting.js"></script>
+  <script src="js/excelExport.js"></script>
+  <script src="js/exportUI.js"></script>
+    <script src="js/templateManagement.js"></script>
+  <script src="export-integration.js"></script>
 </body>
 </html>

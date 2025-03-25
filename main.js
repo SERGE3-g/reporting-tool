@@ -13,6 +13,7 @@ const mysql = require('mysql2/promise');
 const emailService = require('./emailService');
 const authService = require('./src/auth-service.js');
 const database = require('./src/database');
+const { setupExportHandlers } = require('./src/js/electron-export');
 
 // Variabili per finestre
 let mainWindow = null;
@@ -89,6 +90,8 @@ const appConfig = {
             return {success: false, message: error.message};
         }
     },
+
+
 
     // Aggiunge un file alla lista dei recenti
     async addRecentFile(filePath, userId) {
@@ -880,6 +883,7 @@ app.whenReady().then(() => {
     });
     setupIpcHandlers();
     setupAutoUpdater();
+    setupExportHandlers();
 });
 
 app.on('window-all-closed', function () {
@@ -1700,6 +1704,7 @@ function setupIpcHandlers() {
             return {success: false, message: error.message};
         }
     });
+
 
     ipcMain.handle('admin:toggleUserStatus', async (event, userId) => {
         if (!currentUser || currentUser.role !== 'admin') {

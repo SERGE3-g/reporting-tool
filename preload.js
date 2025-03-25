@@ -333,11 +333,14 @@ contextBridge.exposeInMainWorld('reportingTool', {
     saveCsvReport: async (data, defaultFilename) => {
         return await ipcRenderer.invoke('report:saveCsv', {data, defaultFilename});
     },
-    saveXlsxReport: async (data, defaultFilename) => {
-        return await ipcRenderer.invoke('report:saveXlsx', {data, defaultFilename});
+    // Salva il report in formato PDF
+    savePdfReport: async (data, defaultFilename, options) => {
+        return await ipcRenderer.invoke('report:savePdf', {data, defaultFilename, options});
     },
-    savePdfReport: async (data, defaultFilename) => {
-        return await ipcRenderer.invoke('report:savePdf', {data, defaultFilename});
+
+// Versione migliorata per salvare report in formato XLSX
+    saveXlsxReportEnhanced: async (data, defaultFilename, options) => {
+        return await ipcRenderer.invoke('report:saveXlsx', {data, defaultFilename, options});
     },
     saveReport: async (title, description, data) => {
         return await ipcRenderer.invoke('report:saveReport', {title, description, data});
@@ -413,7 +416,7 @@ contextBridge.exposeInMainWorld('reportingTool', {
     sendEmailReportFromData: async (options) => {
         return await ipcRenderer.invoke('email:sendReportFromData', options);
     },
-     sendEmail: async (emailData) => {
+    sendEmail: async (emailData) => {
         try {
             return await ipcRenderer.invoke('email:send', emailData);
         } catch (error) {
